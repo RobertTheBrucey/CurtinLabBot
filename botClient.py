@@ -1,13 +1,9 @@
 import discord
-import time
 import asyncio
 import base64
 import paramiko
-import socket
 import re
-import signal
 import datetime
-from contextlib import contextmanager
 from multiprocessing import Process, Queue
 from config import getCreds
 
@@ -34,7 +30,7 @@ class BotClient( discord.Client ):
             command = " "
         if command[0] == "^":
             if command[1:] == "labs":
-                print( '\n{} asked for the lab machines'.format(message.author))
+                print( '{} asked for the lab machines\n'.format(message.author))
                 labsString = ""
                 first = ""
                 for lab in sorted(self.labs,key=self.labs.get):
@@ -48,7 +44,7 @@ class BotClient( discord.Client ):
                 await message.author.send(labsString)
                 await message.channel.send("List of online lab machines DMed\nQuick machine: {}".format(first))
             elif command[1:] == "quicklab":
-                print( '\n{} asked for a quick lab'.format(message.author))
+                print( '{} asked for a quick lab\n'.format(message.author))
                 for lab in sorted(self.labs,key=self.labs.get):
                     await message.channel.send("Quick Lab: {}".format(lab))
                     break
@@ -62,8 +58,8 @@ class BotClient( discord.Client ):
                 for column in "abcd":
                     for row in range(1,7):
                         users = -1
-                        host = "\033[1Alab{}-{}0{}.cs.curtin.edu.au.".format(room,column,row)
-                        print(host)
+                        host = "lab{}-{}0{}.cs.curtin.edu.au.".format(room,column,row)
+                        print("\033[1A"+host)
                         q = Queue()
                         #print("step 1")
                         proc = Process(target=self.checkLab, args=(host,q))
@@ -106,23 +102,3 @@ class BotClient( discord.Client ):
             sshclient.close()
         except:
             pass
-
-@contextmanager
-def timeout(time):
-    # Register a function to raise a TimeoutError on the signal.
-    signal.signal(signal.SIGALRM, raise_timeout)
-    # Schedule the signal to be sent after ``time``.
-    signal.alarm(time)
-
-    try:
-        yield
-    except TimeoutError:
-        pass
-    finally:
-        # Unregister the signal so it won't be triggered
-        # if the timeout is not reached.
-        signal.signal(signal.SIGALRM, signal.SIG_IGN)
-
-
-def raise_timeout(signum, frame):
-    raise TimeoutError
