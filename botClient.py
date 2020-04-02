@@ -34,9 +34,9 @@ class BotClient( discord.Client ):
                 labsString = ""
                 first = ""
                 for lab in sorted(self.labs,key=self.labs.get):
-                    if first == "":
-                        first = lab
                     if self.labs[lab] != -1:
+                        if first == "":
+                            first = lab
                         #labsString += "\n{} has {} user{}".format((lab,str(self.labs[lab])),("","s")[self.labs[lab]==1])
                         labsString += "\n"+lab+" has "+str(self.labs[lab])+" user(s)"
                 labsString = "Available lab machines are:`"+labsString
@@ -62,7 +62,7 @@ class BotClient( discord.Client ):
                         print("\033[1A"+host)
                         q = Queue()
                         #print("step 1")
-                        proc = Process(target=self.checkLab, args=(host,q))
+                        proc = Process(target=BotClient.checkLab, args=(host,q))
                         #print("step 2")
                         proc.start()
                         #print("step 3")
@@ -79,7 +79,7 @@ class BotClient( discord.Client ):
             await asyncio.sleep(300)
             #a = False
     
-    def checkLab( self, host, temp ):
+    def checkLab( host, temp ):
         sshclient = paramiko.SSHClient()
         creds = getCreds()
         sshclient.set_missing_host_key_policy(paramiko.AutoAddPolicy)
