@@ -100,7 +100,7 @@ class BotClient( discord.Client ):
             for line in stderr:
                 print(line.strip('\n'))
             for line in stdout:
-                #print(line.strip('\n'))
+                print(line.strip('\n'))
                 match = re.search(r"(\d+)(?: users?,)",line)
                 #print(match)
                 if match:
