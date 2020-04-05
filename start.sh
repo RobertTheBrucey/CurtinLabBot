@@ -1,5 +1,5 @@
 #!/bin/bash
-echo $ANYCONNECT_PASSWORD|openconnect $ANYCONNECT_SERVER --user=$ANYCONNECT_USER --no-cert-check --server-cert -b
+echo $ANYCONNECT_PASSWORD|openconnect $ANYCONNECT_SERVER --user=$ANYCONNECT_USER --server-cert -b
 
 sleep 5
 

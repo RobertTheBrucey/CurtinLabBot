@@ -4,6 +4,7 @@ import base64
 import paramiko
 import re
 import datetime
+import copy
 from multiprocessing import Process, Queue
 from config import getCreds
 
@@ -54,12 +55,13 @@ class BotClient( discord.Client ):
     async def pollLabs(self):
         while True:
             print("Starting scan at {}\n".format(str(datetime.datetime.now())))
+            old = copy.deepcopy(self.labs)
             for room in [218,219,220,221,232]:
                 for column in "abcd":
                     for row in range(1,7):
                         users = -1
                         host = "lab{}-{}0{}.cs.curtin.edu.au.".format(room,column,row)
-                        print("\033[1A"+host)
+                        print("\033[1A"+host+": ", end = '')
                         q = Queue()
                         #print("step 1")
                         proc = Process(target=BotClient.checkLab, args=(host,q))
@@ -69,13 +71,21 @@ class BotClient( discord.Client ):
                         try:
                             proc.join(timeout=5)
                             users = q.get_nowait()
+                            print(users + " Users.")
                         except:
                             proc.terminate()
+                            print("Down")
                         #print("step 4")
                         self.labs[host] = users
                         #print("End of thingy")
                         await asyncio.sleep(1)
             print("Finishing scan at {}".format(str(datetime.datetime.now())))
+            max = -1
+            for lab in sorted(self.labs,key=self.labs.get):
+                if self.labs[lab] > max:
+                    max = self.labs[lab]
+            if max == -1:
+                self.labs = old
             await asyncio.sleep(300)
             #a = False
     
