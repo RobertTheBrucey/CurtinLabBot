@@ -9,6 +9,8 @@
 
 #route del -net 172.17.0.0 netmask 255.255.240.0  dev tun0
 
+echo $ANYCONNECT_PASSWORD $ANYCONNECT_USER $ANYCONNECT_SERVER
+
 ping lab219-b06.cs.curtin.edu.au.
 cd BotFiles
 while true;do
