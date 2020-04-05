@@ -10,5 +10,5 @@ route del -net 172.17.0.0 netmask 255.255.240.0  dev tun0
 
 cd BotFiles
 while true;do
-python3 /CurtinLabBot.py
+python3 CurtinLabBot.py
 done
