@@ -9,7 +9,7 @@ services:
     #  - ANYCONNECT_SERVER=${ANYCONNECT_SERVER}
     #  - ANYCONNECT_USER=${ANYCONNECT_USER}
     #  - ANYCONNECT_PASSWORD=${ANYCONNECT_PASSWORD}
-    env-file:
+    env_file:
       - BruceCurtin.env
     networks:
       - default
