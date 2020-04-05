@@ -100,14 +100,14 @@ class BotClient( discord.Client ):
             for line in stderr:
                 print(line.strip('\n'))
             for line in stdout:
-                print(line.strip('\n'))
+                #print(line.strip('\n'))
                 match = re.search(r"(\d+)(?: users?,)",line)
                 #print(match)
                 if match:
                     users = int(match.group(1))
                     if users > 0:
                         users = users-1
-                    #print("Users: {}".format(users))
+                    print("Users: {}".format(users))
                     temp.put(users)
                     break
             sshclient.close()
