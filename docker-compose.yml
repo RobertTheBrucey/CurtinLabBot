@@ -5,10 +5,12 @@ services:
     container_name: vpn
     image: jetbrainsinfra/docker-anyconnect-vpn
     #image: labbot
-    environment:
-      - ANYCONNECT_SERVER=${ANYCONNECT_SERVER}
-      - ANYCONNECT_USER=${ANYCONNECT_USER}
-      - ANYCONNECT_PASSWORD=${ANYCONNECT_PASSWORD}
+    #environment:
+    #  - ANYCONNECT_SERVER=${ANYCONNECT_SERVER}
+    #  - ANYCONNECT_USER=${ANYCONNECT_USER}
+    #  - ANYCONNECT_PASSWORD=${ANYCONNECT_PASSWORD}
+    env-file:
+      - BruceCurtin.env
     networks:
       - default
     privileged: true
