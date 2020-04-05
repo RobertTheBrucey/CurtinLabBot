@@ -3,6 +3,6 @@ RUN apk add openconnect --no-cache  --repository http://dl-3.alpinelinux.org/alp
 RUN apk add build-base libffi-dev iptables expect && apk del libressl-dev \
 && apk add openssl-dev && pip install discord paramiko
 ADD start.sh /
-COPY BotFiles/* /BotFiles
+COPY BotFiles /BotFiles
 
 CMD ["/start.sh"]
