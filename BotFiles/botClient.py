@@ -96,6 +96,8 @@ class BotClient( discord.Client ):
                     max = self.labs[lab]
             if max == -1:
                 self.labs = pickle.load( open( "labs.p", "rb" ) )
+            else:
+                pickle.dump( self.labs, open ("labs.p", "wb" ) )
             await asyncio.sleep(300)
             #a = False
     
