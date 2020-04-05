@@ -22,8 +22,9 @@ services:
   packer:
     container_name: labbot
     image: labbot
-    tty: true
+    tty: false
     entrypoint: /start.sh
+    restart: unless-stopped
     depends_on:
       - vpn
     network_mode: "service:vpn"
