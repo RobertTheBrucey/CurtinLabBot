@@ -1,6 +1,7 @@
 FROM python:3-alpine
 RUN apk add openconnect --no-cache  --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ --allow-untrusted
-RUN apk add build-base libffi-dev iptables expect openssl && pip install discord paramiko
+RUN apk add build-base libffi-dev iptables expect && apk del libressl-dev \
+&& apk add openssl-dev && pip install discord paramiko
 ADD start.sh /
 COPY BotFiles/* /BotFiles
 
