@@ -61,7 +61,8 @@ class BotClient( discord.Client ):
                     for row in range(1,7):
                         users = -1
                         host = "lab{}-{}0{}.cs.curtin.edu.au.".format(room,column,row)
-                        print("\033[1A"+host+": ", end = '')
+                        #print("\033[1A"+host+": ", end = '')
+                        print(host+": ", end = '')
                         q = Queue()
                         #print("step 1")
                         proc = Process(target=BotClient.checkLab, args=(host,q))
