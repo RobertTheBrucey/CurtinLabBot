@@ -8,7 +8,7 @@ iptables -A FORWARD -i eth0 -j ACCEPT
 
 route del -net 172.17.0.0 netmask 255.255.240.0  dev tun0
 
-source ./bot-env/bin/activate
+cd BotFiles
 while true;do
-python3 /BotFiles/CurtinLabBot.py
+python3 /CurtinLabBot.py
 done
