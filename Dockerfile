@@ -6,4 +6,4 @@ ADD start.sh /
 RUN chmod +x start.sh
 COPY BotFiles /BotFiles
 
-CMD ["/start.sh"]
+CMD ["start.sh"]
