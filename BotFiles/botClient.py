@@ -5,6 +5,7 @@ import paramiko
 import re
 import datetime
 import copy
+import pickle
 from multiprocessing import Process, Queue
 from config import getCreds
 
@@ -15,6 +16,10 @@ class BotClient( discord.Client ):
     def __init__(self, ):
         super().__init__()
         self.helpString = ""
+        try:
+            self.labs = pickle.load( open( "labs.p", "rb" ) )
+        except:
+            print("No labs to load")
         asyncio.get_event_loop().create_task(self.pollLabs())
 
     async def on_ready( self ):
@@ -55,7 +60,7 @@ class BotClient( discord.Client ):
     async def pollLabs(self):
         while True:
             print("Starting scan at {}\n".format(str(datetime.datetime.now())))
-            old = copy.deepcopy(self.labs)
+            pickle.dump( self.labs, open ("labs.p", "wb" ) )
             for room in [218,219,220,221,232]:
                 for column in "abcd":
                     for row in range(1,7):
@@ -90,7 +95,7 @@ class BotClient( discord.Client ):
                 if self.labs[lab] > max:
                     max = self.labs[lab]
             if max == -1:
-                self.labs = old
+                self.labs = pickle.load( open( "labs.p", "rb" ) )
             await asyncio.sleep(300)
             #a = False
     
