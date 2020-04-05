@@ -3,8 +3,8 @@ version: '3'
 services:
   vpn:
     container_name: vpn
-    #image: jetbrainsinfra/docker-anyconnect-vpn
-    image: labbot
+    image: jetbrainsinfra/docker-anyconnect-vpn
+    #image: labbot
     environment:
       - ANYCONNECT_SERVER=${ANYCONNECT_SERVER}
       - ANYCONNECT_USER=${ANYCONNECT_USER}
@@ -17,11 +17,11 @@ services:
     restart: unless-stopped
     security_opt:
       - label:disable
-  #packer:
-  #  container_name: packer
-  #  image: alpine
-  #  tty: true
-  #  entrypoint: /bin/sleep 10
-  #  depends_on:
-  #    - vpn
-  #  network_mode: "service:vpn"
+  packer:
+    container_name: labbot
+    image: labbot
+    tty: true
+    entrypoint: /start.sh
+    depends_on:
+      - vpn
+    network_mode: "service:vpn"
