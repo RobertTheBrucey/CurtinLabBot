@@ -70,12 +70,16 @@ class BotClient( discord.Client ):
                         proc.start()
                         #print("step 3")
                         try:
-                            proc.join(timeout=5)
-                            users = q.get_nowait()
-                            print(users + " Users.")
-                        except:
+                            #print("Proc Join")
+                            #proc.join(timeout=5)
+                            #print("get queue")
+                            users = q.get(timeout=3)
+                            proc.join()
+                            print(str(users) + " Users.")
+                        except Exception as err:
                             proc.terminate()
                             print("Down")
+                            #print(type(err))
                         #print("step 4")
                         self.labs[host] = users
                         #print("End of thingy")
@@ -96,9 +100,10 @@ class BotClient( discord.Client ):
         sshclient.set_missing_host_key_policy(paramiko.AutoAddPolicy)
         try:
             sshclient.connect(host, username=creds[0], password=creds[1], timeout=2, banner_timeout=2, auth_timeout=2)
-            stdin, stdout, stderr = sshclient.exec_command('w',timeout=2)
+            stdin, stdout, stderr = sshclient.exec_command('w',timeout=1)
             for line in stderr:
-                print(line.strip('\n'))
+                #print(line.strip('\n'))
+                pass
             for line in stdout:
                 #print(line.strip('\n'))
                 match = re.search(r"(\d+)(?: users?,)",line)
@@ -107,7 +112,7 @@ class BotClient( discord.Client ):
                     users = int(match.group(1))
                     if users > 0:
                         users = users-1
-                    print("Users: {}".format(users))
+                    #print("Users: {}".format(users))
                     temp.put(users)
                     break
             sshclient.close()
