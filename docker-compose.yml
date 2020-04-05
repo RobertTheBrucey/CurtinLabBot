@@ -21,7 +21,7 @@ services:
       - label:disable
   packer:
     container_name: labbot
-    image: labbot
+    image: docker.ashtech.one:5000/labbot
     tty: false
     entrypoint: /start.sh
     restart: unless-stopped
