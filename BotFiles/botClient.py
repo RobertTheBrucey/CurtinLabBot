@@ -184,7 +184,7 @@ class BotClient( discord.Client ):
             rmsg = None
             channels = self.get_all_channels()
             for channel in channels:
-                print("Checking channel: " + str(channel))
+                #print("Checking channel: " + str(channel))
                 try:
                     rmsg = await channel.fetch_message(msg)
                 except:
@@ -196,7 +196,7 @@ class BotClient( discord.Client ):
             rmsg = None
             channels = self.get_all_channels()
             for channel in channels:
-                print("Checking channel: " + str(channel))
+                #print("Checking channel: " + str(channel))
                 try:
                     rmsg = await channel.fetch_message(msg)
                 except:
