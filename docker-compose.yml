@@ -32,4 +32,4 @@ services:
     network_mode: "service:vpn"
 
 volumes:
-  Persistence:
+  - Persistence:./Persistence
