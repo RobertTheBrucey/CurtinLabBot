@@ -180,7 +180,7 @@ class BotClient( discord.Client ):
         self.p_msg_grid = []
         msg_ids = pickle.load( open( "/persistence/pmsg.p", "rb" ) )
         for msg in msg_ids[0]:
-            print("Attempting to load id " + str(msg))
+            #print("Attempting to load id " + str(msg))
             rmsg = None
             channels = self.get_all_channels()
             for channel in channels:
@@ -192,7 +192,7 @@ class BotClient( discord.Client ):
             if rmsg:
                 self.p_msg.append(rmsg)
         for msg in msg_ids[1]:
-            print("Attempting to load id " + str(msg))
+            #print("Attempting to load id " + str(msg))
             rmsg = None
             channels = self.get_all_channels()
             for channel in channels:
