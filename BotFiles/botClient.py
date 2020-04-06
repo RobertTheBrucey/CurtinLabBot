@@ -94,6 +94,7 @@ class BotClient( discord.Client ):
                             host = "lab{}-{}0{}.cs.curtin.edu.au.".format(room,column,row)
                             labsString += str(self.labs.get(host,"F")) + "\t"
                         labsString += "\n"
+                await message.channel.send("Grid DMed to you")
                 await message.author.send(labsString)
 
     async def pollLabs(self):
