@@ -60,6 +60,10 @@ class BotClient( discord.Client ):
                 labsString = labsString[:labsString[:1999].rfind('\n')] + "`"
                 await message.author.send(labsString)
                 await message.channel.send("List of online lab machines DMed\nQuick machine: {}".format(first))
+            elif command[1:] == "labgrid":
+                print( '{} asked for the lab machine grid'.format(message.author))
+                await message.channel.send("Grid DMed to you")
+                await message.author.send(self.getGridStr())
             elif command[1:] == "quicklab":
                 print( '{} asked for a quick lab'.format(message.author))
                 for lab in sorted(self.labs,key=self.labs.get):
@@ -78,18 +82,20 @@ class BotClient( discord.Client ):
                             labsString += "\n"+lab+" has "+str(self.labs[lab])+" user(s)"
                     labsString = "Available lab machines are:`"+labsString
                     labsString = labsString[:labsString[:1999].rfind('\n')] + "`"
+                    for msg in self.p_msg:
+                        if msg.channel == message.channel:
+                            self.p_msg.remove(msg)
                     self.p_msg.append(await message.channel.send(labsString))
                     await self.savePMsg()
                 else:
                     await message.channel.send("You are not authorised to use this command.")
-            elif command[1:] == "labgrid":
-                print( '{} asked for the lab machine grid'.format(message.author))
-                await message.channel.send("Grid DMed to you")
-                await message.author.send(self.getGridStr())
             elif command[1:] == "persistentgrid":
                 print( '{} asked for a persistent lab machine grid'.format(message.author))
                 if message.author.permissions_in(message.channel).manage_messages:
                     print( '{} was authorised for a persistent grid'.format(message.author))
+                    for msg in self.p_msg_grid:
+                        if msg.channel == message.channel:
+                            self.p_msg_grid.remove(msg)
                     self.p_msg_grid.append(await message.channel.send(self.getGridStr()))
                     await self.savePMsg()
                 else:
