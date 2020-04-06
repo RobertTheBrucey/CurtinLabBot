@@ -121,9 +121,9 @@ class BotClient( discord.Client ):
                     users = self.labs.get(host,-1)
                     if (users>-1 and users < mini):
                         mini = users
-                        mins = []
+                        self.mins = []
                     if (users == mini):
-                        mins.append(host)
+                        self.mins.append(host)
                     labsString +=  "  " + str((" ",users)[users!=-1]) + pad(users,sp)
                 labsString += "\n"
         return labsString + "```"
