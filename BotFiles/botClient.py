@@ -9,9 +9,13 @@ import pickle
 from multiprocessing import Process, Queue
 from config import getCreds
 
+#Todo: Persistent messages
+#Grid view
+
 reserved = ['simpintro','simp','unsimp','unsimpall']
 class BotClient( discord.Client ):
     labs = {}
+    p_msg = []
 
     def __init__(self, ):
         super().__init__()
@@ -25,6 +29,10 @@ class BotClient( discord.Client ):
     async def on_ready( self ):
         print( 'Logged on as {0}!'.format( self.user ) )
         await self.change_presence(activity=discord.Game(name="^labhelp"))
+        try:
+            await loadPMsg()
+        except:
+            print("Couldn't load persistent messages from file.")
 
     async def on_message( self, message ):
         #Ignore own messages
@@ -55,12 +63,23 @@ class BotClient( discord.Client ):
                     await message.channel.send("Quick Lab: {}".format(lab))
                     break
             elif command[1:] == "labhelp":
-                await message.channel.send("Type ^labs for a list of Lab machines to be DMed to you\nType ^quicklab for a single free lab machine")
+                await message.channel.send("`^labs` - Request the list of Lab machines via DM\n`^quicklab` - Show a single ready lab machine\n`^labgrid` - Request a DM of Lab machine formatted in a grid.\n`^persistent` - (Administrator only) Generate a persistent (auto updating) message.")
+            elif command[1:] == "persistent":
+                if message.author.server_permissions.administrator:
+                    labsString = ""
+                    for lab in sorted(self.labs,key=self.labs.get):
+                        if self.labs[lab] != -1:
+                            labsString += "\n"+lab+" has "+str(self.labs[lab])+" user(s)"
+                    labsString = "Available lab machines are:`"+labsString
+                    labsString = labsString[:labsString[:1999].rfind('\n')] + "`"
+                    p_msg.append(await message.channel.send(labsString))
+
+            elif command[1:] == "labgrid":
+                await message.channel.send("This command has not been implemented yet")
 
     async def pollLabs(self):
         while True:
             print("Starting scan at {}\n".format(str(datetime.datetime.now())))
-            pickle.dump( self.labs, open ("labs.p", "wb" ) )
             for room in [218,219,220,221,232]:
                 for column in "abcd":
                     for row in range(1,7):
@@ -70,7 +89,7 @@ class BotClient( discord.Client ):
                         print(host+": ", end = '')
                         q = Queue()
                         #print("step 1")
-                        proc = Process(target=BotClient.checkLab, args=(host,q))
+                        proc = Process(target=checkLab, args=(host,q))
                         #print("step 2")
                         proc.start()
                         #print("step 3")
@@ -98,30 +117,63 @@ class BotClient( discord.Client ):
                 self.labs = pickle.load( open( "labs.p", "rb" ) )
             else:
                 pickle.dump( self.labs, open ("labs.p", "wb" ) )
+            await updatePMsg()
             await asyncio.sleep(300)
             #a = False
+
+    async def updatePMsg(self):
+        labsString = ""
+        for lab in sorted(self.labs,key=self.labs.get):
+            if self.labs[lab] != -1:
+                labsString += "\n"+lab+" has "+str(self.labs[lab])+" user(s)"
+        labsString = "Available lab machines are:`"+labsString
+        labsString = labsString[:labsString[:1999].rfind('\n')] + "`"
+        for msg in self.p_msg:
+            try:
+                await msg.edit(content=labsString)
+            except:
+                print("Problem editting persistent message.")
+
+    async def loadPMsg(self):
+        self.pmsg = []
+        msg_ids = pickle.load( open( "pmsg.p", "rb" ) )
+        for msg in msg_ids:
+            channels = self.get_all_channels()
+            for channel in channels:
+                try:
+                    rmsg = await channel.get_message(msg)
+                except:
+                    continue
+            if rmsg:
+                self.p_msg.append(rmsg)
+
+    async def savePMsg(self):
+        msg_ids = []
+        for msg in self.p_msg:
+            msg_ids.append(msg.id)
+        pickle.dump( msg_ids, open ("pmsg.p", "wb" ) )
     
-    def checkLab( host, temp ):
-        sshclient = paramiko.SSHClient()
-        creds = getCreds()
-        sshclient.set_missing_host_key_policy(paramiko.AutoAddPolicy)
-        try:
-            sshclient.connect(host, username=creds[0], password=creds[1], timeout=2, banner_timeout=2, auth_timeout=2)
-            stdin, stdout, stderr = sshclient.exec_command('w',timeout=1)
-            for line in stderr:
-                #print(line.strip('\n'))
-                pass
-            for line in stdout:
-                #print(line.strip('\n'))
-                match = re.search(r"(\d+)(?: users?,)",line)
-                #print(match)
-                if match:
-                    users = int(match.group(1))
-                    if users > 0:
-                        users = users-1
-                    #print("Users: {}".format(users))
-                    temp.put(users)
-                    break
-            sshclient.close()
-        except:
+def checkLab( host, temp ):
+    sshclient = paramiko.SSHClient()
+    creds = getCreds()
+    sshclient.set_missing_host_key_policy(paramiko.AutoAddPolicy)
+    try:
+        sshclient.connect(host, username=creds[0], password=creds[1], timeout=2, banner_timeout=2, auth_timeout=2)
+        stdin, stdout, stderr = sshclient.exec_command('w',timeout=1)
+        for line in stderr:
+            #print(line.strip('\n'))
             pass
+        for line in stdout:
+            #print(line.strip('\n'))
+            match = re.search(r"(\d+)(?: users?,)",line)
+            #print(match)
+            if match:
+                users = int(match.group(1))
+                if users > 0:
+                    users = users-1
+                #print("Users: {}".format(users))
+                temp.put(users)
+                break
+        sshclient.close()
+    except:
+        pass
