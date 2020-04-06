@@ -103,21 +103,21 @@ class BotClient( discord.Client ):
                 else:
                     await message.channel.send("You are not authorised to use this command.")
     def getGridStr(self):
-        labsString = "Lab Machine Users By Room:\n```\n"
-        sp = 4
+        labsString = "Lab Machine Users By Room:\n__```\n"
+        sp = 2
         for room in [218,219,220,221,232]:
-            labsString += "lab" + str(room) + "\n    "
+            labsString += "lab" + str(room) + "\n  "
             for row in range(1,7):
-                labsString += "0" + str(row) + pad(10,sp)
+                labsString += "  0" + str(row)
             labsString += "\n"
             for column in "abcd":
-                labsString += "-" + str(column) + "  "
+                labsString += "-" + str(column)
                 for row in range(1,7):
                     host = "lab{}-{}0{}.cs.curtin.edu.au.".format(room,column,row)
                     users = self.labs.get(host,-1)
-                    labsString += str(("?",users)[users!=-1]) + pad(users,sp)
+                    labsString +=  "  " + str((" ",users)[users!=-1]) + pad(users,sp)
                 labsString += "\n"
-        return labsString + "```"
+        return labsString + "```__"
 
     async def pollLabs(self):
         while True:
