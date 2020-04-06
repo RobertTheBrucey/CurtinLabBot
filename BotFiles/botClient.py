@@ -254,5 +254,5 @@ def pad(inte,places):
     if inte < 1:
         padding = places-1
     else:
-        padding = (places-int(math.log10(abs(inte))))
+        padding = (places-int(1+math.log10(abs(inte))))
     return " " * padding
