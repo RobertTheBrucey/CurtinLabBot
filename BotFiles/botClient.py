@@ -75,7 +75,7 @@ class BotClient( discord.Client ):
                             labsString += "\n"+lab+" has "+str(self.labs[lab])+" user(s)"
                     labsString = "Available lab machines are:`"+labsString
                     labsString = labsString[:labsString[:1999].rfind('\n')] + "`"
-                    p_msg.append(await message.channel.send(labsString))
+                    self.p_msg.append(await message.channel.send(labsString))
                 else:
                     await message.channel.send("You are not authorised to use this command.")
             elif command[1:] == "labgrid":
