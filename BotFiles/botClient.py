@@ -79,6 +79,7 @@ class BotClient( discord.Client ):
                     labsString = "Available lab machines are:`"+labsString
                     labsString = labsString[:labsString[:1999].rfind('\n')] + "`"
                     self.p_msg.append(await message.channel.send(labsString))
+                    await savePMsg(self)
                 else:
                     await message.channel.send("You are not authorised to use this command.")
             elif command[1:] == "labgrid":
@@ -89,6 +90,7 @@ class BotClient( discord.Client ):
                 print( '{} asked for a persistent lab machine grid'.format(message.author))
                 if message.author.permissions_in(message.channel).manage_messages:
                     self.p_msg_grid.append(await message.channel.send(self.getGridStr))
+                    await savePMsg(self)
                 else:
                     await message.channel.send("You are not authorised to use this command.")
     def getGridStr(self):
