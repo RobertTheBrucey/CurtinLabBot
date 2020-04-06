@@ -100,7 +100,7 @@ class BotClient( discord.Client ):
                     for msg in self.p_msg_grid:
                         if msg.channel == message.channel:
                             self.p_msg_grid.remove(msg)
-                    self.p_msg_grid.append(await message.channel.send(self.getGridStr() + "\n Quick Lab: " + random.choice(mins)))
+                    self.p_msg_grid.append(await message.channel.send(self.getGridStr() + "\n Quick Lab: " + random.choice(self.mins)))
                     await self.savePMsg()
                 else:
                     await message.channel.send("You are not authorised to use this command.")
