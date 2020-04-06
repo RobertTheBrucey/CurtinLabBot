@@ -190,6 +190,7 @@ class BotClient( discord.Client ):
             if rmsg:
                 self.p_msg.append(rmsg)
         for msg in msg_ids[1]:
+            rmsg = None
             channels = self.get_all_channels()
             for channel in channels:
                 try:
