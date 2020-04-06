@@ -21,7 +21,7 @@ class BotClient( discord.Client ):
         super().__init__()
         self.helpString = ""
         try:
-            self.labs = pickle.load( open( "persistence/labs.p", "rb" ) )
+            self.labs = pickle.load( open( "/persistence/labs.p", "rb" ) )
             print("Labs successfully loaded.")
         except:
             print("No labs to load")
@@ -133,10 +133,10 @@ class BotClient( discord.Client ):
                     max = self.labs[lab]
             if max == -1:
                 print("All labs down, loading from backup")
-                self.labs = pickle.load( open( "persistence/labs.p", "rb" ) )
+                self.labs = pickle.load( open( "/persistence/labs.p", "rb" ) )
             else:
                 print("Saving up machines to file")
-                pickle.dump( self.labs, open ("persistence/labs.p", "wb" ) )
+                pickle.dump( self.labs, open ("/persistence/labs.p", "wb" ) )
             await self.updatePMsg()
             await asyncio.sleep(300)
             #a = False
@@ -156,7 +156,7 @@ class BotClient( discord.Client ):
 
     async def loadPMsg(self):
         self.pmsg = []
-        msg_ids = pickle.load( open( "persistence/pmsg.p", "rb" ) )
+        msg_ids = pickle.load( open( "/persistence/pmsg.p", "rb" ) )
         for msg in msg_ids:
             channels = self.get_all_channels()
             for channel in channels:
@@ -171,7 +171,7 @@ class BotClient( discord.Client ):
         msg_ids = []
         for msg in self.p_msg:
             msg_ids.append(msg.id)
-        pickle.dump( msg_ids, open ("persistence/pmsg.p", "wb" ) )
+        pickle.dump( msg_ids, open ("/persistence/pmsg.p", "wb" ) )
     
 def checkLab( host, temp ):
     sshclient = paramiko.SSHClient()
