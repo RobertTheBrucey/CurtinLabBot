@@ -181,6 +181,7 @@ class BotClient( discord.Client ):
         self.p_msg_grid = []
         msg_ids = pickle.load( open( "/persistence/pmsg.p", "rb" ) )
         for msg in msg_ids[0]:
+            rmsg = None
             channels = self.get_all_channels()
             for channel in channels:
                 try:
