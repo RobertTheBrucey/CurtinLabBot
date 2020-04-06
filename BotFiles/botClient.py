@@ -93,6 +93,7 @@ class BotClient( discord.Client ):
                         for row in range(1,7):
                             host = "lab{}-{}0{}.cs.curtin.edu.au.".format(room,column,row)
                             labsString += str(self.labs.get(host,"F")) + "\t"
+                        labsString += "\n"
                 await message.author.send(labsString)
 
     async def pollLabs(self):
