@@ -104,7 +104,7 @@ class BotClient( discord.Client ):
                     for msg in self.p_msg_grid:
                         if msg.channel == message.channel:
                             self.p_msg_grid.remove(msg)
-                    self.p_msg_grid.append(await message.channel.send(self.getGridStr() + "\n Quick Lab: " + random.choice(self.mins)))
+                    self.p_msg_grid.append(await message.channel.send(self.getGridStr() + "Quick Lab: " + random.choice(self.mins)))
                     await self.savePMsg()
                 else:
                     await message.channel.send("You are not authorised to use this command.")
@@ -194,7 +194,7 @@ class BotClient( discord.Client ):
         labsString = self.getGridStr()
         for msg in self.p_msg_grid:
             try:
-                await msg.edit(content=(labsString + "\n Quick Lab: " + random.choice(mins)))
+                await msg.edit(content=(labsString + "Quick Lab: " + random.choice(mins)))
             except:
                 print("Problem editting persistent message.")
 
