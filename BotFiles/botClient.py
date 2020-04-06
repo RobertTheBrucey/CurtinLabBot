@@ -22,6 +22,7 @@ class BotClient( discord.Client ):
         self.helpString = ""
         try:
             self.labs = pickle.load( open( "labs.p", "rb" ) )
+            print("Labs successfully loaded.")
         except:
             print("No labs to load")
         asyncio.get_event_loop().create_task(self.pollLabs())
@@ -31,6 +32,7 @@ class BotClient( discord.Client ):
         await self.change_presence(activity=discord.Game(name="^labhelp"))
         try:
             await loadPMsg()
+            print("Persistent messages successfully loaded.")
         except:
             print("Couldn't load persistent messages from file.")
 
@@ -44,7 +46,7 @@ class BotClient( discord.Client ):
             command = " "
         if command[0] == "^":
             if command[1:] == "labs":
-                print( '{} asked for the lab machines\n'.format(message.author))
+                print( '{} asked for the lab machines'.format(message.author))
                 labsString = ""
                 first = ""
                 for lab in sorted(self.labs,key=self.labs.get):
@@ -58,17 +60,17 @@ class BotClient( discord.Client ):
                 await message.author.send(labsString)
                 await message.channel.send("List of online lab machines DMed\nQuick machine: {}".format(first))
             elif command[1:] == "quicklab":
-                print( '{} asked for a quick lab\n'.format(message.author))
+                print( '{} asked for a quick lab'.format(message.author))
                 for lab in sorted(self.labs,key=self.labs.get):
                     await message.channel.send("Quick Lab: {}".format(lab))
                     break
             elif command[1:] == "labhelp":
-                print( '{} asked for the lab help\n'.format(message.author))
+                print( '{} asked for the lab help'.format(message.author))
                 await message.channel.send("`^labs` - Request the list of Lab machines via DM\n`^quicklab` - Show a single ready lab machine\n`^labgrid` - Request a DM of Lab machine formatted in a grid.\n`^persistent` - (Administrator only) Generate a persistent (auto updating) message.")
             elif command[1:] == "persistent":
-                print( '{} asked for a persistent message\n'.format(message.author))
-                if message.author.permissions_in(message.channel).administrator:
-                    print( '{} was authorised for a persistent message\n'.format(message.author))
+                print( '{} asked for a persistent message'.format(message.author))
+                if message.author.permissions_in(message.channel).manage_messages:
+                    print( '{} was authorised for a persistent message'.format(message.author))
                     labsString = ""
                     for lab in sorted(self.labs,key=self.labs.get):
                         if self.labs[lab] != -1:
@@ -79,12 +81,12 @@ class BotClient( discord.Client ):
                 else:
                     await message.channel.send("You are not authorised to use this command.")
             elif command[1:] == "labgrid":
-                print( '{} asked for the lab machine grid\n'.format(message.author))
+                print( '{} asked for the lab machine grid'.format(message.author))
                 await message.channel.send("This command has not been implemented yet")
 
     async def pollLabs(self):
         while True:
-            print("Starting scan at {}\n".format(str(datetime.datetime.now())))
+            print("Starting scan at {}".format(str(datetime.datetime.now())))
             for room in [218,219,220,221,232]:
                 for column in "abcd":
                     for row in range(1,7):
