@@ -105,12 +105,12 @@ class BotClient( discord.Client ):
         labsString = "Lab Machine Users By Room:\n```"
         sp = 3
         for room in [218,219,220,221,232]:
-            labsString += "Room " + str(room) + ":\n  "
+            labsString += "lab" + str(room) + "\n   "
             for row in range(1,7):
-                labsString += str(row) + pad(1,sp)
+                labsString += "0" + str(row) + pad(10,sp)
             labsString += "\n"
             for column in "abcd":
-                labsString += str(column) + " "
+                labsString += "-" + str(column) + " "
                 for row in range(1,7):
                     host = "lab{}-{}0{}.cs.curtin.edu.au.".format(room,column,row)
                     users = self.labs.get(host,-1)
@@ -251,4 +251,4 @@ def checkLab( host, temp ):
         pass
 
 def pad(inte,places):
-    return " " * (places-int(math.log10(math.abs(inte))))
+    return " " * (places-int(math.log10(abs(inte))))
