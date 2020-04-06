@@ -23,7 +23,7 @@ services:
     container_name: labbot
     image: docker.ashtech.one:5000/labbot
     volumes:
-      - Persistence:/Persistence
+      - "Persistence:/Persistence"
     tty: false
     entrypoint: /start.sh
     restart: unless-stopped
