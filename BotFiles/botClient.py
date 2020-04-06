@@ -7,6 +7,7 @@ import datetime
 import copy
 import pickle
 import math
+import random
 from multiprocessing import Process, Queue
 from config import getCreds
 
@@ -18,6 +19,7 @@ class BotClient( discord.Client ):
     labs = {}
     p_msg = []
     p_msg_grid = []
+    mins = []
 
     def __init__(self, ):
         super().__init__()
@@ -98,13 +100,15 @@ class BotClient( discord.Client ):
                     for msg in self.p_msg_grid:
                         if msg.channel == message.channel:
                             self.p_msg_grid.remove(msg)
-                    self.p_msg_grid.append(await message.channel.send(self.getGridStr()))
+                    self.p_msg_grid.append(await message.channel.send(self.getGridStr() + "\n Quick Lab: " + random.choice(mins)))
                     await self.savePMsg()
                 else:
                     await message.channel.send("You are not authorised to use this command.")
     def getGridStr(self):
         labsString = "Lab Machine Users By Room:\n```\n"
         sp = 2
+        mins = []
+        mini = 100
         for room in [218,219,220,221,232]:
             labsString += "lab" + str(room) + "\n  "
             for row in range(1,7):
@@ -115,6 +119,11 @@ class BotClient( discord.Client ):
                 for row in range(1,7):
                     host = "lab{}-{}0{}.cs.curtin.edu.au.".format(room,column,row)
                     users = self.labs.get(host,-1)
+                    if (users>-1 and users < mini):
+                        mini = users
+                        mins = []
+                    if (users == mini):
+                        mins.append(host)
                     labsString +=  "  " + str((" ",users)[users!=-1]) + pad(users,sp)
                 labsString += "\n"
         return labsString + "```"
@@ -181,7 +190,7 @@ class BotClient( discord.Client ):
         labsString = self.getGridStr()
         for msg in self.p_msg_grid:
             try:
-                await msg.edit(content=labsString)
+                await msg.edit(content=(labsString + "\n Quick Lab: " + random.choice(mins)))
             except:
                 print("Problem editting persistent message.")
 
