@@ -200,7 +200,8 @@ class BotClient( discord.Client ):
                     continue
             if rmsg:
                 self.p_msg_grid.append(rmsg)
-        print("{} persistent messages loaded and {} persistent grids loaded" % (str(len(self.p_msg)),str(len(self.p_msg_grid))))
+        #print("{} persistent messages loaded and {} persistent grids loaded" % (str(len(self.p_msg)),str(len(self.p_msg_grid))))
+        print(str(len(self.p_msg)) + " persistent messages loaded and "+ str(len(self.p_msg_grid)) +" persistent grids loaded")
 
     async def savePMsg(self):
         msg_ids = []
