@@ -23,15 +23,10 @@ services:
     container_name: labbot
     image: docker.ashtech.one:5000/labbot
     volumes:
-      - type: volume
-        source: persistence
-        target: /persistence
+      - "./persistence:/persistence"
     tty: false
     entrypoint: /start.sh
     restart: unless-stopped
     depends_on:
       - vpn
     network_mode: "service:vpn"
-
-volumes:
-  persistence:
