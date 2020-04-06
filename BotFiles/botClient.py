@@ -16,6 +16,7 @@ reserved = ['simpintro','simp','unsimp','unsimpall']
 class BotClient( discord.Client ):
     labs = {}
     p_msg = []
+    p_msg_grid = []
 
     def __init__(self, ):
         super().__init__()
@@ -96,6 +97,24 @@ class BotClient( discord.Client ):
                         labsString += "\n"
                 await message.channel.send("Grid DMed to you")
                 await message.author.send(labsString)
+            elif command[1:] == "persistentgrid":
+                print( '{} asked for a persistent lab machine grid'.format(message.author))
+                if message.author.permissions_in(message.channel).manage_messages:
+                    labsString = ""
+                    for room in [218,219,220,221,232]:
+                        labsString += "Room " + str(room) + ":\t"
+                        for row in range(1,7):
+                            labsString += str(row) + "\t"
+                        labsString += "\n"
+                        for column in "abcd":
+                            labsString += "        " + str(column) + "\t"
+                            for row in range(1,7):
+                                host = "lab{}-{}0{}.cs.curtin.edu.au.".format(room,column,row)
+                                labsString += str(self.labs.get(host,"F")) + "\t"
+                            labsString += "\n"
+                    self.p_msg_grid.append(await message.channel.send(labsString))
+                else:
+                    await message.channel.send("You are not authorised to use this command.")
 
     async def pollLabs(self):
         while True:
