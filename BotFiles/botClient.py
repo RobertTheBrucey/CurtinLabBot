@@ -105,7 +105,7 @@ class BotClient( discord.Client ):
                 labsString += str(column) + "\t"
                 for row in range(1,7):
                     host = "lab{}-{}0{}.cs.curtin.edu.au.".format(room,column,row)
-                    labsString += str(self.labs.get(host,"F")) + "\t"
+                    labsString += str(("F",self.labs[host])[self.labs.get(host,-1)!=-1]) + "\t"
                 labsString += "\n"
         return labsString
 
