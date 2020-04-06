@@ -119,8 +119,10 @@ class BotClient( discord.Client ):
                 if self.labs[lab] > max:
                     max = self.labs[lab]
             if max == -1:
+                print("All labs down, loading from backup")
                 self.labs = pickle.load( open( "labs.p", "rb" ) )
             else:
+                print("Saving up machines to file")
                 pickle.dump( self.labs, open ("labs.p", "wb" ) )
             await self.updatePMsg()
             await asyncio.sleep(300)
