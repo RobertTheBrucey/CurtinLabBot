@@ -6,6 +6,7 @@ import re
 import datetime
 import copy
 import pickle
+import math
 from multiprocessing import Process, Queue
 from config import getCreds
 
@@ -102,16 +103,18 @@ class BotClient( discord.Client ):
                     await message.channel.send("You are not authorised to use this command.")
     def getGridStr(self):
         labsString = "Lab Machine Users By Room:\n```"
+        sp = 3
         for room in [218,219,220,221,232]:
-            labsString += "Room " + str(room) + ":\n\t"
+            labsString += "Room " + str(room) + ":\n  "
             for row in range(1,7):
-                labsString += str(row) + "\t"
+                labsString += str(row) + pad(1,sp)
             labsString += "\n"
             for column in "abcd":
-                labsString += str(column) + "\t"
+                labsString += str(column) + " "
                 for row in range(1,7):
                     host = "lab{}-{}0{}.cs.curtin.edu.au.".format(room,column,row)
-                    labsString += str(("F",self.labs[host])[self.labs.get(host,-1)!=-1]) + "\t"
+                    users = self.labs.get(host,-1)
+                    labsString += str(("F",users)[users!=-1]) + pad(users,sp)
                 labsString += "\n"
         return labsString + "```"
 
@@ -246,3 +249,6 @@ def checkLab( host, temp ):
         sshclient.close()
     except:
         pass
+
+def pad(inte,places):
+    return " " * (places-int(math.log10(math.abs(inte))))
