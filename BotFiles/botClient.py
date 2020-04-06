@@ -36,6 +36,7 @@ class BotClient( discord.Client ):
             print("Persistent messages successfully loaded.")
         except:
             print("Couldn't load persistent messages from file.")
+        await self.loadPMsg()
 
     async def on_message( self, message ):
         #Ignore own messages
@@ -95,7 +96,7 @@ class BotClient( discord.Client ):
                 else:
                     await message.channel.send("You are not authorised to use this command.")
     def getGridStr(self):
-        labsString = ""
+        labsString = "Lab Machine Users By Room:\n"
         for room in [218,219,220,221,232]:
             labsString += "Room " + str(room) + ":\n\t"
             for row in range(1,7):
