@@ -66,18 +66,16 @@ class BotClient( discord.Client ):
                 print( '{} asked for the lab help\n'.format(message.author))
                 await message.channel.send("`^labs` - Request the list of Lab machines via DM\n`^quicklab` - Show a single ready lab machine\n`^labgrid` - Request a DM of Lab machine formatted in a grid.\n`^persistent` - (Administrator only) Generate a persistent (auto updating) message.")
             elif command[1:] == "persistent":
-                print( '{} asked for a persistent message\n'.format(message.author))
-                if message.author.hasPermission('ADMINISTRATOR'):
-                    print( '{} was authorised for a persistent message\n'.format(message.author))
-                    labsString = ""
-                    for lab in sorted(self.labs,key=self.labs.get):
-                        if self.labs[lab] != -1:
-                            labsString += "\n"+lab+" has "+str(self.labs[lab])+" user(s)"
-                    labsString = "Available lab machines are:`"+labsString
-                    labsString = labsString[:labsString[:1999].rfind('\n')] + "`"
-                    p_msg.append(await message.channel.send(labsString))
-                else:
-                    await message.channel.send("You are not authorised to use this command.")
+                @commands.has_permissions(administrator=True)
+                @commands.command()
+                print( '{} was authorised for a persistent message\n'.format(message.author))
+                labsString = ""
+                for lab in sorted(self.labs,key=self.labs.get):
+                    if self.labs[lab] != -1:
+                        labsString += "\n"+lab+" has "+str(self.labs[lab])+" user(s)"
+                labsString = "Available lab machines are:`"+labsString
+                labsString = labsString[:labsString[:1999].rfind('\n')] + "`"
+                p_msg.append(await message.channel.send(labsString))
             elif command[1:] == "labgrid":
                 print( '{} asked for the lab machine grid\n'.format(message.author))
                 await message.channel.send("This command has not been implemented yet")
