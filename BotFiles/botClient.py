@@ -110,7 +110,7 @@ class BotClient( discord.Client ):
             for row in range(1,7):
                 labsString += "0" + str(row) + pad(10,sp)
             labsString += "\n"
-            for column in "abcde":
+            for column in "abcd":
                 labsString += "-" + str(column) + "  "
                 for row in range(1,7):
                     host = "lab{}-{}0{}.cs.curtin.edu.au.".format(room,column,row)
@@ -123,7 +123,7 @@ class BotClient( discord.Client ):
         while True:
             print("Starting scan at {}".format(str(datetime.datetime.now())))
             for room in [218,219,220,221,232]:
-                for column in "abcde":
+                for column in "abcd":
                     for row in range(1,7):
                         users = -1
                         host = "lab{}-{}0{}.cs.curtin.edu.au.".format(room,column,row)
