@@ -85,11 +85,12 @@ class BotClient( discord.Client ):
             elif command[1:] == "labgrid":
                 print( '{} asked for the lab machine grid'.format(message.author))
                 await message.channel.send("Grid DMed to you")
-                await message.author.send(self.getGridStr)
+                await message.author.send(self.getGridStr())
             elif command[1:] == "persistentgrid":
                 print( '{} asked for a persistent lab machine grid'.format(message.author))
                 if message.author.permissions_in(message.channel).manage_messages:
-                    self.p_msg_grid.append(await message.channel.send(self.getGridStr))
+                    print( '{} was authorised for a persistent grid'.format(message.author))
+                    self.p_msg_grid.append(await message.channel.send(self.getGridStr()))
                     await self.savePMsg()
                 else:
                     await message.channel.send("You are not authorised to use this command.")
@@ -167,7 +168,7 @@ class BotClient( discord.Client ):
             except:
                 print("Problem editting persistent message.")
         #Grid message section
-        labsString = self.getGridStr
+        labsString = self.getGridStr()
         for msg in self.p_msg_grid:
             try:
                 await msg.edit(content=labsString)
