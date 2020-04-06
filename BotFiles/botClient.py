@@ -251,4 +251,8 @@ def checkLab( host, temp ):
         pass
 
 def pad(inte,places):
-    return " " * (places-int(math.log10(abs(inte))))
+    if inte < 1:
+        padding = places-1
+    else:
+        padding = (places-int(math.log10(abs(inte))))
+    return " " * padding
