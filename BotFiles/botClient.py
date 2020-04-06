@@ -115,7 +115,7 @@ class BotClient( discord.Client ):
                 for row in range(1,7):
                     host = "lab{}-{}0{}.cs.curtin.edu.au.".format(room,column,row)
                     users = self.labs.get(host,-1)
-                    labsString += str((" ",users)[users!=-1]) + pad(users,sp)
+                    labsString += str(("?",users)[users!=-1]) + pad(users,sp)
                 labsString += "\n"
         return labsString + "```"
 
