@@ -83,38 +83,28 @@ class BotClient( discord.Client ):
                     await message.channel.send("You are not authorised to use this command.")
             elif command[1:] == "labgrid":
                 print( '{} asked for the lab machine grid'.format(message.author))
-                labsString = ""
-                for room in [218,219,220,221,232]:
-                    labsString += "Room " + str(room) + ":\t"
-                    for row in range(1,7):
-                        labsString += str(row) + "\t"
-                    labsString += "\n"
-                    for column in "abcd":
-                        labsString += "        " + str(column) + "\t"
-                        for row in range(1,7):
-                            host = "lab{}-{}0{}.cs.curtin.edu.au.".format(room,column,row)
-                            labsString += str(self.labs.get(host,"F")) + "\t"
-                        labsString += "\n"
                 await message.channel.send("Grid DMed to you")
-                await message.author.send(labsString)
+                await message.author.send(self.getGridStr)
             elif command[1:] == "persistentgrid":
                 print( '{} asked for a persistent lab machine grid'.format(message.author))
                 if message.author.permissions_in(message.channel).manage_messages:
-                    labsString = ""
-                    for room in [218,219,220,221,232]:
-                        labsString += "Room " + str(room) + ":\t"
-                        for row in range(1,7):
-                            labsString += str(row) + "\t"
-                        labsString += "\n"
-                        for column in "abcd":
-                            labsString += "        " + str(column) + "\t"
-                            for row in range(1,7):
-                                host = "lab{}-{}0{}.cs.curtin.edu.au.".format(room,column,row)
-                                labsString += str(self.labs.get(host,"F")) + "\t"
-                            labsString += "\n"
-                    self.p_msg_grid.append(await message.channel.send(labsString))
+                    self.p_msg_grid.append(await message.channel.send(self.getGridStr))
                 else:
                     await message.channel.send("You are not authorised to use this command.")
+    def getGridStr(self):
+        labsString = ""
+        for room in [218,219,220,221,232]:
+            labsString += "Room " + str(room) + ":\t"
+            for row in range(1,7):
+                labsString += str(row) + "\t"
+            labsString += "\n"
+            for column in "abcd":
+                labsString += "        " + str(column) + "\t"
+                for row in range(1,7):
+                    host = "lab{}-{}0{}.cs.curtin.edu.au.".format(room,column,row)
+                    labsString += str(self.labs.get(host,"F")) + "\t"
+                labsString += "\n"
+        return labsString
 
     async def pollLabs(self):
         while True:
@@ -175,13 +165,8 @@ class BotClient( discord.Client ):
             except:
                 print("Problem editting persistent message.")
         #Grid message section
-        labsString = ""
-        for lab in sorted(self.labs,key=self.labs.get):
-            if self.labs[lab] != -1:
-                labsString += "\n"+lab+" has "+str(self.labs[lab])+" user(s)"
-        labsString = "Available lab machines are:`"+labsString
-        labsString = labsString[:labsString[:1999].rfind('\n')] + "`"
-        for msg in self.p_msg:
+        labsString = self.getGridStr
+        for msg in self.p_msg_grid:
             try:
                 await msg.edit(content=labsString)
             except:
@@ -209,6 +194,7 @@ class BotClient( discord.Client ):
                     continue
             if rmsg:
                 self.p_msg_grid.append(rmsg)
+        print("{} persistent messages loaded and {} persistent grids loaded" %(len(self.p_msg),len(self.p_msg_grid)))
 
     async def savePMsg(self):
         msg_ids = []
