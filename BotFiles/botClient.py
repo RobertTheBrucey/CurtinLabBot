@@ -20,6 +20,7 @@ class BotClient( discord.Client ):
     p_msg = []
     p_msg_grid = []
     mins = []
+    loading = True
 
     def __init__(self, ):
         super().__init__()
@@ -40,6 +41,7 @@ class BotClient( discord.Client ):
         except:
             print("Couldn't load persistent messages from file.")
         await self.updatePMsg()
+        self.loading = False
 
     async def on_message( self, message ):
         #Ignore own messages
@@ -50,7 +52,9 @@ class BotClient( discord.Client ):
         else:
             command = " "
         if command[0] == "^":
-            if command[1:] == "labs":
+            if self.loading:
+                pass
+            elif command[1:] == "labs":
                 print( '{} asked for the lab machines'.format(message.author))
                 labsString = ""
                 first = ""
