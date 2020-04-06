@@ -174,11 +174,24 @@ class BotClient( discord.Client ):
                 await msg.edit(content=labsString)
             except:
                 print("Problem editting persistent message.")
+        #Grid message section
+        labsString = ""
+        for lab in sorted(self.labs,key=self.labs.get):
+            if self.labs[lab] != -1:
+                labsString += "\n"+lab+" has "+str(self.labs[lab])+" user(s)"
+        labsString = "Available lab machines are:`"+labsString
+        labsString = labsString[:labsString[:1999].rfind('\n')] + "`"
+        for msg in self.p_msg:
+            try:
+                await msg.edit(content=labsString)
+            except:
+                print("Problem editting persistent message.")
 
     async def loadPMsg(self):
         self.pmsg = []
+        self.p_msg_grid = []
         msg_ids = pickle.load( open( "/persistence/pmsg.p", "rb" ) )
-        for msg in msg_ids:
+        for msg in msg_ids[0]:
             channels = self.get_all_channels()
             for channel in channels:
                 try:
@@ -187,12 +200,25 @@ class BotClient( discord.Client ):
                     continue
             if rmsg:
                 self.p_msg.append(rmsg)
+        for msg in msg_ids[1]:
+            channels = self.get_all_channels()
+            for channel in channels:
+                try:
+                    rmsg = await channel.get_message(msg)
+                except:
+                    continue
+            if rmsg:
+                self.p_msg_grid.append(rmsg)
 
     async def savePMsg(self):
         msg_ids = []
+        grid_msg_ids = []
         for msg in self.p_msg:
             msg_ids.append(msg.id)
-        pickle.dump( msg_ids, open ("/persistence/pmsg.p", "wb" ) )
+        for msg in self.p_msg_grid:
+            grid_msg_ids.append(msg.id)
+        msgs = (msg_ids,grid_msg_ids)
+        pickle.dump( msgs, open ("/persistence/pmsg.p", "wb" ) )
     
 def checkLab( host, temp ):
     sshclient = paramiko.SSHClient()
