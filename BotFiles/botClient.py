@@ -32,7 +32,7 @@ class BotClient( discord.Client ):
         print( 'Logged on as {0}!'.format( self.user ) )
         await self.change_presence(activity=discord.Game(name="^labhelp"))
         try:
-            await loadPMsg()
+            await self.loadPMsg()
             print("Persistent messages successfully loaded.")
         except:
             print("Couldn't load persistent messages from file.")
@@ -97,12 +97,12 @@ class BotClient( discord.Client ):
     def getGridStr(self):
         labsString = ""
         for room in [218,219,220,221,232]:
-            labsString += "Room " + str(room) + ":\t"
+            labsString += "Room " + str(room) + ":\n\t"
             for row in range(1,7):
                 labsString += str(row) + "\t"
             labsString += "\n"
             for column in "abcd":
-                labsString += "        " + str(column) + "\t"
+                labsString += str(column) + "\t"
                 for row in range(1,7):
                     host = "lab{}-{}0{}.cs.curtin.edu.au.".format(room,column,row)
                     labsString += str(self.labs.get(host,"F")) + "\t"
