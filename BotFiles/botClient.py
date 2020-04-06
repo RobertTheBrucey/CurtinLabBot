@@ -82,7 +82,18 @@ class BotClient( discord.Client ):
                     await message.channel.send("You are not authorised to use this command.")
             elif command[1:] == "labgrid":
                 print( '{} asked for the lab machine grid'.format(message.author))
-                await message.channel.send("This command has not been implemented yet")
+                labsString = ""
+                for room in [218,219,220,221,232]:
+                    labsString += "Room " + str(room) + ":\t"
+                    for row in range(1,7):
+                        labsString += str(row) + "\t"
+                    labsString += "\n"
+                    for column in "abcd":
+                        labsString += "        " + str(column) + "\t"
+                        for row in range(1,7):
+                            host = "lab{}-{}0{}.cs.curtin.edu.au.".format(room,column,row)
+                            labsString += str(host.get(host,"F")) + "\t"
+                await message.author.send(labsString)
 
     async def pollLabs(self):
         while True:
