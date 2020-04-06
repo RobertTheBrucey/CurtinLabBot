@@ -138,7 +138,7 @@ class BotClient( discord.Client ):
                             #print("Proc Join")
                             #proc.join(timeout=5)
                             #print("get queue")
-                            users = q.get(timeout=3)
+                            users = q.get(timeout=2)
                             proc.join()
                             print(str(users) + " Users.")
                         except Exception as err:
@@ -230,7 +230,7 @@ def checkLab( host, temp ):
     creds = getCreds()
     sshclient.set_missing_host_key_policy(paramiko.AutoAddPolicy)
     try:
-        sshclient.connect(host, username=creds[0], password=creds[1], timeout=2, banner_timeout=2, auth_timeout=2)
+        sshclient.connect(host, username=creds[0], password=creds[1], timeout=1, banner_timeout=1, auth_timeout=1)
         stdin, stdout, stderr = sshclient.exec_command('w',timeout=1)
         for line in stderr:
             #print(line.strip('\n'))
