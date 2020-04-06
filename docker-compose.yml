@@ -30,3 +30,6 @@ services:
     depends_on:
       - vpn
     network_mode: "service:vpn"
+
+volumes:
+  Persistence:
