@@ -194,7 +194,7 @@ class BotClient( discord.Client ):
         labsString = self.getGridStr()
         for msg in self.p_msg_grid:
             try:
-                await msg.edit(content=(labsString + "Quick Lab: " + random.choice(mins)))
+                await msg.edit(content=(labsString + "Quick Lab: " + random.choice(self.mins)))
             except:
                 print("Problem editting persistent message.")
 
