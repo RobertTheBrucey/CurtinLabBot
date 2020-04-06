@@ -36,7 +36,6 @@ class BotClient( discord.Client ):
             print("Persistent messages successfully loaded.")
         except:
             print("Couldn't load persistent messages from file.")
-        await self.loadPMsg()
 
     async def on_message( self, message ):
         #Ignore own messages
