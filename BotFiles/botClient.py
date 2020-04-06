@@ -107,7 +107,7 @@ class BotClient( discord.Client ):
     def getGridStr(self):
         labsString = "Lab Machine Users By Room:\n```\n"
         sp = 2
-        mins = []
+        self.mins = []
         mini = 100
         for room in [218,219,220,221,232]:
             labsString += "lab" + str(room) + "\n  "
