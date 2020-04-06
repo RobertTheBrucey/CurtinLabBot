@@ -34,4 +34,4 @@ services:
     network_mode: "service:vpn"
 
 volumes:
-  - persistence:
+  persistence:
