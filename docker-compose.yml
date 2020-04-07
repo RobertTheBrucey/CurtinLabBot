@@ -10,7 +10,7 @@ services:
     #  - ANYCONNECT_USER=${ANYCONNECT_USER}
     #  - ANYCONNECT_PASSWORD=${ANYCONNECT_PASSWORD}
     env_file:
-      - BruceCurtin.env
+      - VPN.env
     networks:
       - default
     privileged: true
@@ -23,7 +23,7 @@ services:
     container_name: labbot
     image: docker.ashtech.one:5000/labbot
     volumes:
-      - "./persistence:/persistence"
+      - "./persistence:/BotFiles/persistence"
     tty: false
     entrypoint: /start.sh
     restart: unless-stopped

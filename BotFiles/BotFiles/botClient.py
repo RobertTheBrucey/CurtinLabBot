@@ -8,8 +8,9 @@ import copy
 import pickle
 import math
 import random
+import os.path
 from multiprocessing import Process, Queue
-from config import getCreds
+import config
 
 #Todo: Persistent messages
 #Grid view
@@ -22,11 +23,12 @@ class BotClient( discord.Client ):
     mins = []
     loading = True
 
-    def __init__(self, ):
+    def __init__(self, configfile):
         super().__init__()
         self.helpString = ""
+        self.configfile = configfile
         try:
-            self.labs = pickle.load( open( "/persistence/labs.p", "rb" ) )
+            self.labs = pickle.load( open( "./persistence/labs.p", "rb" ) )
             print("Labs successfully loaded.")
         except:
             print("No labs to load")
@@ -133,6 +135,9 @@ class BotClient( discord.Client ):
         return labsString + "```"
 
     async def pollLabs(self):
+        creds = config.getCreds(self.configfile)
+        logfile = "./persistence/"+config.getLogfile(self.configfile)
+        keyfile = "./persistence/"+config.getKeyfile(self.configfile)
         while True:
             print("Starting scan at {}".format(str(datetime.datetime.now())))
             for room in [218,219,220,221,232]:
@@ -144,7 +149,7 @@ class BotClient( discord.Client ):
                         print(host+": ", end = '')
                         q = Queue()
                         #print("step 1")
-                        proc = Process(target=checkLab, args=(host,q))
+                        proc = Process(target=checkLab, args=(host,q,creds,keyfile))
                         #print("step 2")
                         proc.start()
                         #print("step 3")
@@ -170,11 +175,27 @@ class BotClient( discord.Client ):
                     max = self.labs[lab]
             if max == -1:
                 print("All labs down, loading from backup")
-                self.labs = pickle.load( open( "/persistence/labs.p", "rb" ) )
+                self.labs = pickle.load( open( "./persistence/labs.p", "rb" ) )
             else:
                 print("Saving up machines to file")
-                pickle.dump( self.labs, open ("/persistence/labs.p", "wb" ) )
+                pickle.dump( self.labs, open ("./persistence/labs.p", "wb" ) )
             await self.updatePMsg()
+            logStr = ""
+            if os.path.isfile(logfile):
+                dataStr = ""
+                for lab in sorted(self.labs.keys()):
+                    logStr += lab.split(".")[0][3:]
+                    dataStr += self.labs[lab] + ","
+                logStr += "\n" + dataStr
+            elif not os.path.isdir:
+                for lab in sorted(self.labs.keys()):
+                    logStr += self.labs[lab] + ","
+            if not logStr == "":
+                try:
+                    with open(logfile,"a") as f:
+                        f.write(logStr)
+                except:
+                    print("Log file unable to be written to")
             await asyncio.sleep(300)
             #a = False
 
@@ -201,7 +222,7 @@ class BotClient( discord.Client ):
     async def loadPMsg(self):
         self.pmsg = []
         self.p_msg_grid = []
-        msg_ids = pickle.load( open( "/persistence/pmsg.p", "rb" ) )
+        msg_ids = pickle.load( open( "./persistence/pmsg.p", "rb" ) )
         for msg in msg_ids[0]:
             #print("Attempting to load id " + str(msg))
             rmsg = None
@@ -237,14 +258,13 @@ class BotClient( discord.Client ):
         for msg in self.p_msg_grid:
             grid_msg_ids.append(msg.id)
         msgs = (msg_ids,grid_msg_ids)
-        pickle.dump( msgs, open ("/persistence/pmsg.p", "wb" ) )
+        pickle.dump( msgs, open ("./persistence/pmsg.p", "wb" ) )
     
-def checkLab( host, temp ):
+def checkLab( host, temp, creds, keyfile ):
     sshclient = paramiko.SSHClient()
-    creds = getCreds()
     sshclient.set_missing_host_key_policy(paramiko.AutoAddPolicy)
     try:
-        sshclient.connect(host, username=creds[0], password=creds[1], timeout=1, banner_timeout=1, auth_timeout=1)
+        sshclient.connect(host, username=creds[0], password=creds[1], timeout=1, banner_timeout=1, auth_timeout=1, key_filename=keyfile)
         stdin, stdout, stderr = sshclient.exec_command('w',timeout=1)
         for line in stderr:
             #print(line.strip('\n'))
