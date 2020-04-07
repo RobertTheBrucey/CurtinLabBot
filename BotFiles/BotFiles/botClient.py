@@ -17,14 +17,14 @@ import config
 
 reserved = ['simpintro','simp','unsimp','unsimpall']
 class BotClient( discord.Client ):
-    labs = {}
-    p_msg = []
-    p_msg_grid = []
-    mins = []
-    loading = True
-
+    
     def __init__(self, configfile):
         super().__init__()
+        self.labs = {}
+        self.p_msg = []
+        self.p_msg_grid = []
+        self.mins = []
+        self.loading = True
         self.helpString = ""
         self.configfile = configfile
         try:
