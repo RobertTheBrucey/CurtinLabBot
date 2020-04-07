@@ -186,12 +186,12 @@ class BotClient( discord.Client ):
                 dataStr = ""
                 for lab in sorted(self.labs.keys()):
                     logStr += lab.split(".")[0][3:]
-                    dataStr += self.labs[lab] + ","
+                    dataStr += str(self.labs[lab]) + ","
                 logStr += "\n" + dataStr
             elif not os.path.isdir(logfile):
                 print("Log file exists, appending")
                 for lab in sorted(self.labs.keys()):
-                    logStr += self.labs[lab] + ","
+                    logStr += str(self.labs[lab]) + ","
             if not logStr == "":
                 try:
                     with open(logfile,"a") as f:
