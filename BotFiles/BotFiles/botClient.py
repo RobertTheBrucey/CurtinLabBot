@@ -182,16 +182,17 @@ class BotClient( discord.Client ):
             await self.updatePMsg()
             logStr = ""
             if os.path.isfile(logfile):
-                print("Log file specified but none existant, creating")
-                dataStr = ""
-                for lab in sorted(self.labs.keys()):
-                    logStr += lab.split(".")[0][3:]
-                    dataStr += str(self.labs[lab]) + ","
-                logStr += "\n" + dataStr
-            elif not os.path.isdir(logfile):
                 print("Log file exists, appending")
                 for lab in sorted(self.labs.keys()):
                     logStr += str(self.labs[lab]) + ","
+                logStr = logStr[:-1]
+            elif not os.path.isdir(logfile):
+                print("Log file specified but none existant, creating")
+                dataStr = ""
+                for lab in sorted(self.labs.keys()):
+                    logStr += lab.split(".")[0][3:] + ","
+                    dataStr += str(self.labs[lab]) + ","
+                logStr = logStr[:-1] + "\n" + dataStr[:-1]
             if not logStr == "":
                 try:
                     with open(logfile,"a") as f:
