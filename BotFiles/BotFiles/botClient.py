@@ -250,6 +250,27 @@ class BotClient( discord.Client ):
                 continue
             if rmsg:
                 self.p_msg_grid.append(rmsg)
+        msg_ids = pickle.load( open( "./persistence/pmsg.p", "rb" ) )
+        for msgt in msg_ids[0]:
+            rmsg = None
+            channels = self.get_all_channels
+            for channel in channels:
+                try:
+                    rmsg = await channel.fetch_message(msgt)
+                except:
+                    continue
+            if rmsg:
+                self.p_msg.append(rmsg)
+        for msgt in msg_ids[1]:
+            rmsg = None
+            channels = self.get_all_channels
+            for channel in channels:
+                try:
+                    rmsg = await channel.fetch_message(msgt)
+                except:
+                    continue
+            if rmsg:
+                self.p_msg.append(rmsg)
         print(str(len(self.p_msg)) + " persistent messages loaded and "+ str(len(self.p_msg_grid)) +" persistent grids loaded")
 
     async def savePMsg(self):
