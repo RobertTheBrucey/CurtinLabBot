@@ -229,6 +229,7 @@ class BotClient( discord.Client ):
         self.p_msg_grid = []
         msg_ids = pickle.load( open( "./persistence/pmsgn.p", "rb" ) )
         for msgt in msg_ids[0]:
+            print("New message")
             rmsg = None
             try:
                 guild = await self.get_guild(msgt[0])
@@ -257,7 +258,6 @@ class BotClient( discord.Client ):
         #Legacy loading
         msg_ids = pickle.load( open( "./persistence/pmsg.p", "rb" ) )
         for msgt in msg_ids[0]:
-            print("New message")
             rmsg = None
             channels = self.get_all_channels()
             for channel in channels:
