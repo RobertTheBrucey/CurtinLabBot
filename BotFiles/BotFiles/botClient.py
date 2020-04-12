@@ -202,6 +202,7 @@ class BotClient( discord.Client ):
                     print("Log file unable to be written to")
             else:
                 print("Log file not specified")
+            await asyncio.sleep(5)
             await asyncio.sleep(300)
 
     async def updatePMsg(self):
