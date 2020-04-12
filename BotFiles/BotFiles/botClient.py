@@ -183,12 +183,14 @@ class BotClient( discord.Client ):
             logStr = ""
             if os.path.isfile(logfile):
                 print("Log file exists, appending")
+                logStr += "{},".format(str(datetime.datetime.now()))+","
                 for lab in sorted(self.labs.keys()):
                     logStr += str(self.labs[lab]) + ","
                 logStr = logStr[:-1]
             elif not os.path.isdir(logfile):
                 print("Log file specified but none existant, creating")
-                dataStr = ""
+                dataStr = "{},".format(str(datetime.datetime.now()))
+                logStr += "Time,"
                 for lab in sorted(self.labs.keys()):
                     logStr += lab.split(".")[0][3:] + ","
                     dataStr += str(self.labs[lab]) + ","
