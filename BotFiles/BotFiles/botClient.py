@@ -235,10 +235,8 @@ class BotClient( discord.Client ):
                 print(msgt[0])
                 guild = self.get_guild(msgt[0])
                 print(guild.name)
-                channel = await guild.get_channel(msgt[1])
-                print(str(channel))
+                channel = guild.get_channel(msgt[1])
                 rmsg = await channel.fetch_message(msgt[2])
-                print(str(rmsg))
                 #print(guild,channel,rmsg)
             except:
                 continue
@@ -247,8 +245,8 @@ class BotClient( discord.Client ):
         for msgt in msg_ids[1]:
             rmsg = None
             try:
-                guild = await self.get_guild(msgt[0])
-                channel = await guild.get_channel(msgt[1])
+                guild = self.get_guild(msgt[0])
+                channel = guild.get_channel(msgt[1])
                 rmsg = await channel.fetch_message(msgt[2])
                 print(guild,channel,rmsg)
             except:
