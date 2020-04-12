@@ -277,6 +277,7 @@ class BotClient( discord.Client ):
         print(str(len(self.p_msg)) + " persistent messages loaded and "+ str(len(self.p_msg_grid)) +" persistent grids loaded") """
 
     async def savePMsg(self):
+        #Legacy saving
         """ msg_ids = []
         grid_msg_ids = []
         for msg in self.p_msg:
