@@ -253,7 +253,7 @@ class BotClient( discord.Client ):
         msg_ids = pickle.load( open( "./persistence/pmsg.p", "rb" ) )
         for msgt in msg_ids[0]:
             rmsg = None
-            channels = self.get_all_channels
+            channels = self.get_all_channels()
             for channel in channels:
                 try:
                     rmsg = await channel.fetch_message(msgt)
@@ -263,7 +263,7 @@ class BotClient( discord.Client ):
                 self.p_msg.append(rmsg)
         for msgt in msg_ids[1]:
             rmsg = None
-            channels = self.get_all_channels
+            channels = self.get_all_channels()
             for channel in channels:
                 try:
                     rmsg = await channel.fetch_message(msgt)
