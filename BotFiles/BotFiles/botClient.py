@@ -253,14 +253,14 @@ class BotClient( discord.Client ):
         print(str(len(self.p_msg)) + " persistent messages loaded and "+ str(len(self.p_msg_grid)) +" persistent grids loaded")
 
     async def savePMsg(self):
-        msg_ids = []
+        """ msg_ids = []
         grid_msg_ids = []
         for msg in self.p_msg:
             msg_ids.append(msg.id)
         for msg in self.p_msg_grid:
             grid_msg_ids.append(msg.id)
         msgs = (msg_ids,grid_msg_ids)
-        pickle.dump( msgs, open ("./persistence/pmsg.p", "wb" ) )
+        pickle.dump( msgs, open ("./persistence/pmsg.p", "wb" ) ) """
         msg_ids = []
         grid_msg_ids = []
         for msg in self.p_msg:
