@@ -12,9 +12,6 @@ import os.path
 from multiprocessing import Process, Queue
 import config
 
-#Todo: Persistent messages
-#Grid view
-
 reserved = ['simpintro','simp','unsimp','unsimpall']
 listLen = 1000;
 class BotClient( discord.Client ):
@@ -64,7 +61,6 @@ class BotClient( discord.Client ):
                     if self.labs[lab] != -1:
                         if first == "":
                             first = lab
-                        #labsString += "\n{} has {} user{}".format((lab,str(self.labs[lab])),("","s")[self.labs[lab]==1])
                         labsString += "\n"+lab+" has "+str(self.labs[lab])+" user(s)"
                 labsString = "Available lab machines are:```"+labsString
                 labsString = labsString[:labsString[:listLen].rfind('\n')] + "```"
@@ -159,28 +155,18 @@ class BotClient( discord.Client ):
                     for row in range(1,7):
                         users = -1
                         host = "lab{}-{}0{}.cs.curtin.edu.au.".format(room,column,row)
-                        #print("\033[1A"+host+": ", end = '')
                         print(host+": ", end = '')
                         q = Queue()
-                        #print("step 1")
                         proc = Process(target=checkLab, args=(host,q,creds,keyfile))
-                        #print("step 2")
                         proc.start()
-                        #print("step 3")
                         try:
-                            #print("Proc Join")
-                            #proc.join(timeout=5)
-                            #print("get queue")
                             users = q.get(timeout=2)
                             proc.join()
                             print(str(users) + " Users.")
                         except Exception as err:
                             print("Down")
                             proc.terminate()
-                            #print(type(err))
-                        #print("step 4")
                         self.labs[host] = users
-                        #print("End of thingy")
                         await asyncio.sleep(1)
             print("Finishing scan at {}".format(str(datetime.datetime.now())))
             max = -1
@@ -217,7 +203,6 @@ class BotClient( discord.Client ):
             else:
                 print("Log file not specified")
             await asyncio.sleep(300)
-            #a = False
 
     async def updatePMsg(self):
         labsString = ""
@@ -244,11 +229,9 @@ class BotClient( discord.Client ):
         self.p_msg_grid = []
         msg_ids = pickle.load( open( "./persistence/pmsg.p", "rb" ) )
         for msg in msg_ids[0]:
-            #print("Attempting to load id " + str(msg))
             rmsg = None
             channels = self.get_all_channels()
             for channel in channels:
-                #print("Checking channel: " + str(channel))
                 try:
                     rmsg = await channel.fetch_message(msg)
                 except:
@@ -256,18 +239,15 @@ class BotClient( discord.Client ):
             if rmsg:
                 self.p_msg.append(rmsg)
         for msg in msg_ids[1]:
-            #print("Attempting to load id " + str(msg))
             rmsg = None
             channels = self.get_all_channels()
             for channel in channels:
-                #print("Checking channel: " + str(channel))
                 try:
                     rmsg = await channel.fetch_message(msg)
                 except:
                     continue
             if rmsg:
                 self.p_msg_grid.append(rmsg)
-        #print("{} persistent messages loaded and {} persistent grids loaded" % (str(len(self.p_msg)),str(len(self.p_msg_grid))))
         print(str(len(self.p_msg)) + " persistent messages loaded and "+ str(len(self.p_msg_grid)) +" persistent grids loaded")
 
     async def savePMsg(self):
@@ -279,6 +259,14 @@ class BotClient( discord.Client ):
             grid_msg_ids.append(msg.id)
         msgs = (msg_ids,grid_msg_ids)
         pickle.dump( msgs, open ("./persistence/pmsg.p", "wb" ) )
+        msg_ids = []
+        grid_msg_ids = []
+        for msg in self.p_msg:
+            msg_ids.append((msg.guild.id,msg.channel.id,msg.id))
+        for msg in self.p_msg_grid:
+            grid_msg_ids.append((msg.guild.id,msg.channel.id,msg.id))
+        msgs = (msg_ids,grid_msg_ids)
+        pickle.dump( msgs, open ("./persistence/pmsgn.p", "wb" ) )
     
 def checkLab( host, temp, creds, keyfile ):
     sshclient = paramiko.SSHClient()
@@ -292,12 +280,10 @@ def checkLab( host, temp, creds, keyfile ):
         for line in stdout:
             #print(line.strip('\n'))
             match = re.search(r"(\d+)(?: users?,)",line)
-            #print(match)
             if match:
                 users = int(match.group(1))
                 if users > 0:
                     users = users-1
-                #print("Users: {}".format(users))
                 temp.put(users)
                 break
         sshclient.close()
