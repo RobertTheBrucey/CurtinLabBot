@@ -1,5 +1,5 @@
 #!/bin/bash
 
-cd BotFiles
+cd CurtinLabBot/BotFiles/BotFiles
 git pull
 python3 CurtinLabBot.py
