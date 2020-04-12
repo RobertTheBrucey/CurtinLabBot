@@ -25,7 +25,7 @@ class BotClient( discord.Client ):
         self.p_msg_grid = []
         self.mins = []
         self.loading = True
-        self.helpString = "`^labs` - Request the list of Lab machines via DM\n`^quicklab` - Show a single ready lab machine\n`^labgrid` - Request a DM of Lab machine formatted in a grid.\n`^persistent` - (Administrator only) Generate a persistent (auto updating) message."
+        self.helpString = "`^labs` - Request the list of Lab machines via DM\n`^quicklab` - Show a single ready lab machine\n`^labgrid` - Request a DM of Lab machine formatted in a grid.\n`^persistent` - (Administrator only) Generate a persistent (auto updating) message.\npersistentgrid - (Administrator only) Generate a persistent (auto updating) grid message."
         self.configfile = configfile
         try:
             self.labs = pickle.load( open( "./persistence/labs.p", "rb" ) )
@@ -36,7 +36,7 @@ class BotClient( discord.Client ):
 
     async def on_ready( self ):
         print( 'Logged on as {0}!'.format( self.user ) )
-        await self.change_presence(activity=discord.Game(name="^labhelp"))
+        await self.change_presence(activity=discord.Game(name="Loading..."))
         try:
             await self.loadPMsg()
             print("Persistent messages successfully loaded.")
@@ -44,6 +44,7 @@ class BotClient( discord.Client ):
             print("Couldn't load persistent messages from file.")
         await self.updatePMsg()
         self.loading = False
+        await self.change_presence(activity=discord.Game(name="^labhelp"))
 
     async def on_message( self, message ):
         #Ignore own messages
@@ -54,9 +55,7 @@ class BotClient( discord.Client ):
         else:
             command = " "
         if command[0] == "^":
-            if self.loading:
-                pass
-            elif command[1:] == "labs":
+            if command[1:] == "labs":
                 print( '{} asked for the lab machines'.format(message.author))
                 labsString = ""
                 first = ""
@@ -69,15 +68,24 @@ class BotClient( discord.Client ):
                 labsString = "Available lab machines are:`"+labsString
                 labsString = labsString[:labsString[:1999].rfind('\n')] + "`"
                 await message.author.send(labsString)
-                await message.channel.send("List of online lab machines DMed\nQuick machine: {}".format(first))
+                try:
+                    await message.channel.send("List of online lab machines DMed\nQuick machine: {}".format(first))
+                except:
+                    print("Couldn't send message to channel.")
             elif command[1:] == "labgrid":
                 print( '{} asked for the lab machine grid'.format(message.author))
-                await message.channel.send("Grid DMed to you")
                 await message.author.send(self.getGridStr())
+                try:
+                    await message.channel.send("Grid DMed to you")
+                except:
+                    print("Couldn't  send message to channel.")
             elif command[1:] == "quicklab":
                 print( '{} asked for a quick lab'.format(message.author))
                 for lab in sorted(self.labs,key=self.labs.get):
-                    await message.channel.send("Quick Lab: {}".format(lab))
+                    try:
+                        await message.channel.send("Quick Lab: {}".format(lab))
+                    except:
+                        await message.author.send("Quick Lab: {}".format(lab))
                     break
             elif command[1:] == "labhelp":
                 print( '{} asked for the lab help'.format(message.author))
@@ -85,6 +93,8 @@ class BotClient( discord.Client ):
                     await message.channel.send(self.helpString)
                 except:
                     await message.channel.send(self.helpString)
+            elif self.loading:
+                pass
             elif command[1:] == "persistent":
                 print( '{} asked for a persistent message'.format(message.author))
                 if message.author.permissions_in(message.channel).manage_messages:
@@ -93,8 +103,8 @@ class BotClient( discord.Client ):
                     for lab in sorted(self.labs,key=self.labs.get):
                         if self.labs[lab] != -1:
                             labsString += "\n"+lab+" has "+str(self.labs[lab])+" user(s)"
-                    labsString = "Available lab machines are:`"+labsString
-                    labsString = labsString[:labsString[:1999].rfind('\n')] + "`"
+                    labsString = "Available lab machines are:```"+labsString
+                    labsString = labsString[:labsString[:1950].rfind('\n')] + "```\nThis list is updated every 10 minutes."
                     for msg in self.p_msg:
                         if msg.channel == message.channel:
                             self.p_msg.remove(msg)
@@ -109,7 +119,7 @@ class BotClient( discord.Client ):
                     for msg in self.p_msg_grid:
                         if msg.channel == message.channel:
                             self.p_msg_grid.remove(msg)
-                    self.p_msg_grid.append(await message.channel.send(self.getGridStr() + "Quick Lab: " + random.choice(self.mins)))
+                    self.p_msg_grid.append(await message.channel.send(self.getGridStr() + "This grid is updated every 10 minutes.\nQuick Lab: " + random.choice(self.mins)))
                     await self.savePMsg()
                 else:
                     await message.channel.send("You are not authorised to use this command.")
@@ -164,8 +174,8 @@ class BotClient( discord.Client ):
                             proc.join()
                             print(str(users) + " Users.")
                         except Exception as err:
-                            proc.terminate()
                             print("Down")
+                            proc.terminate()
                             #print(type(err))
                         #print("step 4")
                         self.labs[host] = users
@@ -213,8 +223,8 @@ class BotClient( discord.Client ):
         for lab in sorted(self.labs,key=self.labs.get):
             if self.labs[lab] != -1:
                 labsString += "\n"+lab+" has "+str(self.labs[lab])+" user(s)"
-        labsString = "Available lab machines are:`"+labsString
-        labsString = labsString[:labsString[:1999].rfind('\n')] + "`"
+        labsString = "Available lab machines are:```"+labsString
+        labsString = labsString[:labsString[:1950].rfind('\n')] + "```\nThis list is updated every 10 minutes."
         for msg in self.p_msg:
             try:
                 await msg.edit(content=labsString)
@@ -224,7 +234,7 @@ class BotClient( discord.Client ):
         labsString = self.getGridStr()
         for msg in self.p_msg_grid:
             try:
-                await msg.edit(content=(labsString + "Quick Lab: " + random.choice(self.mins)))
+                await msg.edit(content=(labsString + "This grid is updated every 10 minutes.\nQuick Lab: " + random.choice(self.mins)))
             except:
                 print("Problem editting persistent message.")
 
