@@ -232,12 +232,9 @@ class BotClient( discord.Client ):
             print("New message")
             rmsg = None
             try:
-                print(msgt[0])
                 guild = self.get_guild(msgt[0])
-                print(guild.name)
                 channel = guild.get_channel(msgt[1])
                 rmsg = await channel.fetch_message(msgt[2])
-                #print(guild,channel,rmsg)
             except:
                 continue
             if rmsg:
@@ -248,14 +245,13 @@ class BotClient( discord.Client ):
                 guild = self.get_guild(msgt[0])
                 channel = guild.get_channel(msgt[1])
                 rmsg = await channel.fetch_message(msgt[2])
-                print(guild,channel,rmsg)
             except:
                 continue
             if rmsg:
                 self.p_msg_grid.append(rmsg)
         print(str(len(self.p_msg)) + " persistent messages loaded and "+ str(len(self.p_msg_grid)) +" persistent grids loaded")
         #Legacy loading
-        msg_ids = pickle.load( open( "./persistence/pmsg.p", "rb" ) )
+        """ msg_ids = pickle.load( open( "./persistence/pmsg.p", "rb" ) )
         for msgt in msg_ids[0]:
             rmsg = None
             channels = self.get_all_channels()
@@ -278,7 +274,7 @@ class BotClient( discord.Client ):
             if rmsg:
                 if rmsg not in self.p_msg_grid:
                     self.p_msg_grid.append(rmsg)
-        print(str(len(self.p_msg)) + " persistent messages loaded and "+ str(len(self.p_msg_grid)) +" persistent grids loaded")
+        print(str(len(self.p_msg)) + " persistent messages loaded and "+ str(len(self.p_msg_grid)) +" persistent grids loaded") """
 
     async def savePMsg(self):
         """ msg_ids = []
