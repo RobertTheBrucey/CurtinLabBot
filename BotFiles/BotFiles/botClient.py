@@ -229,7 +229,6 @@ class BotClient( discord.Client ):
         self.p_msg_grid = []
         msg_ids = pickle.load( open( "./persistence/pmsgn.p", "rb" ) )
         for msgt in msg_ids[0]:
-            print("New message")
             rmsg = None
             try:
                 guild = self.get_guild(msgt[0])
