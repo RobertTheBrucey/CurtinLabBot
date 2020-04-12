@@ -227,25 +227,25 @@ class BotClient( discord.Client ):
     async def loadPMsg(self):
         self.pmsg = []
         self.p_msg_grid = []
-        msg_ids = pickle.load( open( "./persistence/pmsg.p", "rb" ) )
-        for msg in msg_ids[0]:
+        msg_ids = pickle.load( open( "./persistence/pmsgn.p", "rb" ) )
+        for msgt in msg_ids[0]:
             rmsg = None
-            channels = self.get_all_channels()
-            for channel in channels:
-                try:
-                    rmsg = await channel.fetch_message(msg)
-                except:
-                    continue
+            try:
+                guild = await self.get_guild(msgt[0])
+                channel = await guild.get_channel(msgt[1])
+                rmsg = await channel.fetch_message(msgt[2])
+            except:
+                continue
             if rmsg:
                 self.p_msg.append(rmsg)
-        for msg in msg_ids[1]:
+        for msgt in msg_ids[1]:
             rmsg = None
-            channels = self.get_all_channels()
-            for channel in channels:
-                try:
-                    rmsg = await channel.fetch_message(msg)
-                except:
-                    continue
+            try:
+                guild = await self.get_guild(msgt[0])
+                channel = await guild.get_channel(msgt[1])
+                rmsg = await channel.fetch_message(msgt[2])
+            except:
+                continue
             if rmsg:
                 self.p_msg_grid.append(rmsg)
         print(str(len(self.p_msg)) + " persistent messages loaded and "+ str(len(self.p_msg_grid)) +" persistent grids loaded")
