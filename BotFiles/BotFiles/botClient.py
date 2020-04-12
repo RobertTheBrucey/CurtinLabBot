@@ -25,7 +25,7 @@ class BotClient( discord.Client ):
         self.p_msg_grid = []
         self.mins = []
         self.loading = True
-        self.helpString = ""
+        self.helpString = "`^labs` - Request the list of Lab machines via DM\n`^quicklab` - Show a single ready lab machine\n`^labgrid` - Request a DM of Lab machine formatted in a grid.\n`^persistent` - (Administrator only) Generate a persistent (auto updating) message."
         self.configfile = configfile
         try:
             self.labs = pickle.load( open( "./persistence/labs.p", "rb" ) )
@@ -81,7 +81,10 @@ class BotClient( discord.Client ):
                     break
             elif command[1:] == "labhelp":
                 print( '{} asked for the lab help'.format(message.author))
-                await message.channel.send("`^labs` - Request the list of Lab machines via DM\n`^quicklab` - Show a single ready lab machine\n`^labgrid` - Request a DM of Lab machine formatted in a grid.\n`^persistent` - (Administrator only) Generate a persistent (auto updating) message.")
+                try:
+                    await message.channel.send(self.helpString)
+                except:
+                    await message.channel.send(self.helpString)
             elif command[1:] == "persistent":
                 print( '{} asked for a persistent message'.format(message.author))
                 if message.author.permissions_in(message.channel).manage_messages:
