@@ -250,6 +250,8 @@ class BotClient( discord.Client ):
                 continue
             if rmsg:
                 self.p_msg_grid.append(rmsg)
+        print(str(len(self.p_msg)) + " persistent messages loaded and "+ str(len(self.p_msg_grid)) +" persistent grids loaded")
+        #Legacy loading
         msg_ids = pickle.load( open( "./persistence/pmsg.p", "rb" ) )
         for msgt in msg_ids[0]:
             rmsg = None
