@@ -32,3 +32,4 @@ keyfile="
     """ Setup """
     client = bc.BotClient(configfile)
     client.run(getToken(filename=configfile))
+    print("Program End?")
