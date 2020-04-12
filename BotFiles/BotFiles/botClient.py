@@ -232,6 +232,7 @@ class BotClient( discord.Client ):
             print("New message")
             rmsg = None
             try:
+                print(msgt[0])
                 guild = await self.get_guild(msgt[0])
                 print(str(guild.name))
                 channel = await guild.get_channel(msgt[1])
