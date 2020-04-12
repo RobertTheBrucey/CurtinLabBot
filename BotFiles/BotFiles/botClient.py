@@ -232,9 +232,12 @@ class BotClient( discord.Client ):
             rmsg = None
             try:
                 guild = await self.get_guild(msgt[0])
+                print(str(guild))
                 channel = await guild.get_channel(msgt[1])
+                print(str(channel))
                 rmsg = await channel.fetch_message(msgt[2])
-                print(guild,channel,rmsg)
+                print(str(rmsg))
+                #print(guild,channel,rmsg)
             except:
                 continue
             if rmsg:
