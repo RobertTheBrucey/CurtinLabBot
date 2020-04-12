@@ -265,7 +265,8 @@ class BotClient( discord.Client ):
                 except:
                     continue
             if rmsg:
-                self.p_msg.append(rmsg)
+                if rmsg not in self.p_msg:
+                    self.p_msg.append(rmsg)
         for msgt in msg_ids[1]:
             rmsg = None
             channels = self.get_all_channels()
@@ -275,7 +276,8 @@ class BotClient( discord.Client ):
                 except:
                     continue
             if rmsg:
-                self.p_msg_grid.append(rmsg)
+                if rmsg not in self.p_msg_grid:
+                    self.p_msg_grid.append(rmsg)
         print(str(len(self.p_msg)) + " persistent messages loaded and "+ str(len(self.p_msg_grid)) +" persistent grids loaded")
 
     async def savePMsg(self):
