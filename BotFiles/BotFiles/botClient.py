@@ -257,6 +257,7 @@ class BotClient( discord.Client ):
         #Legacy loading
         msg_ids = pickle.load( open( "./persistence/pmsg.p", "rb" ) )
         for msgt in msg_ids[0]:
+            print("New message")
             rmsg = None
             channels = self.get_all_channels()
             for channel in channels:
