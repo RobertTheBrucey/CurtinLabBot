@@ -65,8 +65,8 @@ class BotClient( discord.Client ):
                             first = lab
                         #labsString += "\n{} has {} user{}".format((lab,str(self.labs[lab])),("","s")[self.labs[lab]==1])
                         labsString += "\n"+lab+" has "+str(self.labs[lab])+" user(s)"
-                labsString = "Available lab machines are:`"+labsString
-                labsString = labsString[:labsString[:1999].rfind('\n')] + "`"
+                labsString = "Available lab machines are:```"+labsString
+                labsString = labsString[:labsString[:1997].rfind('\n')] + "```"
                 await message.author.send(labsString)
                 try:
                     await message.channel.send("List of online lab machines DMed\nQuick machine: {}".format(first))
@@ -104,7 +104,7 @@ class BotClient( discord.Client ):
                         if self.labs[lab] != -1:
                             labsString += "\n"+lab+" has "+str(self.labs[lab])+" user(s)"
                     labsString = "Available lab machines are:```"+labsString
-                    labsString = labsString[:labsString[:1950].rfind('\n')] + "```\nThis list is updated every 10 minutes."
+                    labsString = labsString[:labsString[:1950].rfind('\n')] + "```This list is updated every 10 minutes."
                     for msg in self.p_msg:
                         if msg.channel == message.channel:
                             self.p_msg.remove(msg)
@@ -224,7 +224,7 @@ class BotClient( discord.Client ):
             if self.labs[lab] != -1:
                 labsString += "\n"+lab+" has "+str(self.labs[lab])+" user(s)"
         labsString = "Available lab machines are:```"+labsString
-        labsString = labsString[:labsString[:1950].rfind('\n')] + "```\nThis list is updated every 10 minutes."
+        labsString = labsString[:labsString[:1950].rfind('\n')] + "```This list is updated every 10 minutes."
         for msg in self.p_msg:
             try:
                 await msg.edit(content=labsString)
