@@ -234,6 +234,7 @@ class BotClient( discord.Client ):
                 guild = await self.get_guild(msgt[0])
                 channel = await guild.get_channel(msgt[1])
                 rmsg = await channel.fetch_message(msgt[2])
+                print(guild,channel,rmsg)
             except:
                 continue
             if rmsg:
@@ -244,6 +245,7 @@ class BotClient( discord.Client ):
                 guild = await self.get_guild(msgt[0])
                 channel = await guild.get_channel(msgt[1])
                 rmsg = await channel.fetch_message(msgt[2])
+                print(guild,channel,rmsg)
             except:
                 continue
             if rmsg:
