@@ -270,7 +270,7 @@ class BotClient( discord.Client ):
                 except:
                     continue
             if rmsg:
-                self.p_msg.append(rmsg)
+                self.p_msg_grid.append(rmsg)
         print(str(len(self.p_msg)) + " persistent messages loaded and "+ str(len(self.p_msg_grid)) +" persistent grids loaded")
 
     async def savePMsg(self):
