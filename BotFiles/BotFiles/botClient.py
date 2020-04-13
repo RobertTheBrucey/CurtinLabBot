@@ -44,6 +44,8 @@ class BotClient( discord.Client ):
         await self.updatePMsg()
         self.loading = False
         await self.change_presence(activity=discord.Game(name="^labhelp"))
+        if not hasattr(self, 'appinfo'):
+            self.appinfo = await self.application_info()
 
     async def on_message( self, message ):
         #Ignore own messages
@@ -92,7 +94,7 @@ class BotClient( discord.Client ):
                 except:
                     await message.author.send(self.helpString)
             elif command[1:] == "restart":
-                if message.author == discord.AppInfo.owner:
+                if message.author == self.appinfo.owner:
                     await message.author.send("Restarting...")
                     exit()
             elif self.loading:
