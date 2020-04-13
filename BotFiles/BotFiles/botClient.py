@@ -162,7 +162,7 @@ class BotClient( discord.Client ):
         sp = 2
         for room in [218,219,220,221,232]:
             labsString += "lab" + str(room) + ":                   "
-            labsString += " -:- " + labs[ii] + "\n"
+            labsString += " -:- " + labs[ii] + "\n  "
             ii = ii + 1
             for row in range(1,7):
                 labsString += "  0" + str(row)
