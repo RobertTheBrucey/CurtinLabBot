@@ -90,6 +90,9 @@ class BotClient( discord.Client ):
                     await message.channel.send(self.helpString)
                 except:
                     await message.channel.send(self.helpString)
+            elif command[1:] == "restart":
+                if message.author.id() == "269641079261757440":
+                    exit()
             elif self.loading:
                 pass
             elif command[1:] == "persistent":
