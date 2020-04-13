@@ -158,6 +158,9 @@ class BotClient( discord.Client ):
     def getHybridStr(self):
         labsString = "Lab Machine Users By Room:    Quick Labs:\n```yaml\n"
         labs = sorted(self.labs,key=self.labs.get)
+        for lab in labs:
+            if labs[lab] == -1:
+                labs.remove(lab)
         ii = 0
         sp = 2
         for room in [218,219,220,221,232]:
