@@ -89,7 +89,7 @@ class BotClient( discord.Client ):
                 try:
                     await message.channel.send(self.helpString)
                 except:
-                    await message.channel.send(self.helpString)
+                    await message.author.send(self.helpString)
             elif command[1:] == "restart":
                 print(message.author.id)
                 if message.author.id == 269641079261757440:
