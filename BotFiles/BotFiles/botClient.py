@@ -177,12 +177,12 @@ class BotClient( discord.Client ):
                             users = q.get(timeout=2)
                             #users = await self.getFromQ(q)
                             proc.join()
-                            if users != -1:
-                                print(str(users) + " Users.")
-                            else:
-                                print("Down")
+                            #if users != -1:
+                                #print(str(users) + " Users.")
+                            #else:
+                                #print("Down")
                         except Exception as err:
-                            print("Down")
+                            #print("Down")
                             proc.terminate()
                         self.labs[host] = users
                         if (users>-1 and users < mini):
