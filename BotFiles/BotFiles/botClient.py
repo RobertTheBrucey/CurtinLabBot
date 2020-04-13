@@ -27,10 +27,9 @@ class BotClient( discord.Client ):
         self.configfile = configfile
         self.owner = None
         try:
-            self.labs = pickle.load( open( "./persistence/labs.p", "rb" ) )
-            labt = pickle.load( open( "./persistence/labsn.p", "rb" ) )
-            #self.labs = labt[0]
-            #self.mins = labt[1]
+            labt = pickle.load( open( "./persistence/labs.p", "rb" ) )
+            self.labs = labt[0]
+            self.mins = labt[1]
             print("Labs successfully loaded.")
         except:
             print("No labs to load")
