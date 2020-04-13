@@ -25,6 +25,7 @@ class BotClient( discord.Client ):
         self.loading = True
         self.helpString = "`^labs` - Request the list of Lab machines via DM\n`^quicklab` - Show a single ready lab machine\n`^labgrid` - Request a DM of Lab machine formatted in a grid.\n`^persistent` - (Administrator only) Generate a persistent (auto updating) message.\npersistentgrid - (Administrator only) Generate a persistent (auto updating) grid message."
         self.configfile = configfile
+        self.owner = None
         #self.ownerid = config.getOwnerID(filename = configfile)
         try:
             self.labs = pickle.load( open( "./persistence/labs.p", "rb" ) )
@@ -44,8 +45,8 @@ class BotClient( discord.Client ):
         await self.updatePMsg()
         self.loading = False
         await self.change_presence(activity=discord.Game(name="^labhelp"))
-        if not hasattr(self, 'appinfo'):
-            self.appinfo = await self.application_info()
+        appinfo = await self.application_info()
+        self.owner = appinfo.owner
 
     async def on_message( self, message ):
         #Ignore own messages
