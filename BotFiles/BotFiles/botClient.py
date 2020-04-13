@@ -149,6 +149,13 @@ class BotClient( discord.Client ):
                 labsString += "\n"
         return labsString + "```"
 
+    async def getFromQ(self, q):
+        try:
+            users = q.get(timeout=2)
+        except:
+            users = -1
+        return users
+
     async def pollLabs(self):
         creds = config.getCreds(self.configfile)
         logfile = "./persistence/"+config.getLogfile(self.configfile)
@@ -167,14 +174,15 @@ class BotClient( discord.Client ):
                         proc = Process(target=checkLab, args=(host,q,creds,keyfile))
                         proc.start()
                         try:
-                            users = q.get(timeout=2)
+                            #users = q.get(timeout=2)
+                            users = await self.getFromQ(q)
                             proc.join()
                             print(str(users) + " Users.")
                         except Exception as err:
                             print("Down")
                             proc.terminate()
                         self.labs[host] = users
-                        await asyncio.sleep(0)
+                        #await asyncio.sleep(0)
             for room in [218,219,220,221,232]:
                 for column in "abcd":
                     for row in range(1,7):
