@@ -37,12 +37,3 @@ def getKeyfile( filename='config.ini', section='keyfile' ):
     else:
         raise Exception( 'Section {0} not found in the {1} file'.format(section, filename) )
     return keyfile
-
-def getOwnerID( filename = 'config.ini', section='ownerid' ):
-    parser = ConfigParser()
-    parser.read( filename )
-    if parser.has_section(section):
-        ownerid = parser.items(section)[0][1]
-    else:
-        raise Exception( 'Section {0} not found in the {1} file'.format(section, filename) )
-    return int(ownerid)
