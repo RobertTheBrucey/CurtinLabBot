@@ -164,6 +164,7 @@ class BotClient( discord.Client ):
                 print("lab" + str(room) + ":\n  ", end='')
                 for row in range(1,7):
                     print( "  0" + str(row), end='')
+                print("")
                 for column in "abcd":
                     print("-" + str(column), end='')
                     for row in range(1,7):
