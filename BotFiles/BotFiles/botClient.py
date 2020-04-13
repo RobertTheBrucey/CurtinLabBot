@@ -153,6 +153,7 @@ class BotClient( discord.Client ):
         return users
 
     async def pollLabs(self):
+        sp = 2
         creds = config.getCreds(self.configfile)
         logfile = "./persistence/"+config.getLogfile(self.configfile)
         keyfile = "./persistence/"+config.getKeyfile(self.configfile)
@@ -160,12 +161,16 @@ class BotClient( discord.Client ):
             print("Starting scan at {}".format(str(datetime.datetime.now())))
             mini = 100
             mins = []
+            for row in range(1,7):
+                print( "  0" + str(row), end='')
             for room in [218,219,220,221,232]:
+                print("lab" + str(room) + ":\n  ", end='')
                 for column in "abcd":
+                    print("-" + str(column), end='')
                     for row in range(1,7):
                         users = -1
                         host = "lab{}-{}0{}.cs.curtin.edu.au.".format(room,column,row)
-                        print(host+": ", end = '')
+                        #print(host+": ", end = '')
                         q = Queue()
                         proc = Process(target=checkLab, args=(host,q,creds,keyfile))
                         proc.start()
@@ -186,7 +191,9 @@ class BotClient( discord.Client ):
                             mins = []
                         if (users == mini):
                             mins.append(host)
+                        print("  " + str((" ",users)[users!=-1]) + pad(users,sp), end = '')
                         await asyncio.sleep(0.1)
+                    print("")
             self.mins = mins
             print("Finishing scan at {}".format(str(datetime.datetime.now())))
             max = -1
