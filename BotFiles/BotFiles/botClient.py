@@ -92,7 +92,7 @@ class BotClient( discord.Client ):
                 except:
                     await message.author.send(self.helpString)
             elif command[1:] == "restart":
-                if message.author == self.owner:
+                if message.author == self.AppInfo.owner:
                     await message.author.send("Restarting...")
                     exit()
             elif self.loading:
