@@ -98,7 +98,7 @@ class BotClient( discord.Client ):
                 labsString = self.getHybridStr()
                 await message.author.send(labsString)
                 try:
-                    await message.channel.send("Hybrid messaage of online lab machines DMed")
+                    await message.channel.send("Hybrid message of online lab machines DMed")
                 except:
                     print("Couldn't send message to channel.")
             elif self.loading:
@@ -166,7 +166,7 @@ class BotClient( discord.Client ):
             ii = ii + 1
             for row in range(1,7):
                 labsString += "  0" + str(row)
-            labsString += "   -:- " + labs[ii] + "\n"
+            labsString += " -:- " + labs[ii] + "\n"
             ii = ii + 1
             for column in "abcd":
                 labsString += "-" + str(column)
