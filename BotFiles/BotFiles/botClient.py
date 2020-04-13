@@ -128,12 +128,12 @@ class BotClient( discord.Client ):
                 else:
                     await message.channel.send("You are not authorised to use this command.")
     def getGridStr(self):
-        labsString = "Lab Machine Users By Room:\n```\n"
+        labsString = "Lab Machine Users By Room:\n```yaml\n"
         sp = 2
         self.mins = []
         mini = 100
         for room in [218,219,220,221,232]:
-            labsString += "lab" + str(room) + "\n  "
+            labsString += "lab" + str(room) + ":\n  "
             for row in range(1,7):
                 labsString += "  0" + str(row)
             labsString += "\n"
