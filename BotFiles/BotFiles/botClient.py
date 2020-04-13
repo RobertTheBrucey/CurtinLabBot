@@ -29,8 +29,8 @@ class BotClient( discord.Client ):
         try:
             self.labs = pickle.load( open( "./persistence/labs.p", "rb" ) )
             labt = pickle.load( open( "./persistence/labsn.p", "rb" ) )
-            self.labs = labt[0]
-            self.mins = labt[1]
+            #self.labs = labt[0]
+            #self.mins = labt[1]
             print("Labs successfully loaded.")
         except:
             print("No labs to load")
@@ -161,10 +161,10 @@ class BotClient( discord.Client ):
             print("Starting scan at {}".format(str(datetime.datetime.now())))
             mini = 100
             mins = []
-            for row in range(1,7):
-                print( "  0" + str(row), end='')
             for room in [218,219,220,221,232]:
                 print("lab" + str(room) + ":\n  ", end='')
+                for row in range(1,7):
+                    print( "  0" + str(row), end='')
                 for column in "abcd":
                     print("-" + str(column), end='')
                     for row in range(1,7):
