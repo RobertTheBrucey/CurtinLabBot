@@ -94,8 +94,13 @@ class BotClient( discord.Client ):
                     await message.author.send("Restarting...")
                     exit()
             elif command[1:] == "labhybrid":
-                pass
-                #grid -:- quicklabs
+                print( '{} asked for the lab hybrid machines'.format(message.author))
+                labsString = self.getHybridStr()
+                await message.author.send(labsString)
+                try:
+                    await message.channel.send("Hybrid messaage of online lab machines DMed")
+                except:
+                    print("Couldn't send message to channel.")
             elif self.loading:
                 pass
             elif command[1:] == "persistent":
