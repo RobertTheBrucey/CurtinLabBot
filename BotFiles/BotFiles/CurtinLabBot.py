@@ -15,15 +15,17 @@ if __name__ == '__main__':
     except:
         print("Config file invalid, creating a new one")
         base = "[token]\n\
-token=\n\
+token=\n\n\
 [creds]\n\
 username=\n\
-password=\n\
+password=\n\n\
 Password is optional if using keyfile\n\
 [logging]\n\
-logfile=\n\
+logfile=\n\n\
 [keyfile]\n\
-keyfile="
+keyfile=\n\n\
+[ownerid]\n\
+ownerid="
         file = open("config.ini", "w")
         file.write(base)
         file.close()
