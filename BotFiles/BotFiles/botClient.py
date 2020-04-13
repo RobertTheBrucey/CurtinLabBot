@@ -205,7 +205,7 @@ class BotClient( discord.Client ):
                             print("Down")
                             proc.terminate()
                         self.labs[host] = users
-                        await asyncio.sleep(1)
+                        await asyncio.sleep(0.1)
             print("Finishing scan at {}".format(str(datetime.datetime.now())))
             max = -1
             for lab in sorted(self.labs,key=self.labs.get):
