@@ -174,8 +174,8 @@ class BotClient( discord.Client ):
                         proc = Process(target=checkLab, args=(host,q,creds,keyfile))
                         proc.start()
                         try:
-                            #users = q.get(timeout=2)
-                            users = await self.getFromQ(q)
+                            users = q.get(timeout=2)
+                            #users = await self.getFromQ(q)
                             proc.join()
                             if users != -1:
                                 print(str(users) + " Users.")
@@ -185,7 +185,7 @@ class BotClient( discord.Client ):
                             print("Down")
                             proc.terminate()
                         self.labs[host] = users
-                        #await asyncio.sleep(0)
+                        await asyncio.sleep(0.1)
             for room in [218,219,220,221,232]:
                 for column in "abcd":
                     for row in range(1,7):
