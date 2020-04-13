@@ -142,7 +142,7 @@ class BotClient( discord.Client ):
         labsString = "Lab Machine Users By Room:\n```yaml\n"
         sp = 2
         for room in [218,219,220,221,232]:
-            labsString += "lab" + str(room) + "                   :\n  "
+            labsString += "lab" + str(room) + ":\n  "
             for row in range(1,7):
                 labsString += "  0" + str(row)
             labsString += "\n"
@@ -161,10 +161,13 @@ class BotClient( discord.Client ):
         ii = 0
         sp = 2
         for room in [218,219,220,221,232]:
-            labsString += "lab" + str(room) + "                   :\n  "
+            labsString += "lab" + str(room) + ":                   \n  "
+            labsString += " -:- " + labs[ii] + "\n"
+            ii = ii + 1
             for row in range(1,7):
                 labsString += "  0" + str(row)
-            labsString += "\n"
+            labsString += " -:- " + labs[ii] + "\n"
+            ii = ii + 1
             for column in "abcd":
                 labsString += "-" + str(column)
                 for row in range(1,7):
