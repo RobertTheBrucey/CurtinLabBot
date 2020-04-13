@@ -1,10 +1,10 @@
 import discord
 import asyncio
-import base64
+#import base64
 import paramiko
 import re
 import datetime
-import copy
+#import copy
 import pickle
 import math
 import random
