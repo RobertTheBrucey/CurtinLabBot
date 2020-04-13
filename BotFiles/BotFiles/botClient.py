@@ -149,7 +149,7 @@ class BotClient( discord.Client ):
                         self.mins.append(host)
                     labsString +=  "  " + str((" ",users)[users!=-1]) + pad(users,sp)
                 labsString += "\n"
-        return labsString + "```"
+        return labsString + "\n```"
 
     async def getFromQ(self, q):
         try:
