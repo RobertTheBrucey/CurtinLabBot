@@ -43,7 +43,10 @@ class BotClient( discord.Client ):
             print("Persistent messages successfully loaded.")
         except:
             print("Couldn't load persistent messages from file.")
-        await self.updatePMsg()
+        try:
+            await self.updatePMsg()
+        except:
+            pass
         self.loading = False
         await self.change_presence(activity=discord.Game(name="^labhelp"))
         appinfo = await self.application_info()
@@ -90,6 +93,9 @@ class BotClient( discord.Client ):
                 if message.author == self.owner:
                     await message.author.send("Restarting...")
                     exit()
+            elif command[1:] == "labhybrid":
+                pass
+                #grid -:- quicklabs
             elif self.loading:
                 pass
             elif command[1:] == "persistent":
@@ -131,7 +137,7 @@ class BotClient( discord.Client ):
         labsString = "Lab Machine Users By Room:\n```yaml\n"
         sp = 2
         for room in [218,219,220,221,232]:
-            labsString += "lab" + str(room) + ":\n  "
+            labsString += "lab" + str(room) + "                   :\n  "
             for row in range(1,7):
                 labsString += "  0" + str(row)
             labsString += "\n"
@@ -142,6 +148,26 @@ class BotClient( discord.Client ):
                     users = self.labs.get(host,-1)
                     labsString +=  "  " + str((" ",users)[users!=-1]) + pad(users,sp)
                 labsString += "\n"
+        return labsString + "\n```"
+    
+    def getHybridStr(self):
+        labsString = "Lab Machine Users By Room:    Quick Labs:\n```yaml\n"
+        labs = sorted(self.labs,key=self.labs.get)
+        ii = 0
+        sp = 2
+        for room in [218,219,220,221,232]:
+            labsString += "lab" + str(room) + "                   :\n  "
+            for row in range(1,7):
+                labsString += "  0" + str(row)
+            labsString += "\n"
+            for column in "abcd":
+                labsString += "-" + str(column)
+                for row in range(1,7):
+                    host = "lab{}-{}0{}.cs.curtin.edu.au.".format(room,column,row)
+                    users = self.labs.get(host,-1)
+                    labsString +=  "  " + str((" ",users)[users!=-1]) + pad(users,sp)
+                labsString += " -:- " + labs[ii] + "\n"
+                ii = ii + 1
         return labsString + "\n```"
 
     async def getFromQ(self, q):
