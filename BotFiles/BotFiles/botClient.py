@@ -58,15 +58,7 @@ class BotClient( discord.Client ):
         if command[0] == "^":
             if command[1:] == "labs":
                 print( '{} asked for the lab machines'.format(message.author))
-                labsString = ""
-                first = ""
-                for lab in sorted(self.labs,key=self.labs.get):
-                    if self.labs[lab] != -1:
-                        if first == "":
-                            first = lab
-                        labsString += "\n"+lab+" has "+str(self.labs[lab])+" user(s)"
-                labsString = "Available lab machines are:```"+labsString
-                labsString = labsString[:labsString[:listLen].rfind('\n')] + "```"
+                labsString = getListStr() + random.choice(self.mins)
                 await message.author.send(labsString)
                 try:
                     await message.channel.send("List of online lab machines DMed\nQuick machine: {}".format(first))
@@ -81,12 +73,11 @@ class BotClient( discord.Client ):
                     print("Couldn't  send message to channel.")
             elif command[1:] == "quicklab":
                 print( '{} asked for a quick lab'.format(message.author))
-                for lab in sorted(self.labs,key=self.labs.get):
-                    try:
-                        await message.channel.send("Quick Lab: {}".format(lab))
-                    except:
-                        await message.author.send("Quick Lab: {}".format(lab))
-                    break
+                lab = random.choice(self.mins)
+                try:
+                    await message.channel.send("Quick Lab: {}".format(lab))
+                except:
+                    await message.author.send("Quick Lab: {}".format(lab))
             elif command[1:] == "labhelp":
                 print( '{} asked for the lab help'.format(message.author))
                 try:
@@ -103,12 +94,7 @@ class BotClient( discord.Client ):
                 print( '{} asked for a persistent message'.format(message.author))
                 if message.author.permissions_in(message.channel).manage_messages:
                     print( '{} was authorised for a persistent message'.format(message.author))
-                    labsString = ""
-                    for lab in sorted(self.labs,key=self.labs.get):
-                        if self.labs[lab] != -1:
-                            labsString += "\n"+lab+" has "+str(self.labs[lab])+" user(s)"
-                    labsString = "Available lab machines are:```"+labsString
-                    labsString = labsString[:labsString[:listLen].rfind('\n')] + "```This list is updated every 10 minutes."
+                    labsString = getListStr() + "This list is updated every 10 minutes.\nQuick Lab: " + random.choice(self.mins)
                     for msg in self.p_msg:
                         if msg.channel == message.channel:
                             self.p_msg.remove(msg)
@@ -127,6 +113,18 @@ class BotClient( discord.Client ):
                     await self.savePMsg()
                 else:
                     await message.channel.send("You are not authorised to use this command.")
+
+    def getListStr(self):
+        labsString = ""
+        for lab in sorted(self.labs,key=self.labs.get):
+            if self.labs[lab] != -1:
+                labsString += "\n"+lab+" has "+str(self.labs[lab])+" user"
+                if self.labs[lab] != 1:
+                    labsString += "s"
+        labsString = "Available lab machines are:```c"+labsString
+        labsString = labsString[:labsString[:listLen].rfind('\n')] + "\n```"
+        return labsString
+
     def getGridStr(self):
         labsString = "Lab Machine Users By Room:\n```yaml\n"
         sp = 2
@@ -226,12 +224,7 @@ class BotClient( discord.Client ):
             await asyncio.sleep(300)
 
     async def updatePMsg(self):
-        labsString = ""
-        for lab in sorted(self.labs,key=self.labs.get):
-            if self.labs[lab] != -1:
-                labsString += "\n"+lab+" has "+str(self.labs[lab])+" user(s)"
-        labsString = "Available lab machines are:```"+labsString
-        labsString = labsString[:labsString[:listLen].rfind('\n')] + "```This list is updated every 10 minutes."
+        labsString = getListStr() + "This list is updated every 10 minutes.\nQuick Lab: " + random.choice(self.mins)
         for msg in self.p_msg:
             try:
                 await msg.edit(content=labsString)
