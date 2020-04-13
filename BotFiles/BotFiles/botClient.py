@@ -25,6 +25,7 @@ class BotClient( discord.Client ):
         self.loading = True
         self.helpString = "`^labs` - Request the list of Lab machines via DM\n`^quicklab` - Show a single ready lab machine\n`^labgrid` - Request a DM of Lab machine formatted in a grid.\n`^persistent` - (Administrator only) Generate a persistent (auto updating) message.\npersistentgrid - (Administrator only) Generate a persistent (auto updating) grid message."
         self.configfile = configfile
+        self.ownerid = config.getOwnerID(filename = configfile)
         try:
             self.labs = pickle.load( open( "./persistence/labs.p", "rb" ) )
             print("Labs successfully loaded.")
@@ -91,8 +92,7 @@ class BotClient( discord.Client ):
                 except:
                     await message.author.send(self.helpString)
             elif command[1:] == "restart":
-                print(message.author.id)
-                if message.author.id == 269641079261757440:
+                if message.author.id == self.ownerid:
                     await message.author.send("Restarting...")
                     exit()
             elif self.loading:
