@@ -28,6 +28,9 @@ class BotClient( discord.Client ):
         self.owner = None
         try:
             self.labs = pickle.load( open( "./persistence/labs.p", "rb" ) )
+            labt = pickle.load( open( "./persistence/labsn.p", "rb" ) )
+            self.labs = labt[0]
+            self.mins = labt[1]
             print("Labs successfully loaded.")
         except:
             print("No labs to load")
@@ -128,8 +131,6 @@ class BotClient( discord.Client ):
     def getGridStr(self):
         labsString = "Lab Machine Users By Room:\n```yaml\n"
         sp = 2
-        self.mins = []
-        mini = 100
         for room in [218,219,220,221,232]:
             labsString += "lab" + str(room) + ":\n  "
             for row in range(1,7):
@@ -140,11 +141,6 @@ class BotClient( discord.Client ):
                 for row in range(1,7):
                     host = "lab{}-{}0{}.cs.curtin.edu.au.".format(room,column,row)
                     users = self.labs.get(host,-1)
-                    if (users>-1 and users < mini):
-                        mini = users
-                        self.mins = []
-                    if (users == mini):
-                        self.mins.append(host)
                     labsString +=  "  " + str((" ",users)[users!=-1]) + pad(users,sp)
                 labsString += "\n"
         return labsString + "\n```"
@@ -162,6 +158,8 @@ class BotClient( discord.Client ):
         keyfile = "./persistence/"+config.getKeyfile(self.configfile)
         while True:
             print("Starting scan at {}".format(str(datetime.datetime.now())))
+            mini = 100
+            mins = []
             for room in [218,219,220,221,232]:
                 for column in "abcd":
                     for row in range(1,7):
@@ -183,7 +181,13 @@ class BotClient( discord.Client ):
                             print("Down")
                             proc.terminate()
                         self.labs[host] = users
+                        if (users>-1 and users < mini):
+                            mini = users
+                            mins = []
+                        if (users == mini):
+                            self.mins.append(host)
                         await asyncio.sleep(0.1)
+            self.mins = mins
             print("Finishing scan at {}".format(str(datetime.datetime.now())))
             max = -1
             for lab in sorted(self.labs,key=self.labs.get):
@@ -191,10 +195,12 @@ class BotClient( discord.Client ):
                     max = self.labs[lab]
             if max == -1:
                 print("All labs down, loading from backup")
-                self.labs = pickle.load( open( "./persistence/labs.p", "rb" ) )
+                labt = pickle.load( open( "./persistence/labsn.p", "rb" ) )
+                self.labs = labt[0]
+                self.mins = labt[1]
             else:
                 print("Saving up machines to file")
-                pickle.dump( self.labs, open ("./persistence/labs.p", "wb" ) )
+                pickle.dump( (self.labs,self.mins), open ("./persistence/labs.p", "wb" ) )
             await self.updatePMsg()
             logStr = ""
             if os.path.isfile(logfile):
