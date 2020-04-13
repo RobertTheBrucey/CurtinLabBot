@@ -185,7 +185,7 @@ class BotClient( discord.Client ):
                             mini = users
                             mins = []
                         if (users == mini):
-                            self.mins.append(host)
+                            mins.append(host)
                         await asyncio.sleep(0.1)
             self.mins = mins
             print("Finishing scan at {}".format(str(datetime.datetime.now())))
