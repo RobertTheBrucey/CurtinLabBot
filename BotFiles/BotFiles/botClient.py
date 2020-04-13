@@ -58,7 +58,7 @@ class BotClient( discord.Client ):
         if command[0] == "^":
             if command[1:] == "labs":
                 print( '{} asked for the lab machines'.format(message.author))
-                labsString = getListStr() + random.choice(self.mins)
+                labsString = self.getListStr() + random.choice(self.mins)
                 await message.author.send(labsString)
                 try:
                     await message.channel.send("List of online lab machines DMed\nQuick machine: {}".format(first))
@@ -94,7 +94,7 @@ class BotClient( discord.Client ):
                 print( '{} asked for a persistent message'.format(message.author))
                 if message.author.permissions_in(message.channel).manage_messages:
                     print( '{} was authorised for a persistent message'.format(message.author))
-                    labsString = getListStr() + "This list is updated every 10 minutes.\nQuick Lab: " + random.choice(self.mins)
+                    labsString = self.getListStr() + "This list is updated every 10 minutes.\nQuick Lab: " + random.choice(self.mins)
                     for msg in self.p_msg:
                         if msg.channel == message.channel:
                             self.p_msg.remove(msg)
@@ -224,7 +224,7 @@ class BotClient( discord.Client ):
             await asyncio.sleep(300)
 
     async def updatePMsg(self):
-        labsString = getListStr() + "This list is updated every 10 minutes.\nQuick Lab: " + random.choice(self.mins)
+        labsString = self.getListStr() + "This list is updated every 10 minutes.\nQuick Lab: " + random.choice(self.mins)
         for msg in self.p_msg:
             try:
                 await msg.edit(content=labsString)
