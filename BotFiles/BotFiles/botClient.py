@@ -160,6 +160,28 @@ class BotClient( discord.Client ):
                     for row in range(1,7):
                         users = -1
                         host = "lab{}-{}0{}.cs.curtin.edu.au.".format(room,column,row)
+                        if self.labs[host] == -1:
+                            continue
+                        print(host+": ", end = '')
+                        q = Queue()
+                        proc = Process(target=checkLab, args=(host,q,creds,keyfile))
+                        proc.start()
+                        try:
+                            users = q.get(timeout=2)
+                            proc.join()
+                            print(str(users) + " Users.")
+                        except Exception as err:
+                            print("Down")
+                            proc.terminate()
+                        self.labs[host] = users
+                        await asyncio.sleep(1)
+            for room in [218,219,220,221,232]:
+                for column in "abcd":
+                    for row in range(1,7):
+                        users = -1
+                        host = "lab{}-{}0{}.cs.curtin.edu.au.".format(room,column,row)
+                        if not self.labs[host] == -1:
+                            continue
                         print(host+": ", end = '')
                         q = Queue()
                         proc = Process(target=checkLab, args=(host,q,creds,keyfile))
