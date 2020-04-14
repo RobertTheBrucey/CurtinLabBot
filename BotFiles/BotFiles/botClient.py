@@ -242,7 +242,7 @@ class BotClient( discord.Client ):
                     max = self.labs[lab]
             if max == -1:
                 print("All labs down, loading from backup")
-                labt = pickle.load( open( "./persistence/labsn.p", "rb" ) )
+                labt = pickle.load( open( "./persistence/labs.p", "rb" ) )
                 self.labs = labt[0]
                 self.mins = labt[1]
             else:
