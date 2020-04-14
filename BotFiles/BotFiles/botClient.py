@@ -253,7 +253,7 @@ class BotClient( discord.Client ):
                             mins.append(host)
                         print("S16")
                         print("  " + str((" ",users)[users!=-1]) + pad(users,sp), end = '')
-                        await asyncio.sleep(0.1)
+                        await asyncio.sleep(1)
                         print("S17")
                     print("")
             self.mins = mins
