@@ -256,7 +256,7 @@ class BotClient( discord.Client ):
                             print("S16"+str(users))
                             print("  " + str((" ",users)[users!=-1]) + pad(users,sp), end = '')
                             print("S17")
-                            await asyncio.sleep(1) #Crashes here somehow?
+                            #await asyncio.sleep(1) #Crashes here somehow?
                             print("S18")
                         except:
                             pass
