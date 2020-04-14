@@ -50,7 +50,7 @@ class BotClient( discord.Client ):
         await self.change_presence(activity=discord.Game(name="^labhelp"))
         appinfo = await self.application_info()
         self.owner = appinfo.owner
-        #asyncio.get_event_loop().create_task(self.pollLabs())
+        asyncio.get_event_loop().create_task(self.pollLabs())
 
     async def on_message( self, message ):
         #Ignore own messages
@@ -226,7 +226,10 @@ class BotClient( discord.Client ):
                                 #print("Down")
                         except Exception as err:
                             #print("Down")
-                            proc.terminate()
+                            try:
+                                proc.terminate()
+                            except:
+                                pass
                         self.labs[host] = users
                         if (users>-1 and users < mini):
                             mini = users
