@@ -10,7 +10,6 @@ import os.path
 from multiprocessing import Process, Queue
 import config
 
-reserved = ['simpintro','simp','unsimp','unsimpall']
 listLen = 1000;
 class BotClient( discord.Client ):
     
@@ -35,6 +34,8 @@ class BotClient( discord.Client ):
     async def on_ready( self ):
         print( 'Logged on as {0}!'.format( self.user ) )
         await self.change_presence(activity=discord.Game(name="Loading..."))
+        for guild in self.guilds:
+            print(guild)
         try:
             await self.loadPMsg()
             print("Persistent messages successfully loaded.")
@@ -48,9 +49,6 @@ class BotClient( discord.Client ):
         await self.change_presence(activity=discord.Game(name="^labhelp"))
         appinfo = await self.application_info()
         self.owner = appinfo.owner
-        #loop = asyncio.new_event_loop()
-        #loop.run_forever()
-        #loop.create_task(self.pollLabs())
         asyncio.ensure_future(self.pollLabs())
 
     async def on_message( self, message ):
@@ -211,55 +209,29 @@ class BotClient( discord.Client ):
                 for column in "abcd":
                     print("-" + str(column), end='')
                     for row in range(1,7):
-                        #await asyncio.sleep(1)
                         try:
-                            #print("S1")
                             users = -1
-                            #print("S2")
                             host = "lab{}-{}0{}.cs.curtin.edu.au.".format(room,column,row)
-                            #print("S3")
-                            #print(host+": ", end = '')
                             q = Queue()
-                            #print("S4")
                             proc = Process(target=checkLab, args=(host,q,creds,keyfile))
-                            #print("S5")
                             proc.start()
-                            #print("S6")
                             try:
-                                #print("S7")
                                 await asyncio.sleep(2)
                                 users = q.get(timeout=0)
-                                #print("S8")
-                                #users = await self.getFromQ(q)
                                 proc.join()
-                                #print("S9")
-                                #if users != -1:
-                                    #print(str(users) + " Users.")
-                                #else:
-                                    #print("Down")
                             except Exception as err:
-                                #print("S10")
-                                #print("Down")
                                 try:
-                                    #print("S11")
                                     proc.terminate()
-                                    #print("S12")
                                 except:
-                                    #print("S13")
                                     pass
-                            #print("S14")
                             self.labs[host] = users
-                            #print("S15")
                             if (users>-1 and users < mini):
                                 mini = users
                                 mins = []
                             if (users == mini):
                                 mins.append(host)
-                            #print("S16"+str(users))
                             print("  " + str((" ",users)[users!=-1]) + pad(users,sp), end = '')
-                            #print("S17")
                             await asyncio.sleep(1) #Crashes here somehow?
-                            #print("S18")
                         except:
                             pass
                     print("")
@@ -302,7 +274,6 @@ class BotClient( discord.Client ):
                     print("Log file unable to be written to")
             else:
                 print("Log file not specified")
-            await asyncio.sleep(5)
             await asyncio.sleep(300)
 
     async def updatePMsg(self):
@@ -345,42 +316,8 @@ class BotClient( discord.Client ):
             if rmsg:
                 self.p_msg_grid.append(rmsg)
         print(str(len(self.p_msg)) + " persistent messages loaded and "+ str(len(self.p_msg_grid)) +" persistent grids loaded")
-        #Legacy loading
-        """ msg_ids = pickle.load( open( "./persistence/pmsg.p", "rb" ) )
-        for msgt in msg_ids[0]:
-            rmsg = None
-            channels = self.get_all_channels()
-            for channel in channels:
-                try:
-                    rmsg = await channel.fetch_message(msgt)
-                except:
-                    continue
-            if rmsg:
-                if rmsg not in self.p_msg:
-                    self.p_msg.append(rmsg)
-        for msgt in msg_ids[1]:
-            rmsg = None
-            channels = self.get_all_channels()
-            for channel in channels:
-                try:
-                    rmsg = await channel.fetch_message(msgt)
-                except:
-                    continue
-            if rmsg:
-                if rmsg not in self.p_msg_grid:
-                    self.p_msg_grid.append(rmsg)
-        print(str(len(self.p_msg)) + " persistent messages loaded and "+ str(len(self.p_msg_grid)) +" persistent grids loaded") """
 
     async def savePMsg(self):
-        #Legacy saving
-        """ msg_ids = []
-        grid_msg_ids = []
-        for msg in self.p_msg:
-            msg_ids.append(msg.id)
-        for msg in self.p_msg_grid:
-            grid_msg_ids.append(msg.id)
-        msgs = (msg_ids,grid_msg_ids)
-        pickle.dump( msgs, open ("./persistence/pmsg.p", "wb" ) ) """
         msg_ids = []
         grid_msg_ids = []
         for msg in self.p_msg:
