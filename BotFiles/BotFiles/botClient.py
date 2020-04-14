@@ -156,7 +156,7 @@ class BotClient( discord.Client ):
         return labsString + "\n```"
     
     def getHybridStr(self):
-        labsString = "Lab Machine Users By Room:    Quick Labs:\n```yaml\n"
+        labsString = "```yaml\nLab Machine Users By Room:    -:- Quick Labs:\n"
         labs = sorted(self.labs,key=self.labs.get)
         ii = 0
         while ii < len(labs):
