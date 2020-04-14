@@ -249,7 +249,6 @@ class BotClient( discord.Client ):
             else:
                 print("Saving up machines to file")
                 pickle.dump( (self.labs,self.mins), open ("./persistence/labs.p", "wb" ) )
-            await self.updatePMsg()
             logStr = ""
             if os.path.isfile(logfile):
                 print("Log file exists, appending")
@@ -274,6 +273,8 @@ class BotClient( discord.Client ):
                     print("Log file unable to be written to")
             else:
                 print("Log file not specified")
+            await asyncio.sleep(1)
+            await self.updatePMsg()
             await asyncio.sleep(300)
 
     async def updatePMsg(self):
