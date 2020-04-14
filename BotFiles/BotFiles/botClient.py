@@ -210,53 +210,56 @@ class BotClient( discord.Client ):
                 for column in "abcd":
                     print("-" + str(column), end='')
                     for row in range(1,7):
-                        print("S1")
-                        users = -1
-                        print("S2")
-                        host = "lab{}-{}0{}.cs.curtin.edu.au.".format(room,column,row)
-                        print("S3")
-                        #print(host+": ", end = '')
-                        q = Queue()
-                        print("S4")
-                        proc = Process(target=checkLab, args=(host,q,creds,keyfile))
-                        print("S5")
-                        proc.start()
-                        print("S6")
                         try:
-                            print("S7")
-                            await asyncio.sleep(2)
-                            users = q.get(timeout=0)
-                            print("S8")
-                            #users = await self.getFromQ(q)
-                            proc.join()
-                            print("S9")
-                            #if users != -1:
-                                #print(str(users) + " Users.")
-                            #else:
-                                #print("Down")
-                        except Exception as err:
-                            print("S10")
-                            #print("Down")
+                            print("S1")
+                            users = -1
+                            print("S2")
+                            host = "lab{}-{}0{}.cs.curtin.edu.au.".format(room,column,row)
+                            print("S3")
+                            #print(host+": ", end = '')
+                            q = Queue()
+                            print("S4")
+                            proc = Process(target=checkLab, args=(host,q,creds,keyfile))
+                            print("S5")
+                            proc.start()
+                            print("S6")
                             try:
-                                print("S11")
-                                proc.terminate()
-                                print("S12")
-                            except:
-                                print("S13")
-                                pass
-                        print("S14")
-                        self.labs[host] = users
-                        print("S15")
-                        if (users>-1 and users < mini):
-                            mini = users
-                            mins = []
-                        if (users == mini):
-                            mins.append(host)
-                        print("S16"+str(users))
-                        print("  " + str((" ",users)[users!=-1]) + pad(users,sp), end = '')
-                        print("S17")
-                        await asyncio.sleep(1) #Crashes here somehow?
-                        print("S18")
+                                print("S7")
+                                await asyncio.sleep(2)
+                                users = q.get(timeout=0)
+                                print("S8")
+                                #users = await self.getFromQ(q)
+                                proc.join()
+                                print("S9")
+                                #if users != -1:
+                                    #print(str(users) + " Users.")
+                                #else:
+                                    #print("Down")
+                            except Exception as err:
+                                print("S10")
+                                #print("Down")
+                                try:
+                                    print("S11")
+                                    proc.terminate()
+                                    print("S12")
+                                except:
+                                    print("S13")
+                                    pass
+                            print("S14")
+                            self.labs[host] = users
+                            print("S15")
+                            if (users>-1 and users < mini):
+                                mini = users
+                                mins = []
+                            if (users == mini):
+                                mins.append(host)
+                            print("S16"+str(users))
+                            print("  " + str((" ",users)[users!=-1]) + pad(users,sp), end = '')
+                            print("S17")
+                            await asyncio.sleep(1) #Crashes here somehow?
+                            print("S18")
+                        except:
+                            pass
                     print("")
             self.mins = mins
             print("Finishing scan at {}".format(str(datetime.datetime.now())))
