@@ -161,7 +161,7 @@ class BotClient( discord.Client ):
         ii = 0
         while ii < len(labs):
             print(labs[ii])
-            if self.labs(labs[ii]) == -1:
+            if self.labs[labs[ii]] == -1:
                 labs.remove(ii)
             else:
                 ii = ii + 1
