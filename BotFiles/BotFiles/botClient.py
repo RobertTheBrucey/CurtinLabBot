@@ -250,7 +250,7 @@ class BotClient( discord.Client ):
                 self.mins = labt[1]
             else:
                 print("Saving up machines to file")
-                pickle.dump( (self.labs,self.mins), open ("./persistence/labs.p", "wb" ) )
+                pickle.dump( (self.labs,self.mins), open("./persistence/labs.p", "wb" ) )
             logStr = ""
             if os.path.isfile(logfile):
                 print("Log file exists, appending")

@@ -32,6 +32,10 @@ ownerid="
         exit()
 
     """ Setup """
+    #Store lab, current count and mins?
+    labs = [{},[]]
+    #Store persistent lists, grids and hybrids
+    pmsg = [[],[],[]]
     #Thread 1 pls
     client = bc.BotClient(configfile)
     client.run(getToken(filename=configfile))
