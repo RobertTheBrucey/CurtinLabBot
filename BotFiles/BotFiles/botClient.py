@@ -1,10 +1,8 @@
 import discord
 import asyncio
-#import base64
 import paramiko
 import re
 import datetime
-#import copy
 import pickle
 import math
 import random
@@ -312,8 +310,8 @@ class BotClient( discord.Client ):
         for msg in self.p_msg:
             try:
                 await msg.edit(content=labsString)
-            except:
-                print("Problem editting persistent message.")
+            except Exception as err:
+                print("Problem editting persistent message. {}".format(err))
         #Grid message section
         labsString = self.getGridStr()
         for msg in self.p_msg_grid:
