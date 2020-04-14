@@ -211,7 +211,7 @@ class BotClient( discord.Client ):
                     print("-" + str(column), end='')
                     for row in range(1,7):
                         print("S1")
-                        """users = -1
+                        users = -1
                         print("S2")
                         host = "lab{}-{}0{}.cs.curtin.edu.au.".format(room,column,row)
                         print("S3")
@@ -256,9 +256,9 @@ class BotClient( discord.Client ):
                         print("  " + str((" ",users)[users!=-1]) + pad(users,sp), end = '')
                         print("S17")
                         await asyncio.sleep(1) #Crashes here somehow?
-                        print("S18")"""
+                        print("S18")
                     print("")
-            #self.mins = mins
+            self.mins = mins
             print("Finishing scan at {}".format(str(datetime.datetime.now())))
             max = -1
             for lab in sorted(self.labs,key=self.labs.get):
