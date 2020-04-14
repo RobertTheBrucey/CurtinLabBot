@@ -166,7 +166,7 @@ class BotClient( discord.Client ):
             else:
                 ii = ii + 1
         for i in range(len(labs),31):
-            labs.append(("",0))
+            labs.append("")
         ii = 0
         sp = 2
         for room in [218,219,220,221,232]:
