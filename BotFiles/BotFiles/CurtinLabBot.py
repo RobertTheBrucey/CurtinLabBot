@@ -34,7 +34,7 @@ ownerid="
     """ Setup """
     #Store lab, current count and mins?
     labs = [{},[]]
-    #Store persistent messages, with type (message,channel,guild,type)
+    #Store persistent messages, with type (message,channel,guild,type)?????????????????????
     pmsg = []
     #Thread 1 pls
     client = bc.BotClient(configfile)

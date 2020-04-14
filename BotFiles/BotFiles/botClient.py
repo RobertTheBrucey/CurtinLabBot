@@ -244,22 +244,22 @@ class BotClient( discord.Client ):
                 if self.labs[lab] > max:
                     max = self.labs[lab]
             if max == -1:
-                print("All labs down, loading from backup")
+                print("All labs down, loading from backup", flush=True)
                 labt = pickle.load( open( "./persistence/labs.p", "rb" ) )
                 self.labs = labt[0]
                 self.mins = labt[1]
             else:
-                print("Saving up machines to file")
+                print("Saving up machines to file", flush=True)
                 pickle.dump( (self.labs,self.mins), open("./persistence/labs.p", "wb" ) )
             logStr = ""
             if os.path.isfile(logfile):
-                print("Log file exists, appending")
+                print("Log file exists, appending", flush=True)
                 logStr += "{},".format(str(datetime.datetime.now()))+","
                 for lab in sorted(self.labs.keys()):
                     logStr += str(self.labs[lab]) + ","
                 logStr = logStr[:-1]
             elif not os.path.isdir(logfile):
-                print("Log file specified but none existant, creating")
+                print("Log file specified but none existant, creating", flush=True)
                 dataStr = "{},".format(str(datetime.datetime.now()))
                 logStr += "Time,"
                 for lab in sorted(self.labs.keys()):
@@ -270,11 +270,11 @@ class BotClient( discord.Client ):
                 try:
                     with open(logfile,"a") as f:
                         f.write(logStr+"\n")
-                        print("Log file successfully written to.")
+                        print("Log file successfully written to.", flush=True)
                 except:
-                    print("Log file unable to be written to")
+                    print("Log file unable to be written to", flush=True)
             else:
-                print("Log file not specified")
+                print("Log file not specified", flush=True)
             await asyncio.sleep(1)
             await self.updatePMsg()
             await asyncio.sleep(300)
@@ -285,14 +285,14 @@ class BotClient( discord.Client ):
             try:
                 await msg.edit(content=labsString)
             except Exception as err:
-                print("Problem editting persistent message. {}".format(err))
+                print("Problem editting persistent message. {}".format(err), flush=True)
         #Grid message section
         labsString = self.getGridStr()
         for msg in self.p_msg_grid:
             try:
-                await msg.edit(content=(labsString + "This grid is updated every 10 minutes.\nQuick Lab: " + random.choice(self.mins)))
+                await msg.edit(content=(labsString + "This grid is updated every 10 minutes.\nQuick Lab: " + random.choice(self.mins)), flush=True)
             except:
-                print("Problem editting persistent message.")
+                print("Problem editting persistent message.", flush=True)
 
     async def loadPMsg(self):
         self.pmsg = []
