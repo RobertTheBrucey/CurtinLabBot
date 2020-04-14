@@ -20,7 +20,7 @@ class BotClient( discord.Client ):
         self.p_msg_grid = []
         self.mins = []
         self.loading = True
-        self.helpString = "`^labs` - Request the list of Lab machines via DM\n`^quicklab` - Show a single ready lab machine\n`^labgrid` - Request a DM of Lab machine formatted in a grid.\n`^persistent` - (Administrator only) Generate a persistent (auto updating) message.\n`^persistentgrid` - (Administrator only) Generate a persistent (auto updating) grid message."
+        self.helpString = "`^labs` - Request the list of Lab machines via DM\n`^quicklab` - Show a single ready lab machine\n`^labgrid` - Request a DM of Lab machine formatted in a grid.\n`^persistent` - (Administrator only) Generate a persistent (auto updating) message.\n`^persistentgrid` - (Administrator only) Generate a persistent (auto updating) grid message.\n`^labhybrid` - Get a grid and a list of machines"
         self.configfile = configfile
         self.owner = None
         try:
@@ -36,6 +36,8 @@ class BotClient( discord.Client ):
         await self.change_presence(activity=discord.Game(name="Loading..."))
         for guild in self.guilds:
             print(guild)
+            for member in guild.members:
+                print("  ",member)
         try:
             await self.loadPMsg()
             print("Persistent messages successfully loaded.")
