@@ -271,7 +271,7 @@ class BotClient( discord.Client ):
                 self.mins = labt[1]
             else:
                 print("Saving up machines to file")
-                pickle.dump( (self.labs,self.mins), open ("./persistence/labs.p", "wb" ) )
+                #pickle.dump( (self.labs,self.mins), open ("./persistence/labs.p", "wb" ) )
             await self.updatePMsg()
             logStr = ""
             if os.path.isfile(logfile):
@@ -291,7 +291,7 @@ class BotClient( discord.Client ):
             if not logStr == "":
                 try:
                     with open(logfile,"a") as f:
-                        #f.write(logStr+"\n")
+                        f.write(logStr+"\n")
                         print("Log file successfully written to.")
                 except:
                     print("Log file unable to be written to")
