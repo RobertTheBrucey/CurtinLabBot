@@ -50,8 +50,7 @@ class BotClient( discord.Client ):
         await self.change_presence(activity=discord.Game(name="^labhelp"))
         appinfo = await self.application_info()
         self.owner = appinfo.owner
-        while True:
-            asyncio.get_event_loop().create_task(self.pollLabs())
+        #asyncio.get_event_loop().create_task(self.pollLabs())
 
     async def on_message( self, message ):
         #Ignore own messages
