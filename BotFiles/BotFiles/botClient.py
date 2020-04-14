@@ -10,7 +10,7 @@ import os.path
 from multiprocessing import Process, Queue
 import config
 
-listLen = 1000;
+listLen = 1000
 class BotClient( discord.Client ):
     
     def __init__(self, configfile):
