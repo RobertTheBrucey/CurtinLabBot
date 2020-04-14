@@ -291,7 +291,7 @@ class BotClient( discord.Client ):
             if not logStr == "":
                 try:
                     with open(logfile,"a") as f:
-                        f.write(logStr+"\n")
+                        #f.write(logStr+"\n")
                         print("Log file successfully written to.")
                 except:
                     print("Log file unable to be written to")
