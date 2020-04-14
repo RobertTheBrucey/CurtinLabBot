@@ -199,7 +199,7 @@ class BotClient( discord.Client ):
         logfile = "./persistence/"+config.getLogfile(self.configfile)
         keyfile = "./persistence/"+config.getKeyfile(self.configfile)
         while True:
-            print("Starting scan at {}".format(str(datetime.datetime.now())))
+            #print("Starting scan at {}".format(str(datetime.datetime.now())))
             mini = 100
             mins = []
             for room in [218,219,220,221,232]:
@@ -211,53 +211,53 @@ class BotClient( discord.Client ):
                     print("-" + str(column), end='')
                     for row in range(1,7):
                         try:
-                            print("S1")
+                            #print("S1")
                             users = -1
-                            print("S2")
+                            #print("S2")
                             host = "lab{}-{}0{}.cs.curtin.edu.au.".format(room,column,row)
-                            print("S3")
+                            #print("S3")
                             #print(host+": ", end = '')
                             q = Queue()
-                            print("S4")
+                            #print("S4")
                             proc = Process(target=checkLab, args=(host,q,creds,keyfile))
-                            print("S5")
+                            #print("S5")
                             proc.start()
-                            print("S6")
+                            #print("S6")
                             try:
-                                print("S7")
+                                #print("S7")
                                 await asyncio.sleep(2)
                                 users = q.get(timeout=0)
-                                print("S8")
+                                #print("S8")
                                 #users = await self.getFromQ(q)
                                 proc.join()
-                                print("S9")
+                                #print("S9")
                                 #if users != -1:
                                     #print(str(users) + " Users.")
                                 #else:
                                     #print("Down")
                             except Exception as err:
-                                print("S10")
+                                #print("S10")
                                 #print("Down")
                                 try:
-                                    print("S11")
+                                    #print("S11")
                                     proc.terminate()
-                                    print("S12")
+                                    #print("S12")
                                 except:
-                                    print("S13")
+                                    #print("S13")
                                     pass
-                            print("S14")
+                            #print("S14")
                             self.labs[host] = users
-                            print("S15")
+                            #print("S15")
                             if (users>-1 and users < mini):
                                 mini = users
                                 mins = []
                             if (users == mini):
                                 mins.append(host)
-                            print("S16"+str(users))
+                            #print("S16"+str(users))
                             print("  " + str((" ",users)[users!=-1]) + pad(users,sp), end = '')
-                            print("S17")
-                            #await asyncio.sleep(1) #Crashes here somehow?
-                            print("S18")
+                            #print("S17")
+                            await asyncio.sleep(1) #Crashes here somehow?
+                            #print("S18")
                         except:
                             pass
                     print("")
