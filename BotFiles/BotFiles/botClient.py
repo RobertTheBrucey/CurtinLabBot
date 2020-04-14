@@ -258,7 +258,7 @@ class BotClient( discord.Client ):
                         await asyncio.sleep(1) #Crashes here somehow?
                         print("S18")"""
                     print("")
-            self.mins = mins
+            #self.mins = mins
             print("Finishing scan at {}".format(str(datetime.datetime.now())))
             max = -1
             for lab in sorted(self.labs,key=self.labs.get):
