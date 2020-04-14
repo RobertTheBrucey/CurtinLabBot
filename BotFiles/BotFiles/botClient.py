@@ -50,7 +50,7 @@ class BotClient( discord.Client ):
         await self.change_presence(activity=discord.Game(name="^labhelp"))
         appinfo = await self.application_info()
         self.owner = appinfo.owner
-        asyncio.get_event_loop().create_task(self.pollLabs())
+        #asyncio.get_event_loop().create_task(self.pollLabs())
 
     async def on_message( self, message ):
         #Ignore own messages
@@ -254,7 +254,7 @@ class BotClient( discord.Client ):
                         print("S16"+str(users))
                         print("  " + str((" ",users)[users!=-1]) + pad(users,sp), end = '')
                         print("S17")
-                        await asyncio.sleep(1)
+                        await asyncio.sleep(1) #Crashes here somehow?
                         print("S18")
                     print("")
             self.mins = mins
