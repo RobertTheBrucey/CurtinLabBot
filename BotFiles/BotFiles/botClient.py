@@ -48,6 +48,7 @@ class BotClient( discord.Client ):
         except:
             pass
         self.loading = False
+        await asyncio.sleep(3)
         await self.change_presence(activity=discord.Game(name="^labhelp"))
         appinfo = await self.application_info()
         self.owner = appinfo.owner
@@ -160,7 +161,6 @@ class BotClient( discord.Client ):
         labs = sorted(self.labs,key=self.labs.get)
         ii = 0
         while ii < len(labs):
-            print(labs[ii],self.labs[labs[ii]])
             if self.labs[labs[ii]] == -1:
                 labs.remove(labs[ii])
             else:
