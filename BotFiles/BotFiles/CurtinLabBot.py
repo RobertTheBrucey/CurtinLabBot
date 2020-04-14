@@ -34,8 +34,8 @@ ownerid="
     """ Setup """
     #Store lab, current count and mins?
     labs = [{},[]]
-    #Store persistent lists, grids and hybrids
-    pmsg = [[],[],[]]
+    #Store persistent messages, with type (message,channel,guild,type)
+    pmsg = []
     #Thread 1 pls
     client = bc.BotClient(configfile)
     client.run(getToken(filename=configfile))

@@ -238,7 +238,7 @@ class BotClient( discord.Client ):
                             pass
                     print("")
             self.mins = mins
-            print("Finishing scan at {}".format(str(datetime.datetime.now())))
+            print("Finishing scan at {}".format(str(datetime.datetime.now())), flush=True)
             max = -1
             for lab in sorted(self.labs,key=self.labs.get):
                 if self.labs[lab] > max:
