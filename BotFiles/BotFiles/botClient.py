@@ -253,8 +253,9 @@ class BotClient( discord.Client ):
                             mins.append(host)
                         print("S16"+str(users))
                         print("  " + str((" ",users)[users!=-1]) + pad(users,sp), end = '')
-                        await asyncio.sleep(1)
                         print("S17")
+                        await asyncio.sleep(1)
+                        print("S18")
                     print("")
             self.mins = mins
             print("Finishing scan at {}".format(str(datetime.datetime.now())))
