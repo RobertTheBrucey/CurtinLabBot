@@ -62,7 +62,7 @@ class BotClient( discord.Client ):
         if len(message.content) > 0:
             command = message.content.lower().split()[0]
         else:
-            command = " "
+            return
         if command[0] == "^":
             if command[1:] == "labs":
                 print( '{} asked for the lab machines'.format(message.author))
@@ -278,7 +278,7 @@ class BotClient( discord.Client ):
                 self.mins = labt[1]
             else:
                 print("Saving up machines to file")
-                #pickle.dump( (self.labs,self.mins), open ("./persistence/labs.p", "wb" ) )
+                pickle.dump( (self.labs,self.mins), open ("./persistence/labs.p", "wb" ) )
             await self.updatePMsg()
             logStr = ""
             if os.path.isfile(logfile):

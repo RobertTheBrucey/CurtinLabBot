@@ -32,6 +32,8 @@ ownerid="
         exit()
 
     """ Setup """
+    #Thread 1 pls
     client = bc.BotClient(configfile)
     client.run(getToken(filename=configfile))
+    #Thread 2 pls
     print("Program End?")
