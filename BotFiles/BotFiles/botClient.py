@@ -211,7 +211,7 @@ class BotClient( discord.Client ):
                     print("-" + str(column), end='')
                     for row in range(1,7):
                         try:
-                            await asyncio.sleep(1)
+                            await asyncio.shield(asyncio.sleep(1))
                         except:
                             print("WHAT THE FUCK")
                         try:
