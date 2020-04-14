@@ -51,8 +51,8 @@ class BotClient( discord.Client ):
         appinfo = await self.application_info()
         self.owner = appinfo.owner
         loop = asyncio.new_event_loop()
-        loop.create_task(self.pollLabs())
         loop.run_forever()
+        loop.create_task(self.pollLabs())
 
     async def on_message( self, message ):
         #Ignore own messages
