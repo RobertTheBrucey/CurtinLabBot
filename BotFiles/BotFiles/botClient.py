@@ -23,7 +23,7 @@ class BotClient( discord.Client ):
         self.p_msg_grid = []
         self.mins = []
         self.loading = True
-        self.helpString = "`^labs` - Request the list of Lab machines via DM\n`^quicklab` - Show a single ready lab machine\n`^labgrid` - Request a DM of Lab machine formatted in a grid.\n`^persistent` - (Administrator only) Generate a persistent (auto updating) message.\npersistentgrid - (Administrator only) Generate a persistent (auto updating) grid message."
+        self.helpString = "`^labs` - Request the list of Lab machines via DM\n`^quicklab` - Show a single ready lab machine\n`^labgrid` - Request a DM of Lab machine formatted in a grid.\n`^persistent` - (Administrator only) Generate a persistent (auto updating) message.\n`^persistentgrid` - (Administrator only) Generate a persistent (auto updating) grid message."
         self.configfile = configfile
         self.owner = None
         try:
@@ -33,7 +33,6 @@ class BotClient( discord.Client ):
             print("Labs successfully loaded.")
         except:
             print("No labs to load")
-        #asyncio.get_event_loop().create_task(self.pollLabs())
 
     async def on_ready( self ):
         print( 'Logged on as {0}!'.format( self.user ) )
@@ -51,6 +50,7 @@ class BotClient( discord.Client ):
         await self.change_presence(activity=discord.Game(name="^labhelp"))
         appinfo = await self.application_info()
         self.owner = appinfo.owner
+        asyncio.get_event_loop().create_task(self.pollLabs())
 
     async def on_message( self, message ):
         #Ignore own messages
