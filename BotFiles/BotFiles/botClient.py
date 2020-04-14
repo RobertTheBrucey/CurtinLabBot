@@ -210,10 +210,7 @@ class BotClient( discord.Client ):
                 for column in "abcd":
                     print("-" + str(column), end='')
                     for row in range(1,7):
-                        try:
-                            await asyncio.shield(asyncio.sleep(1))
-                        except:
-                            print("WHAT THE FUCK")
+                        #await asyncio.sleep(1)
                         try:
                             #print("S1")
                             users = -1
