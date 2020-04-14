@@ -165,7 +165,7 @@ class BotClient( discord.Client ):
                 labs.remove(labs[ii])
             else:
                 ii = ii + 1
-        for i in range(len(labs),30):
+        for i in range(len(labs),31):
             labs.append(("",0))
         ii = 0
         sp = 2
