@@ -50,7 +50,7 @@ class BotClient( discord.Client ):
         await self.change_presence(activity=discord.Game(name="^labhelp"))
         appinfo = await self.application_info()
         self.owner = appinfo.owner
-        #asyncio.get_event_loop().create_task(self.pollLabs())
+        asyncio.get_event_loop().create_task(self.pollLabs())
 
     async def on_message( self, message ):
         #Ignore own messages
@@ -224,7 +224,8 @@ class BotClient( discord.Client ):
                         print("S6")
                         try:
                             print("S7")
-                            users = q.get(timeout=2)
+                            await asyncio.sleep(2)
+                            users = q.get(timeout=0)
                             print("S8")
                             #users = await self.getFromQ(q)
                             proc.join()
