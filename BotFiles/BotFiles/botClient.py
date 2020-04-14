@@ -212,6 +212,7 @@ class BotClient( discord.Client ):
                     for row in range(1,7):
                         try:
                             print("S1")
+                            await asyncio.sleep(1)
                             users = -1
                             print("S2")
                             host = "lab{}-{}0{}.cs.curtin.edu.au.".format(room,column,row)
@@ -256,7 +257,7 @@ class BotClient( discord.Client ):
                             print("S16"+str(users))
                             print("  " + str((" ",users)[users!=-1]) + pad(users,sp), end = '')
                             print("S17")
-                            await asyncio.sleep(1) #Crashes here somehow?
+                            #await asyncio.sleep(1) #Crashes here somehow?
                             print("S18")
                         except:
                             pass
