@@ -49,7 +49,10 @@ class BotClient( discord.Client ):
             pass
         self.loading = False
         #await asyncio.sleep(3)
-        await self.change_presence(activity=discord.Game(name="^labhelp"))
+        try:
+            await self.change_presence(activity=discord.Game(name="^labhelp"))
+        except:
+            print("WTF DISCORD")
         appinfo = await self.application_info()
         self.owner = appinfo.owner
 
