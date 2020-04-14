@@ -37,7 +37,7 @@ class BotClient( discord.Client ):
 
     async def on_ready( self ):
         print( 'Logged on as {0}!'.format( self.user ) )
-        await self.change_presence(activity=discord.Game(name="Loading..."))
+        #await self.change_presence(activity=discord.Game(name="Loading..."))
         try:
             await self.loadPMsg()
             print("Persistent messages successfully loaded.")
@@ -48,7 +48,7 @@ class BotClient( discord.Client ):
         except:
             pass
         self.loading = False
-        await asyncio.sleep(3)
+        #await asyncio.sleep(3)
         await self.change_presence(activity=discord.Game(name="^labhelp"))
         appinfo = await self.application_info()
         self.owner = appinfo.owner
