@@ -33,7 +33,7 @@ class BotClient( discord.Client ):
             print("Labs successfully loaded.")
         except:
             print("No labs to load")
-        asyncio.get_event_loop().create_task(self.pollLabs())
+        #asyncio.get_event_loop().create_task(self.pollLabs())
 
     async def on_ready( self ):
         print( 'Logged on as {0}!'.format( self.user ) )
