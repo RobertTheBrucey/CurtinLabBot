@@ -34,10 +34,10 @@ class BotClient( discord.Client ):
     async def on_ready( self ):
         print( 'Logged on as {0}!'.format( self.user ) )
         await self.change_presence(activity=discord.Game(name="Loading..."))
-        for guild in self.guilds:
-            print(guild)
-            for member in guild.members:
-                print("  ",member)
+        #for guild in self.guilds:
+        #    print(guild)
+        #    for member in guild.members:
+        #        print("  ",member)
         try:
             await self.loadPMsg()
             print("Persistent messages successfully loaded.")
