@@ -43,10 +43,6 @@ class BotClient( discord.Client ):
             print("Persistent messages successfully loaded.")
         except:
             print("Couldn't load persistent messages from file.")
-        try:
-            await self.updatePMsg()
-        except:
-            pass
         self.loading = False
         await self.change_presence(activity=discord.Game(name="^labhelp"))
         appinfo = await self.application_info()
