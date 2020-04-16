@@ -40,7 +40,7 @@ ownerid="
     pmsg = []
     client = bc.BotClient(configfile)
     #Thread 1 pls
-    scanner = ls.LabScan(filename=configfile)
+    scanner = ls.LabScan(configfile=configfile)
     scanT = threading.Thread(target=scanner.pollLabs, args=(client), daemon=True)
     scanT.start()
     #Thread 2 pls
