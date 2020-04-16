@@ -114,7 +114,8 @@ class LabScan():
                 print("Log file not specified", flush=True)
             self.lock.release()
             if self.bot:
-                asyncio.create_task(self.bot.updatePMsg())
+                if self.bot.loop:
+                    self.bot.loop.create_task(self.bot.updatePMsg())
             #self.newLabs = True
             #asyncio.create_task(self.bot.updatePMsg())
             time.sleep(300)

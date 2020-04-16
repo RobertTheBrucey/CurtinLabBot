@@ -24,6 +24,7 @@ class BotClient( discord.Client ):
         self.helpString = "`^labs` - Request the list of Lab machines via DM\n`^quicklab` - Show a single ready lab machine\n`^labgrid` - Request a DM of Lab machine formatted in a grid.\n`^persistent` - (Administrator only) Generate a persistent (auto updating) message.\n`^persistentgrid` - (Administrator only) Generate a persistent (auto updating) grid message.\n`^labhybrid` - Get a grid and a list of machines"
         self.configfile = configfile
         self.owner = None
+        self.loop = None
 
     async def on_ready( self ):
         print( 'Logged on as {0}!'.format( self.user ) )
@@ -41,7 +42,8 @@ class BotClient( discord.Client ):
         await self.change_presence(activity=discord.Game(name="^labhelp"))
         appinfo = await self.application_info()
         self.owner = appinfo.owner
-        asyncio.get_event_loop().create_task(self.checkForNew())
+        self.loop = asyncio.get_event_loop()
+        #asyncio.get_event_loop().create_task(self.checkForNew())
 
     async def checkForNew(self):
         while True:
