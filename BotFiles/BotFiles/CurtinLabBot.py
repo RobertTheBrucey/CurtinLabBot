@@ -34,11 +34,7 @@ ownerid="
         exit()
 
     """ Setup """
-    #Store lab, current count and mins?
-    labs = [{},[]]
-    #Store persistent messages, with type (message,channel,guild,type)
-    pmsg = []
-    
+  
     #Thread 1 pls
     scanner = ls.LabScan(configfile=configfile)
     scanT = threading.Thread(target=scanner.pollLabs, daemon=True)

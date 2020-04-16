@@ -25,7 +25,7 @@ class LabScan():
         except:
             print("No labs to load")
 
-    async def pollLabs(self):
+    def pollLabs(self):
         sp = 2
         creds = config.getCreds(self.configfile)
         logfile = "./persistence/"+config.getLogfile(self.configfile)
