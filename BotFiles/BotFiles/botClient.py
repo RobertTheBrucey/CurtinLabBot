@@ -41,13 +41,14 @@ class BotClient( discord.Client ):
         await self.change_presence(activity=discord.Game(name="^labhelp"))
         appinfo = await self.application_info()
         self.owner = appinfo.owner
+        asyncio.get_event_loop().create_task(self.checkForNew())
 
     async def checkForNew(self):
         while True:
             if self.scanner.newLabs:
                 await self.updatePMsg()
                 self.scanner.newLabs = False
-            await asyncio.sleep(30)
+            await asyncio.sleep(1)
 
     async def on_message( self, message ):
         #Ignore own messages

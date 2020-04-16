@@ -108,7 +108,7 @@ class LabScan():
             if self.bot:
                 self.bot.updatePMsg()
             self.newLabs = True
-            asyncio.create_task(self.bot.updatePMsg())
+            #asyncio.create_task(self.bot.updatePMsg())
             time.sleep(300)
 
 def checkLab( host, temp, creds, keyfile ):
