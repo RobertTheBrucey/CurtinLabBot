@@ -19,7 +19,7 @@ class LabScan():
         self.configfile = configfile
         self.bot = None
         self.newLabs = False
-        self.lock = threading.lock()
+        self.lock = threading.Lock()
         try:
             labt = pickle.load( open( "./persistence/labs.p", "rb" ) )
             self.lock.acquire()
