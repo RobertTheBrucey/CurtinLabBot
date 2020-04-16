@@ -10,7 +10,7 @@ import discord
 import botClient as bc
 import asyncio
 
-class labScan():
+class LabScan():
     def __init__(self, configfile):
         self.labs = {}
         self.mins = []
