@@ -135,6 +135,9 @@ class BotClient( discord.Client ):
                     await self.savePMsg()
                 else:
                     await message.channel.send("You are not authorised to use this command.")
+        if self.scanner.newLabs:
+            await self.updatePMsg()
+            self.scanner.newLabs = False
 
     def getListStr(self):
         labsString = ""
@@ -337,7 +340,7 @@ class BotClient( discord.Client ):
                 continue
             if rmsg:
                 self.p_msg_hybrid.append(rmsg)
-        print(str(len(self.p_msg)) + " persistent messages loaded and "+ str(len(self.p_msg_grid)) +" persistent grids loaded")
+        print(str(len(self.p_msg)) + " persistent messages loaded, "+ str(len(self.p_msg_grid)) +" persistent grids loaded and "+ str(len(self.p_msg_hybrid))+" hybrid messages loaded.")
 
     async def savePMsg(self):
         msg_ids = []
