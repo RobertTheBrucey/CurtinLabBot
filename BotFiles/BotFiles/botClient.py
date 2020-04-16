@@ -16,21 +16,14 @@ class BotClient( discord.Client ):
     def __init__(self, configfile, scanner):
         super().__init__()
         self.scanner = scanner
-        #self.scanner.labs = labs
+        self.scanner.bot = self
         self.p_msg = []
         self.p_msg_grid = []
-        #self.scanner.mins = mins
+        self.p_msg_hybrid = []
         self.loading = True
         self.helpString = "`^labs` - Request the list of Lab machines via DM\n`^quicklab` - Show a single ready lab machine\n`^labgrid` - Request a DM of Lab machine formatted in a grid.\n`^persistent` - (Administrator only) Generate a persistent (auto updating) message.\n`^persistentgrid` - (Administrator only) Generate a persistent (auto updating) grid message.\n`^labhybrid` - Get a grid and a list of machines"
         self.configfile = configfile
         self.owner = None
-        #try:
-        #    labt = pickle.load( open( "./persistence/labs.p", "rb" ) )
-        #    self.scanner.labs = labt[0]
-        #    self.scanner.mins = labt[1]
-        #    print("Labs successfully loaded.")
-        #except:
-        #    print("No labs to load")
 
     async def on_ready( self ):
         print( 'Logged on as {0}!'.format( self.user ) )
@@ -48,8 +41,6 @@ class BotClient( discord.Client ):
         await self.change_presence(activity=discord.Game(name="^labhelp"))
         appinfo = await self.application_info()
         self.owner = appinfo.owner
-        #asyncio.ensure_future(self.pollLabs())
-        asyncio.ensure_future(self.checkForNew())
 
     async def checkForNew(self):
         while True:
@@ -129,6 +120,17 @@ class BotClient( discord.Client ):
                         if msg.channel == message.channel:
                             self.p_msg_grid.remove(msg)
                     self.p_msg_grid.append(await message.channel.send(self.getGridStr() + "This grid is updated every 10 minutes.\nQuick Lab: " + random.choice(self.scanner.mins)))
+                    await self.savePMsg()
+                else:
+                    await message.channel.send("You are not authorised to use this command.")
+            elif command[1:] == "persistenthybrid":
+                print( '{} asked for a persistent hybrid grid'.format(message.author))
+                if message.author.permissions_in(message.channel).manage_messages:
+                    print( '{} was authorised for a persistent hybrid'.format(message.author))
+                    for msg in self.p_msg_grid:
+                        if msg.channel == message.channel:
+                            self.p_msg_grid.remove(msg)
+                    self.p_msg_hybrid.append(await message.channel.send(self.getHybridStr()))
                     await self.savePMsg()
                 else:
                     await message.channel.send("You are not authorised to use this command.")
@@ -328,11 +330,14 @@ class BotClient( discord.Client ):
     async def savePMsg(self):
         msg_ids = []
         grid_msg_ids = []
+        hybrid_msg_ids = []
         for msg in self.p_msg:
             msg_ids.append((msg.guild.id,msg.channel.id,msg.id))
         for msg in self.p_msg_grid:
             grid_msg_ids.append((msg.guild.id,msg.channel.id,msg.id))
-        msgs = (msg_ids,grid_msg_ids)
+        for msg in self.p_msg_hybrid:
+            hybrid_msg_ids.append((msg.guild.id,msg.channel.id,msg.id))
+        msgs = (msg_ids,grid_msg_ids,hybrid_msg_ids)
         pickle.dump( msgs, open ("./persistence/pmsgn.p", "wb" ) )
     
 def checkLab( host, temp, creds, keyfile ):
