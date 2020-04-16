@@ -47,5 +47,6 @@ ownerid="
     #while True:
     botT.join()
     print("Bot Crash")
+    botT = threading.Thread(target=client.run, args=(getToken(filename=configfile)))
     botT.start()
     print("Program End?")
