@@ -42,6 +42,8 @@ ownerid="
     #Thread 2 pls
     client = bc.BotClient(configfile,scanner)
     for i in range(5):
-        client.run(getToken(filename=configfile))
-        print("Bot crashed")
+        try:
+            client.run(getToken(filename=configfile))
+        except:
+            print("Bot crashed")
     print("Program End?")
