@@ -54,6 +54,7 @@ class BotClient( discord.Client ):
         while True:
             if self.scanner.newLabs:
                 await self.updatePMsg()
+                self.scanner.newLabs = False
             await asyncio.sleep(30)
 
     async def on_message( self, message ):
