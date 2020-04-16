@@ -65,32 +65,24 @@ class BotClient( discord.Client ):
                 labsString = self.getListStr() + self.getRLab()
                 await message.author.send(labsString)
                 if message.channel.permissions_for(message.guild.me).send_messages:
-                    print("Can send message")
-                else:
-                    print("Can't send message")
-                try:
                     await message.channel.send("List of online lab machines DMed\nQuick machine: {}".format(first))
-                except:
-                    print("Couldn't send message to channel.")
             elif command[1:] == "labgrid":
                 print( '{} asked for the lab machine grid'.format(message.author))
                 await message.author.send(self.getGridStr())
-                try:
+                if message.channel.permissions_for(message.guild.me).send_messages:
                     await message.channel.send("Grid DMed to you")
-                except:
-                    print("Couldn't  send message to channel.")
             elif command[1:] == "quicklab":
                 print( '{} asked for a quick lab'.format(message.author))
                 lab = self.getRLab()
-                try:
+                if message.channel.permissions_for(message.guild.me).send_messages:
                     await message.channel.send("Quick Lab: {}".format(lab))
-                except:
+                else:
                     await message.author.send("Quick Lab: {}".format(lab))
             elif command[1:] == "labhelp":
                 print( '{} asked for the lab help'.format(message.author))
-                try:
+                if message.channel.permissions_for(message.guild.me).send_messages:
                     await message.channel.send(self.helpString)
-                except:
+                else:
                     await message.author.send(self.helpString)
             elif command[1:] == "restart":
                 if message.author == self.owner:
@@ -100,10 +92,8 @@ class BotClient( discord.Client ):
                 print( '{} asked for the lab hybrid machines'.format(message.author))
                 labsString = self.getHybridStr()
                 await message.author.send(labsString)
-                try:
+                if message.channel.permissions_for(message.guild.me).send_messages:
                     await message.channel.send("Hybrid message of online lab machines DMed")
-                except:
-                    print("Couldn't send message to channel.")
             elif self.loading:
                 pass
             elif command[1:] == "persistent":
@@ -208,13 +198,6 @@ class BotClient( discord.Client ):
                 ii = ii + 1
         self.scanner.lock.release()
         return labsString + "\n```"
-
-    async def getFromQ(self, q):
-        try:
-            users = q.get(timeout=2)
-        except:
-            users = -1
-        return users
 
     async def updatePMsg(self):
         labsString = self.getListStr() + "This list is updated every 10 minutes.\nQuick Lab: " + self.getRLab()
