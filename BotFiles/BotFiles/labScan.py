@@ -9,6 +9,7 @@ import re
 import discord
 import botClient as bc
 import asyncio
+import time
 
 class LabScan():
     def __init__(self, configfile):
@@ -107,7 +108,7 @@ class LabScan():
             if self.bot:
                 self.bot.updatePMsg()
             self.newLabs = True
-            datetime.sleep(300)
+            time.sleep(300)
 
 def checkLab( host, temp, creds, keyfile ):
     sshclient = paramiko.SSHClient()
