@@ -15,6 +15,7 @@ class LabScan():
         self.labs = {}
         self.mins = []
         self.configfile = configfile
+        self.bot = None
         try:
             labt = pickle.load( open( "./persistence/labs.p", "rb" ) )
             self.labs = labt[0]
@@ -23,7 +24,7 @@ class LabScan():
         except:
             print("No labs to load")
 
-    def pollLabs(self):
+    async def pollLabs(self):
         sp = 2
         creds = config.getCreds(self.configfile)
         logfile = "./persistence/"+config.getLogfile(self.configfile)
@@ -102,6 +103,8 @@ class LabScan():
                     print("Log file unable to be written to", flush=True)
             else:
                 print("Log file not specified", flush=True)
+            if self.bot:
+                self.bot.updatePMsg()
             datetime.sleep(300)
 
 def checkLab( host, temp, creds, keyfile ):

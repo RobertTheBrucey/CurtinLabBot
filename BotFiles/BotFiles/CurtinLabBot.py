@@ -42,8 +42,9 @@ ownerid="
     #Thread 1 pls
     scanner = ls.LabScan(configfile=configfile)
     scanT = threading.Thread(target=scanner.pollLabs, daemon=True)
-    scanT.start()
     #Thread 2 pls
     client = bc.BotClient(configfile,scanner)
+    scanner.bot = client
+    scanT.start()
     client.run(getToken(filename=configfile))
     print("Program End?")
