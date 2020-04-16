@@ -44,6 +44,6 @@ ownerid="
     scanT = threading.Thread(target=scanner.pollLabs, daemon=True)
     scanT.start()
     #Thread 2 pls
-    client = bc.BotClient(configfile,scanner.labs,scanner.mins)
+    client = bc.BotClient(configfile,scanner)
     client.run(getToken(filename=configfile))
     print("Program End?")

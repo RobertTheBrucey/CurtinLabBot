@@ -102,7 +102,6 @@ class LabScan():
                     print("Log file unable to be written to", flush=True)
             else:
                 print("Log file not specified", flush=True)
-            asyncio.ensure_future(bot.updatePMsg())
             datetime.sleep(300)
 
 def checkLab( host, temp, creds, keyfile ):

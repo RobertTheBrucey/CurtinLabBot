@@ -13,23 +13,23 @@ import config
 listLen = 1000
 class BotClient( discord.Client ):
     
-    def __init__(self, configfile, labs, mins):
+    def __init__(self, configfile, scanner):
         super().__init__()
-        self.labs = labs
+        #self.scanner.labs = labs
         self.p_msg = []
         self.p_msg_grid = []
-        self.mins = mins
+        #self.scanner.mins = mins
         self.loading = True
         self.helpString = "`^labs` - Request the list of Lab machines via DM\n`^quicklab` - Show a single ready lab machine\n`^labgrid` - Request a DM of Lab machine formatted in a grid.\n`^persistent` - (Administrator only) Generate a persistent (auto updating) message.\n`^persistentgrid` - (Administrator only) Generate a persistent (auto updating) grid message.\n`^labhybrid` - Get a grid and a list of machines"
         self.configfile = configfile
         self.owner = None
-        try:
-            labt = pickle.load( open( "./persistence/labs.p", "rb" ) )
-            self.labs = labt[0]
-            self.mins = labt[1]
-            print("Labs successfully loaded.")
-        except:
-            print("No labs to load")
+        #try:
+        #    labt = pickle.load( open( "./persistence/labs.p", "rb" ) )
+        #    self.scanner.labs = labt[0]
+        #    self.scanner.mins = labt[1]
+        #    print("Labs successfully loaded.")
+        #except:
+        #    print("No labs to load")
 
     async def on_ready( self ):
         print( 'Logged on as {0}!'.format( self.user ) )
@@ -60,7 +60,7 @@ class BotClient( discord.Client ):
         if command[0] == "^":
             if command[1:] == "labs":
                 print( '{} asked for the lab machines'.format(message.author))
-                labsString = self.getListStr() + random.choice(self.mins)
+                labsString = self.getListStr() + random.choice(self.scanner.mins)
                 await message.author.send(labsString)
                 try:
                     await message.channel.send("List of online lab machines DMed\nQuick machine: {}".format(first))
@@ -75,7 +75,7 @@ class BotClient( discord.Client ):
                     print("Couldn't  send message to channel.")
             elif command[1:] == "quicklab":
                 print( '{} asked for a quick lab'.format(message.author))
-                lab = random.choice(self.mins)
+                lab = random.choice(self.scanner.mins)
                 try:
                     await message.channel.send("Quick Lab: {}".format(lab))
                 except:
@@ -104,7 +104,7 @@ class BotClient( discord.Client ):
                 print( '{} asked for a persistent message'.format(message.author))
                 if message.author.permissions_in(message.channel).manage_messages:
                     print( '{} was authorised for a persistent message'.format(message.author))
-                    labsString = self.getListStr() + "This list is updated every 10 minutes.\nQuick Lab: " + random.choice(self.mins)
+                    labsString = self.getListStr() + "This list is updated every 10 minutes.\nQuick Lab: " + random.choice(self.scanner.mins)
                     for msg in self.p_msg:
                         if msg.channel == message.channel:
                             self.p_msg.remove(msg)
@@ -119,17 +119,17 @@ class BotClient( discord.Client ):
                     for msg in self.p_msg_grid:
                         if msg.channel == message.channel:
                             self.p_msg_grid.remove(msg)
-                    self.p_msg_grid.append(await message.channel.send(self.getGridStr() + "This grid is updated every 10 minutes.\nQuick Lab: " + random.choice(self.mins)))
+                    self.p_msg_grid.append(await message.channel.send(self.getGridStr() + "This grid is updated every 10 minutes.\nQuick Lab: " + random.choice(self.scanner.mins)))
                     await self.savePMsg()
                 else:
                     await message.channel.send("You are not authorised to use this command.")
 
     def getListStr(self):
         labsString = ""
-        for lab in sorted(self.labs,key=self.labs.get):
-            if self.labs[lab] != -1:
-                labsString += "\n"+lab+" has "+str(self.labs[lab])+" user"
-                if self.labs[lab] != 1:
+        for lab in sorted(self.scanner.labs,key=self.scanner.labs.get):
+            if self.scanner.labs[lab] != -1:
+                labsString += "\n"+lab+" has "+str(self.scanner.labs[lab])+" user"
+                if self.scanner.labs[lab] != 1:
                     labsString += "s"
         labsString = "Available lab machines are:```c"+labsString
         labsString = labsString[:labsString[:listLen].rfind('\n')] + "\n```"
@@ -147,17 +147,17 @@ class BotClient( discord.Client ):
                 labsString += "-" + str(column)
                 for row in range(1,7):
                     host = "lab{}-{}0{}.cs.curtin.edu.au.".format(room,column,row)
-                    users = self.labs.get(host,-1)
+                    users = self.scanner.labs.get(host,-1)
                     labsString +=  "  " + str((" ",users)[users!=-1]) + pad(users,sp)
                 labsString += "\n"
         return labsString + "\n```"
     
     def getHybridStr(self):
         labsString = "```yaml\nLab Machine Users By Room  -:- Quick Labs\n"
-        labs = sorted(self.labs,key=self.labs.get)
+        labs = sorted(self.scanner.labs,key=self.scanner.labs.get)
         ii = 0
         while ii < len(labs):
-            if self.labs[labs[ii]] == -1:
+            if self.scanner.labs[labs[ii]] == -1:
                 labs.remove(labs[ii])
             else:
                 ii = ii + 1
@@ -177,7 +177,7 @@ class BotClient( discord.Client ):
                 labsString += "-" + str(column)
                 for row in range(1,7):
                     host = "lab{}-{}0{}.cs.curtin.edu.au.".format(room,column,row)
-                    users = self.labs.get(host,-1)
+                    users = self.scanner.labs.get(host,-1)
                     labsString +=  "  " + str((" ",users)[users!=-1]) + pad(users,sp)
                 labsString += " -:- " + labs[ii] + "\n"
                 ii = ii + 1
@@ -222,7 +222,7 @@ class BotClient( discord.Client ):
                                     proc.terminate()
                                 except:
                                     pass
-                            self.labs[host] = users
+                            self.scanner.labs[host] = users
                             if (users>-1 and users < mini):
                                 mini = users
                                 mins = []
@@ -233,34 +233,34 @@ class BotClient( discord.Client ):
                         except:
                             pass
                     print("")
-            self.mins = mins
+            self.scanner.mins = mins
             print("Finishing scan at {}".format(str(datetime.datetime.now())), flush=True)
             max = -1
-            for lab in sorted(self.labs,key=self.labs.get):
-                if self.labs[lab] > max:
-                    max = self.labs[lab]
+            for lab in sorted(self.scanner.labs,key=self.scanner.labs.get):
+                if self.scanner.labs[lab] > max:
+                    max = self.scanner.labs[lab]
             if max == -1:
                 print("All labs down, loading from backup", flush=True)
                 labt = pickle.load( open( "./persistence/labs.p", "rb" ) )
-                self.labs = labt[0]
-                self.mins = labt[1]
+                self.scanner.labs = labt[0]
+                self.scanner.mins = labt[1]
             else:
                 print("Saving up machines to file", flush=True)
-                pickle.dump( (self.labs,self.mins), open("./persistence/labs.p", "wb" ) )
+                pickle.dump( (self.scanner.labs,self.scanner.mins), open("./persistence/labs.p", "wb" ) )
             logStr = ""
             if os.path.isfile(logfile):
                 print("Log file exists, appending", flush=True)
                 logStr += "{},".format(str(datetime.datetime.now()))+","
-                for lab in sorted(self.labs.keys()):
-                    logStr += str(self.labs[lab]) + ","
+                for lab in sorted(self.scanner.labs.keys()):
+                    logStr += str(self.scanner.labs[lab]) + ","
                 logStr = logStr[:-1]
             elif not os.path.isdir(logfile):
                 print("Log file specified but none existant, creating", flush=True)
                 dataStr = "{},".format(str(datetime.datetime.now()))
                 logStr += "Time,"
-                for lab in sorted(self.labs.keys()):
+                for lab in sorted(self.scanner.labs.keys()):
                     logStr += lab.split(".")[0][3:] + ","
-                    dataStr += str(self.labs[lab]) + ","
+                    dataStr += str(self.scanner.labs[lab]) + ","
                 logStr = logStr[:-1] + "\n" + dataStr[:-1]
             if not logStr == "":
                 try:
@@ -276,7 +276,7 @@ class BotClient( discord.Client ):
             await asyncio.sleep(300)
 
     async def updatePMsg(self):
-        labsString = self.getListStr() + "This list is updated every 10 minutes.\nQuick Lab: " + random.choice(self.mins)
+        labsString = self.getListStr() + "This list is updated every 10 minutes.\nQuick Lab: " + random.choice(self.scanner.mins)
         for msg in self.p_msg:
             try:
                 await msg.edit(content=labsString)
@@ -286,7 +286,7 @@ class BotClient( discord.Client ):
         labsString = self.getGridStr()
         for msg in self.p_msg_grid:
             try:
-                await msg.edit(content=(labsString + "This grid is updated every 10 minutes.\nQuick Lab: " + random.choice(self.mins)), flush=True)
+                await msg.edit(content=(labsString + "This grid is updated every 10 minutes.\nQuick Lab: " + random.choice(self.scanner.mins)), flush=True)
             except:
                 print("Problem editting persistent message.", flush=True)
 
