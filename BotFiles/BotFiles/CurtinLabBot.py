@@ -41,5 +41,6 @@ ownerid="
     scanT.start()
     #Thread 2 pls
     client = bc.BotClient(configfile,scanner)
-    client.run(getToken(filename=configfile))
+    for i in range(5):
+        client.run(getToken(filename=configfile))
     print("Program End?")
