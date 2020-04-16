@@ -46,6 +46,7 @@ class LabScan():
                 print("")
                 for column in "abcd":
                     print("-" + str(column), end='', flush=True)
+                    line = ""
                     for row in range(1,7):
                         try:
                             users = -1
@@ -69,10 +70,10 @@ class LabScan():
                                 mins = []
                             if (users == mini):
                                 mins.append(host)
-                            print("  " + str((" ",users)[users!=-1]) + pad(users,sp), end = '', flush=True)
+                            line += "  " + str((" ",users)[users!=-1]) + pad(users,sp)
                         except:
                             pass
-                    print("")
+                    print(line,flush=True)
             self.lock.acquire()
             self.mins = mins
             print("Finishing scan at {}".format(str(datetime.datetime.now())), flush=True)
