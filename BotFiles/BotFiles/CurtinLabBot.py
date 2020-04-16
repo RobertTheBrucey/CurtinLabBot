@@ -43,4 +43,5 @@ ownerid="
     client = bc.BotClient(configfile,scanner)
     for i in range(5):
         client.run(getToken(filename=configfile))
+        print("Bot crashed")
     print("Program End?")
