@@ -62,14 +62,13 @@ class BotClient( discord.Client ):
         if command[0] == "^":
             if command[1:] == "labs":
                 print( '{} asked for the lab machines'.format(message.author))
-                self.scanner.lock.acquire()
-                labsString = self.getListStr() + random.choice(self.scanner.mins)
-                self.scanner.lock.release()
+                labsString = self.getListStr() + self.getRLab()
                 await message.author.send(labsString)
                 if self.user.permissions_in(message.channel).send_messages:
-                    self.scanner.lock.acquire()
-                    await message.channel.send("List of online lab machines DMed\nQuick machine: {}".format(random.choice(self.scanner.mins)))
-                    self.scanner.lock.release()
+                try:
+                    await message.channel.send("List of online lab machines DMed\nQuick machine: {}".format(first))
+                except:
+                    print("Couldn't send message to channel.")
             elif command[1:] == "labgrid":
                 print( '{} asked for the lab machine grid'.format(message.author))
                 await message.author.send(self.getGridStr())
@@ -79,9 +78,7 @@ class BotClient( discord.Client ):
                     print("Couldn't  send message to channel.")
             elif command[1:] == "quicklab":
                 print( '{} asked for a quick lab'.format(message.author))
-                self.scanner.lock.acquire()
-                lab = random.choice(self.scanner.mins)
-                self.scanner.lock.release()
+                lab = self.getRLab()
                 try:
                     await message.channel.send("Quick Lab: {}".format(lab))
                 except:
@@ -110,7 +107,7 @@ class BotClient( discord.Client ):
                 print( '{} asked for a persistent message'.format(message.author))
                 if message.author.permissions_in(message.channel).manage_messages:
                     print( '{} was authorised for a persistent message'.format(message.author))
-                    labsString = self.getListStr() + "This list is updated every 10 minutes.\nQuick Lab: " + random.choice(self.scanner.mins)
+                    labsString = self.getListStr() + "This list is updated every 10 minutes.\nQuick Lab: " + self.getRLab()
                     for msg in self.p_msg:
                         if msg.channel == message.channel:
                             self.p_msg.remove(msg)
@@ -125,7 +122,7 @@ class BotClient( discord.Client ):
                     for msg in self.p_msg_grid:
                         if msg.channel == message.channel:
                             self.p_msg_grid.remove(msg)
-                    self.p_msg_grid.append(await message.channel.send(self.getGridStr() + "This grid is updated every 10 minutes.\nQuick Lab: " + random.choice(self.scanner.mins)))
+                    self.p_msg_grid.append(await message.channel.send(self.getGridStr() + "This grid is updated every 10 minutes.\nQuick Lab: " + self.getRLab()))
                     await self.savePMsg()
                 else:
                     await message.channel.send("You are not authorised to use this command.")
@@ -217,26 +214,20 @@ class BotClient( discord.Client ):
         return users
 
     async def updatePMsg(self):
-        self.scanner.lock.acquire()
-        labsString = self.getListStr() + "This list is updated every 10 minutes.\nQuick Lab: " + random.choice(self.scanner.mins)
-        self.scanner.lock.release()
+        labsString = self.getListStr() + "This list is updated every 10 minutes.\nQuick Lab: " + self.getRLab()
         for msg in self.p_msg:
             try:
                 await msg.edit(content=labsString)
             except Exception as err:
                 print("Problem editting persistent message. {}".format(err), flush=True)
         #Grid message section
-        self.scanner.lock.acquire()
-        labsString = self.getGridStr() + "This grid is updated every 10 minutes.\nQuick Lab: " + random.choice(self.scanner.mins)
-        self.scanner.lock.release()
+        labsString = self.getGridStr() + "This grid is updated every 10 minutes.\nQuick Lab: " + self.getRLab()
         for msg in self.p_msg_grid:
             try:
                 await msg.edit(content=labsString, flush=True)
             except:
                 print("Problem editting persistent message.", flush=True)
-        self.scanner.lock.acquire()
-        labsString = self.getHybridStr() + "This grid is updated every 10 minutes.\nQuick Lab: " + random.choice(self.scanner.mins)
-        self.scanner.lock.release()
+        labsString = self.getHybridStr() + "This grid is updated every 10 minutes.\nQuick Lab: " + self.getRLab()
         for msg in self.p_msg_hybrid:
             try:
                 await msg.edit(content=labsString, flush=True)
@@ -292,6 +283,12 @@ class BotClient( discord.Client ):
             hybrid_msg_ids.append((msg.guild.id,msg.channel.id,msg.id))
         msgs = (msg_ids,grid_msg_ids,hybrid_msg_ids)
         pickle.dump( msgs, open ("./persistence/pmsgn.p", "wb" ) )
+
+    def getRLab(self):
+        self.scanner.lock.acquire()
+        lab = random.choice(self.scanner.mins)
+        self.scanner.lock.release()
+        return lab
     
 def checkLab( host, temp, creds, keyfile ):
     sshclient = paramiko.SSHClient()
