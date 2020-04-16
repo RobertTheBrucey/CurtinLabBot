@@ -47,7 +47,7 @@ class BotClient( discord.Client ):
         await self.change_presence(activity=discord.Game(name="^labhelp"))
         appinfo = await self.application_info()
         self.owner = appinfo.owner
-        asyncio.ensure_future(self.pollLabs())
+        #asyncio.ensure_future(self.pollLabs())
 
     async def on_message( self, message ):
         #Ignore own messages

@@ -3,6 +3,8 @@ if __name__ == '__main__':
     import botClient as bc
     from config import getToken,getCreds
     import sys
+    import threading
+    import labScan as ls
 
     if len(sys.argv) < 2:
         configfile = "./persistence/config.ini"
@@ -34,10 +36,13 @@ ownerid="
     """ Setup """
     #Store lab, current count and mins?
     labs = [{},[]]
-    #Store persistent messages, with type (message,channel,guild,type)?????????????????????
+    #Store persistent messages, with type (message,channel,guild,type)
     pmsg = []
-    #Thread 1 pls
     client = bc.BotClient(configfile)
-    client.run(getToken(filename=configfile))
+    #Thread 1 pls
+    scanner = ls.LabScan(filename=configfile)
+    scanT = threading.Thread(target=scanner.pollLabs, args=(client), daemon=True)
+    scanT.start()
     #Thread 2 pls
+    client.run(getToken(filename=configfile))
     print("Program End?")
