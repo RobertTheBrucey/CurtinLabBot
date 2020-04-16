@@ -46,5 +46,6 @@ ownerid="
     #client.run(getToken(filename=configfile))
     #while True:
     botT.join()
+    print("Bot Crash")
     botT.start()
     print("Program End?")
