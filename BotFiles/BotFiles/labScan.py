@@ -10,6 +10,7 @@ import discord
 import botClient as bc
 import asyncio
 import time
+import threading
 
 class LabScan():
     def __init__(self, configfile):
@@ -18,10 +19,13 @@ class LabScan():
         self.configfile = configfile
         self.bot = None
         self.newLabs = False
+        self.lock = threading.lock()
         try:
             labt = pickle.load( open( "./persistence/labs.p", "rb" ) )
+            self.lock.acquire()
             self.labs = labt[0]
             self.mins = labt[1]
+            self.lock.release()
             print("Labs successfully loaded.")
         except:
             print("No labs to load")
@@ -57,7 +61,9 @@ class LabScan():
                                     proc.terminate()
                                 except:
                                     pass
+                            self.lock.acquire()
                             self.labs[host] = users
+                            self.lock.release()
                             if (users>-1 and users < mini):
                                 mini = users
                                 mins = []
@@ -67,6 +73,7 @@ class LabScan():
                         except:
                             pass
                     print("")
+            self.lock.acquire()
             self.mins = mins
             print("Finishing scan at {}".format(str(datetime.datetime.now())), flush=True)
             max = -1
@@ -105,6 +112,7 @@ class LabScan():
                     print("Log file unable to be written to", flush=True)
             else:
                 print("Log file not specified", flush=True)
+            self.lock.release()
             if self.bot:
                 self.bot.updatePMsg()
             self.newLabs = True

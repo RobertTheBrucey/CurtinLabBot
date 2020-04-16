@@ -62,7 +62,9 @@ class BotClient( discord.Client ):
         if command[0] == "^":
             if command[1:] == "labs":
                 print( '{} asked for the lab machines'.format(message.author))
+                self.scanner.lock.acquire()
                 labsString = self.getListStr() + random.choice(self.scanner.mins)
+                self.scanner.lock.release()
                 await message.author.send(labsString)
                 try:
                     await message.channel.send("List of online lab machines DMed\nQuick machine: {}".format(first))
@@ -77,7 +79,9 @@ class BotClient( discord.Client ):
                     print("Couldn't  send message to channel.")
             elif command[1:] == "quicklab":
                 print( '{} asked for a quick lab'.format(message.author))
+                self.scanner.lock.acquire()
                 lab = random.choice(self.scanner.mins)
+                self.scanner.lock.release()
                 try:
                     await message.channel.send("Quick Lab: {}".format(lab))
                 except:
@@ -142,11 +146,13 @@ class BotClient( discord.Client ):
 
     def getListStr(self):
         labsString = ""
+        self.scanner.lock.acquire()
         for lab in sorted(self.scanner.labs,key=self.scanner.labs.get):
             if self.scanner.labs[lab] != -1:
                 labsString += "\n"+lab+" has "+str(self.scanner.labs[lab])+" user"
                 if self.scanner.labs[lab] != 1:
                     labsString += "s"
+        self.scanner.lock.release()
         labsString = "Available lab machines are:```c"+labsString
         labsString = labsString[:labsString[:listLen].rfind('\n')] + "\n```"
         return labsString
@@ -159,6 +165,7 @@ class BotClient( discord.Client ):
             for row in range(1,7):
                 labsString += "  0" + str(row)
             labsString += "\n"
+            self.scanner.lock.acquire()
             for column in "abcd":
                 labsString += "-" + str(column)
                 for row in range(1,7):
@@ -166,12 +173,14 @@ class BotClient( discord.Client ):
                     users = self.scanner.labs.get(host,-1)
                     labsString +=  "  " + str((" ",users)[users!=-1]) + pad(users,sp)
                 labsString += "\n"
+            self.scanner.lock.release()
         return labsString + "\n```"
     
     def getHybridStr(self):
         labsString = "```yaml\nLab Machine Users By Room  -:- Quick Labs\n"
         labs = sorted(self.scanner.labs,key=self.scanner.labs.get)
         ii = 0
+        self.scanner.lock.acquire()
         while ii < len(labs):
             if self.scanner.labs[labs[ii]] == -1:
                 labs.remove(labs[ii])
@@ -197,6 +206,7 @@ class BotClient( discord.Client ):
                     labsString +=  "  " + str((" ",users)[users!=-1]) + pad(users,sp)
                 labsString += " -:- " + labs[ii] + "\n"
                 ii = ii + 1
+        self.scanner.lock.release()
         return labsString + "\n```"
 
     async def getFromQ(self, q):
@@ -206,109 +216,30 @@ class BotClient( discord.Client ):
             users = -1
         return users
 
-    async def pollLabs(self):
-        sp = 2
-        creds = config.getCreds(self.configfile)
-        logfile = "./persistence/"+config.getLogfile(self.configfile)
-        keyfile = "./persistence/"+config.getKeyfile(self.configfile)
-        while True:
-            print("Starting scan at {}".format(str(datetime.datetime.now())))
-            mini = 100
-            mins = []
-            for room in [218,219,220,221,232]:
-                print("lab" + str(room) + ":\n  ", end='')
-                for row in range(1,7):
-                    print( "  0" + str(row), end='')
-                print("")
-                for column in "abcd":
-                    print("-" + str(column), end='')
-                    for row in range(1,7):
-                        try:
-                            users = -1
-                            host = "lab{}-{}0{}.cs.curtin.edu.au.".format(room,column,row)
-                            q = Queue()
-                            proc = Process(target=checkLab, args=(host,q,creds,keyfile))
-                            proc.start()
-                            try:
-                                await asyncio.sleep(2)
-                                users = q.get(timeout=0)
-                                proc.join()
-                            except Exception as err:
-                                try:
-                                    proc.terminate()
-                                except:
-                                    pass
-                            self.scanner.labs[host] = users
-                            if (users>-1 and users < mini):
-                                mini = users
-                                mins = []
-                            if (users == mini):
-                                mins.append(host)
-                            print("  " + str((" ",users)[users!=-1]) + pad(users,sp), end = '')
-                            await asyncio.sleep(1) #Crashes here somehow?
-                        except:
-                            pass
-                    print("")
-            self.scanner.mins = mins
-            print("Finishing scan at {}".format(str(datetime.datetime.now())), flush=True)
-            max = -1
-            for lab in sorted(self.scanner.labs,key=self.scanner.labs.get):
-                if self.scanner.labs[lab] > max:
-                    max = self.scanner.labs[lab]
-            if max == -1:
-                print("All labs down, loading from backup", flush=True)
-                labt = pickle.load( open( "./persistence/labs.p", "rb" ) )
-                self.scanner.labs = labt[0]
-                self.scanner.mins = labt[1]
-            else:
-                print("Saving up machines to file", flush=True)
-                pickle.dump( (self.scanner.labs,self.scanner.mins), open("./persistence/labs.p", "wb" ) )
-            logStr = ""
-            if os.path.isfile(logfile):
-                print("Log file exists, appending", flush=True)
-                logStr += "{},".format(str(datetime.datetime.now()))+","
-                for lab in sorted(self.scanner.labs.keys()):
-                    logStr += str(self.scanner.labs[lab]) + ","
-                logStr = logStr[:-1]
-            elif not os.path.isdir(logfile):
-                print("Log file specified but none existant, creating", flush=True)
-                dataStr = "{},".format(str(datetime.datetime.now()))
-                logStr += "Time,"
-                for lab in sorted(self.scanner.labs.keys()):
-                    logStr += lab.split(".")[0][3:] + ","
-                    dataStr += str(self.scanner.labs[lab]) + ","
-                logStr = logStr[:-1] + "\n" + dataStr[:-1]
-            if not logStr == "":
-                try:
-                    with open(logfile,"a") as f:
-                        f.write(logStr+"\n")
-                        print("Log file successfully written to.", flush=True)
-                except:
-                    print("Log file unable to be written to", flush=True)
-            else:
-                print("Log file not specified", flush=True)
-            await asyncio.sleep(1)
-            await self.updatePMsg()
-            await asyncio.sleep(300)
-
     async def updatePMsg(self):
+        self.scanner.lock.acquire()
         labsString = self.getListStr() + "This list is updated every 10 minutes.\nQuick Lab: " + random.choice(self.scanner.mins)
+        self.scanner.lock.release()
         for msg in self.p_msg:
             try:
                 await msg.edit(content=labsString)
             except Exception as err:
                 print("Problem editting persistent message. {}".format(err), flush=True)
         #Grid message section
-        labsString = self.getGridStr()
+        self.scanner.lock.acquire()
+        labsString = self.getGridStr() + "This grid is updated every 10 minutes.\nQuick Lab: " + random.choice(self.scanner.mins)
+        self.scanner.lock.release()
         for msg in self.p_msg_grid:
             try:
-                await msg.edit(content=(labsString + "This grid is updated every 10 minutes.\nQuick Lab: " + random.choice(self.scanner.mins)), flush=True)
+                await msg.edit(content=labsString, flush=True)
             except:
                 print("Problem editting persistent message.", flush=True)
-        labsString = self.getHybridStr()
+        self.scanner.lock.acquire()
+        labsString = self.getHybridStr() + "This grid is updated every 10 minutes.\nQuick Lab: " + random.choice(self.scanner.mins)
+        self.scanner.lock.release()
         for msg in self.p_msg_hybrid:
             try:
-                await msg.edit(content=(labsString + "This grid is updated every 10 minutes.\nQuick Lab: " + random.choice(self.scanner.mins)), flush=True)
+                await msg.edit(content=labsString, flush=True)
             except:
                 print("Problem editting persistent message.", flush=True)
 
