@@ -46,6 +46,7 @@ class BotClient( discord.Client ):
     async def checkForNew(self):
         while True:
             if self.scanner.newLabs:
+                await asyncio.sleep(1)
                 await self.updatePMsg()
                 self.scanner.newLabs = False
             await asyncio.sleep(1)
