@@ -49,6 +49,7 @@ class BotClient( discord.Client ):
         appinfo = await self.application_info()
         self.owner = appinfo.owner
         #asyncio.ensure_future(self.pollLabs())
+        asyncio.ensure_future(self.checkForNew())
 
     async def checkForNew(self):
         while True:
