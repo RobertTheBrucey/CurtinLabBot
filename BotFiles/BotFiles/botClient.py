@@ -50,6 +50,12 @@ class BotClient( discord.Client ):
         self.owner = appinfo.owner
         #asyncio.ensure_future(self.pollLabs())
 
+    async def checkForNew(self):
+        while True:
+            if self.scanner.newLabs:
+                await self.updatePMsg()
+            await asyncio.sleep(30)
+
     async def on_message( self, message ):
         #Ignore own messages
         if message.author == self.user:

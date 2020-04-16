@@ -16,6 +16,7 @@ class LabScan():
         self.mins = []
         self.configfile = configfile
         self.bot = None
+        self.newLabs = False
         try:
             labt = pickle.load( open( "./persistence/labs.p", "rb" ) )
             self.labs = labt[0]
@@ -105,6 +106,7 @@ class LabScan():
                 print("Log file not specified", flush=True)
             if self.bot:
                 self.bot.updatePMsg()
+            self.newLabs = True
             datetime.sleep(300)
 
 def checkLab( host, temp, creds, keyfile ):
