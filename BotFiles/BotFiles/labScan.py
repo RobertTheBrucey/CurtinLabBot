@@ -23,7 +23,7 @@ class LabScan():
         except:
             print("No labs to load")
 
-    def pollLabs(self, bot):
+    def pollLabs(self):
         sp = 2
         creds = config.getCreds(self.configfile)
         logfile = "./persistence/"+config.getLogfile(self.configfile)
