@@ -38,11 +38,12 @@ ownerid="
     labs = [{},[]]
     #Store persistent messages, with type (message,channel,guild,type)
     pmsg = []
-    client = bc.BotClient(configfile)
+    
     #Thread 1 pls
     scanner = ls.LabScan(configfile=configfile)
-    scanT = threading.Thread(target=scanner.pollLabs, args=(client), daemon=True)
+    scanT = threading.Thread(target=scanner.pollLabs, daemon=True)
     scanT.start()
     #Thread 2 pls
+    client = bc.BotClient(configfile,scanner.labs,scanner.mins)
     client.run(getToken(filename=configfile))
     print("Program End?")

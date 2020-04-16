@@ -13,12 +13,12 @@ import config
 listLen = 1000
 class BotClient( discord.Client ):
     
-    def __init__(self, configfile):
+    def __init__(self, configfile, labs, mins):
         super().__init__()
-        self.labs = {}
+        self.labs = labs
         self.p_msg = []
         self.p_msg_grid = []
-        self.mins = []
+        self.mins = mins
         self.loading = True
         self.helpString = "`^labs` - Request the list of Lab machines via DM\n`^quicklab` - Show a single ready lab machine\n`^labgrid` - Request a DM of Lab machine formatted in a grid.\n`^persistent` - (Administrator only) Generate a persistent (auto updating) message.\n`^persistentgrid` - (Administrator only) Generate a persistent (auto updating) grid message.\n`^labhybrid` - Get a grid and a list of machines"
         self.configfile = configfile
