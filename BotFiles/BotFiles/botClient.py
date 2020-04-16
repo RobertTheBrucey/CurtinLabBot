@@ -128,9 +128,9 @@ class BotClient( discord.Client ):
                 print( '{} asked for a persistent hybrid grid'.format(message.author))
                 if message.author.permissions_in(message.channel).manage_messages:
                     print( '{} was authorised for a persistent hybrid'.format(message.author))
-                    for msg in self.p_msg_grid:
+                    for msg in self.p_msg_hybrid:
                         if msg.channel == message.channel:
-                            self.p_msg_grid.remove(msg)
+                            self.p_msg_hybrid.remove(msg)
                     self.p_msg_hybrid.append(await message.channel.send(self.getHybridStr()))
                     await self.savePMsg()
                 else:
@@ -300,6 +300,12 @@ class BotClient( discord.Client ):
         #Grid message section
         labsString = self.getGridStr()
         for msg in self.p_msg_grid:
+            try:
+                await msg.edit(content=(labsString + "This grid is updated every 10 minutes.\nQuick Lab: " + random.choice(self.scanner.mins)), flush=True)
+            except:
+                print("Problem editting persistent message.", flush=True)
+        labsString = self.getHybridStr()
+        for msg in self.p_msg_hybrid:
             try:
                 await msg.edit(content=(labsString + "This grid is updated every 10 minutes.\nQuick Lab: " + random.choice(self.scanner.mins)), flush=True)
             except:
