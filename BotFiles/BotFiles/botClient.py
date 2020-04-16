@@ -160,12 +160,12 @@ class BotClient( discord.Client ):
     def getGridStr(self):
         labsString = "Lab Machine Users By Room:\n```yaml\n"
         sp = 2
+        self.scanner.lock.acquire()
         for room in [218,219,220,221,232]:
             labsString += "lab" + str(room) + ":\n  "
             for row in range(1,7):
                 labsString += "  0" + str(row)
             labsString += "\n"
-            self.scanner.lock.acquire()
             for column in "abcd":
                 labsString += "-" + str(column)
                 for row in range(1,7):
@@ -173,14 +173,14 @@ class BotClient( discord.Client ):
                     users = self.scanner.labs.get(host,-1)
                     labsString +=  "  " + str((" ",users)[users!=-1]) + pad(users,sp)
                 labsString += "\n"
-            self.scanner.lock.release()
+        self.scanner.lock.release()
         return labsString + "\n```"
     
     def getHybridStr(self):
         labsString = "```yaml\nLab Machine Users By Room  -:- Quick Labs\n"
+        self.scanner.lock.acquire()
         labs = sorted(self.scanner.labs,key=self.scanner.labs.get)
         ii = 0
-        self.scanner.lock.acquire()
         while ii < len(labs):
             if self.scanner.labs[labs[ii]] == -1:
                 labs.remove(labs[ii])
