@@ -66,10 +66,10 @@ class BotClient( discord.Client ):
                 labsString = self.getListStr() + random.choice(self.scanner.mins)
                 self.scanner.lock.release()
                 await message.author.send(labsString)
-                try:
-                    await message.channel.send("List of online lab machines DMed\nQuick machine: {}".format(first))
-                except:
-                    print("Couldn't send message to channel.")
+                if self.user.permissions_in(message.channel).send_messages:
+                    self.scanner.lock.acquire()
+                    await message.channel.send("List of online lab machines DMed\nQuick machine: {}".format(random.choice(self.scanner.mins)))
+                    self.scanner.lock.release()
             elif command[1:] == "labgrid":
                 print( '{} asked for the lab machine grid'.format(message.author))
                 await message.author.send(self.getGridStr())
