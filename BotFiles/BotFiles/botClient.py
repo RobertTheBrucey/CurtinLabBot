@@ -64,7 +64,7 @@ class BotClient( discord.Client ):
                 print( '{} asked for the lab machines'.format(message.author))
                 labsString = self.getListStr() + self.getRLab()
                 await message.author.send(labsString)
-                if message.channel.permissions_for(self).send_messages:
+                if message.channel.permissions_for(self.user).send_messages:
                     print("Can send message")
                 else:
                     print("Can't send message")
