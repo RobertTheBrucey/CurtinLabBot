@@ -82,10 +82,12 @@ class LabScan():
                 if self.labs[lab] > max:
                     max = self.labs[lab]
             if max == -1:
-                print("All labs down, loading from backup", flush=True)
-                labt = pickle.load( open( "./persistence/labs.p", "rb" ) )
-                self.labs = labt[0]
-                self.mins = labt[1]
+                #print("All labs down, loading from backup", flush=True)
+                #labt = pickle.load( open( "./persistence/labs.p", "rb" ) )
+                #self.labs = labt[0]
+                #self.mins = labt[1]
+                print("All labs appear down, restarting", flush=True)
+                exit()
             else:
                 print("Saving up machines to file", flush=True)
                 pickle.dump( (self.labs,self.mins), open ("./persistence/labs.p", "wb" ) )
