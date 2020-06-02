@@ -8,11 +8,11 @@ if __name__ == '__main__':
     import logging
     import datetime
 
-    logger = logging.getLogger('discord')
-    logger.setLevel(logging.DEBUG)
-    handler = logging.FileHandler(filename='./persistence/discord'+str(datetime.datetime.now())+'.log', encoding='utf-8', mode='w')
-    handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
-    logger.addHandler(handler)
+    #logger = logging.getLogger('discord')
+    #logger.setLevel(logging.DEBUG)
+    #handler = logging.FileHandler(filename='./persistence/discord'+str(datetime.datetime.now())+'.log', encoding='utf-8', mode='w')
+    #handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
+    #logger.addHandler(handler)
 
     if len(sys.argv) < 2:
         configfile = "./persistence/config.ini"
