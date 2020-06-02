@@ -11,6 +11,7 @@ import botClient as bc
 import asyncio
 import time
 import threading
+import sys
 
 class LabScan():
     def __init__(self, configfile):
@@ -20,6 +21,7 @@ class LabScan():
         self.bot = None
         self.newLabs = False
         self.lock = threading.Lock()
+        self.quit = False
         try:
             labt = pickle.load( open( "./persistence/labs.p", "rb" ) )
             self.lock.acquire()
@@ -87,7 +89,7 @@ class LabScan():
                 #self.labs = labt[0]
                 #self.mins = labt[1]
                 print("All labs appear down, restarting", flush=True)
-                exit()
+                sys.exit()
             else:
                 print("Saving up machines to file", flush=True)
                 pickle.dump( (self.labs,self.mins), open ("./persistence/labs.p", "wb" ) )
