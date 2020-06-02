@@ -5,7 +5,14 @@ if __name__ == '__main__':
     import sys
     import threading
     import labScan as ls
+    import logging
 
+    logger = logging.getLogger('discord')
+    logger.setLevel(logging.DEBUG)
+    handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
+    handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
+    logger.addHandler(handler)
+    
     if len(sys.argv) < 2:
         configfile = "./persistence/config.ini"
     else:
