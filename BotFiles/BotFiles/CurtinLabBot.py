@@ -40,10 +40,5 @@ ownerid="
     scanT = threading.Thread(target=scanner.pollLabs, daemon=True)
     scanT.start()
     #Thread 2 pls
-    for i in range(50):
-        try:
-            client = bc.BotClient(configfile,scanner)
-            client.run(getToken(filename=configfile))
-        except:
-            print("Bot crashed")
-    print("Program End?")
+    client = bc.BotClient(configfile,scanner)
+    client.run(getToken(filename=configfile))
