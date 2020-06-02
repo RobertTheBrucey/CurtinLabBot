@@ -9,6 +9,7 @@ import random
 import os.path
 from multiprocessing import Process, Queue
 import config
+import socket
 
 listLen = 1000
 class BotClient( discord.Client ):
@@ -184,11 +185,17 @@ class BotClient( discord.Client ):
         sp = 2
         for room in [218,219,220,221,232]:
             labsString += "lab" + str(room) + ":                   "
-            labsString += " -:- " + labs[ii] + "\n  "
+            if (ii % 2 == 0):
+                labsString += " -:- " + labs[ii/2] + "\n  "
+            else:
+                labsString += " -:- IP: " + getIP(labs[(ii-1)/2]) + "\n  "
             ii = ii + 1
             for row in range(1,7):
                 labsString += "  0" + str(row)
-            labsString += " -:- " + labs[ii] + "\n"
+            if (ii % 2 == 0):
+                labsString += " -:- " + labs[ii/2] + "\n"
+            else:
+                labsString += " -:- IP: " + getIP(labs[(ii-1)/2]) + "\n"
             ii = ii + 1
             for column in "abcd":
                 labsString += "-" + str(column)
@@ -196,7 +203,10 @@ class BotClient( discord.Client ):
                     host = "lab{}-{}0{}.cs.curtin.edu.au.".format(room,column,row)
                     users = self.scanner.labs.get(host,-1)
                     labsString +=  "  " + str((" ",users)[users!=-1]) + pad(users,sp)
-                labsString += " -:- " + labs[ii] + "\n"
+                if (ii % 2 == 0):
+                    labsString += " -:- " + labs[ii/2] + "\n  "
+                else:
+                    labsString += " -:- IP: " + getIP(labs[(ii-1)/2]) + "\n  "
                 ii = ii + 1
         self.scanner.lock.release()
         return labsString + "\n```"
@@ -306,3 +316,6 @@ def pad(inte,places):
     else:
         padding = (places-int(1+math.log10(abs(inte))))
     return " " * padding
+
+def getIP(hostname):
+    return socket.gethostbyname(hostname)
