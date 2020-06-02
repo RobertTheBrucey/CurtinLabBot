@@ -204,9 +204,9 @@ class BotClient( discord.Client ):
                     users = self.scanner.labs.get(host,-1)
                     labsString +=  "  " + str((" ",users)[users!=-1]) + pad(users,sp)
                 if (ii % 2 == 0):
-                    labsString += " -:- " + labs[int(ii/2)] + "\n  "
+                    labsString += " -:- " + labs[int(ii/2)] + "\n"
                 else:
-                    labsString += " -:- IP: " + getIP(labs[int(ii/2)]) + "\n  "
+                    labsString += " -:- IP: " + getIP(labs[int(ii/2)]) + "\n"
                 ii = ii + 1
         self.scanner.lock.release()
         return labsString + "\n```"
