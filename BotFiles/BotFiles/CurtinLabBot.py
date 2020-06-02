@@ -50,3 +50,4 @@ ownerid="
     #Thread 2 pls
     client = bc.BotClient(configfile,scanner)
     client.run(getToken(filename=configfile))
+    print("Bot Exitting For No Reason")
