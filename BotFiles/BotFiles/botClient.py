@@ -10,6 +10,7 @@ import os.path
 from multiprocessing import Process, Queue
 import config
 import socket
+import sys
 
 listLen = 1000
 class BotClient( discord.Client ):
@@ -90,7 +91,8 @@ class BotClient( discord.Client ):
             elif command[1:] == "restart":
                 if message.author == self.owner:
                     await message.author.send("Restarting...")
-                    exit()
+                    print("Restart requested")
+                    sys.exit()
             elif command[1:] == "labhybrid":
                 print( '{} asked for the lab hybrid machines'.format(message.author))
                 labsString = self.getHybridStr()
