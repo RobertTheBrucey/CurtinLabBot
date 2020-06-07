@@ -68,17 +68,17 @@ class BotClient( discord.Client ):
                 print( '{} asked for the lab machines'.format(message.author))
                 labsString = self.getListStr() + self.getRLab()
                 await message.author.send(labsString)
-                if message.channel.permissions_for(message.guild.me).send_messages:
+                if message.guild and message.channel.permissions_for(message.guild.me).send_messages:
                     await message.channel.send("List of online lab machines DMed\nQuick machine: {}".format(first))
             elif command[1:] == "labgrid":
                 print( '{} asked for the lab machine grid'.format(message.author))
                 await message.author.send(self.getGridStr())
-                if message.channel.permissions_for(message.guild.me).send_messages:
+                if message.guild and message.channel.permissions_for(message.guild.me).send_messages:
                     await message.channel.send("Grid DMed to you")
             elif command[1:] == "quicklab":
                 print( '{} asked for a quick lab'.format(message.author))
                 lab = self.getRLab()
-                if message.channel.permissions_for(message.guild.me).send_messages:
+                if message.guild and message.channel.permissions_for(message.guild.me).send_messages:
                     await message.channel.send("Quick Lab: {}".format(lab))
                 else:
                     await message.author.send("Quick Lab: {}".format(lab))
@@ -97,7 +97,7 @@ class BotClient( discord.Client ):
                 print( '{} asked for the lab hybrid machines'.format(message.author))
                 labsString = self.getHybridStr()
                 await message.author.send(labsString)
-                if message.channel.permissions_for(message.guild.me).send_messages:
+                if message.guild and message.channel.permissions_for(message.guild.me).send_messages:
                     await message.channel.send("Hybrid message of online lab machines DMed")
             elif self.loading:
                 pass
