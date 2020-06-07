@@ -84,7 +84,7 @@ class BotClient( discord.Client ):
                     await message.author.send("Quick Lab: {}".format(lab))
             elif command[1:] == "labhelp":
                 print( '{} asked for the lab help'.format(message.author))
-                if message.channel.permissions_for(message.guild.me).send_messages:
+                if message.guild and message.channel.permissions_for(message.guild.me).send_messages:
                     await message.channel.send(self.helpString)
                 else:
                     await message.author.send(self.helpString)
