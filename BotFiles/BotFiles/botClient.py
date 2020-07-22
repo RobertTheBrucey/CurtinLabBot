@@ -69,7 +69,7 @@ class BotClient( discord.Client ):
                 labsString = self.getListStr() + self.getRLab()
                 await message.author.send(labsString)
                 if message.guild and message.channel.permissions_for(message.guild.me).send_messages:
-                    await message.channel.send("List of online lab machines DMed\nQuick machine: {}".format(first))
+                    await message.channel.send("List of online lab machines DMed\nQuick machine: {}".format(lab))
             elif command[1:] == "labgrid":
                 print( '{} asked for the lab machine grid'.format(message.author))
                 await message.author.send(self.getGridStr())
