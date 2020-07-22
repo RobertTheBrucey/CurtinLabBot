@@ -23,7 +23,13 @@ class BotClient( discord.Client ):
         self.p_msg_grid = []
         self.p_msg_hybrid = []
         self.loading = True
-        self.helpString = "`^labs` - Request the list of Lab machines via DM\n`^quicklab` - Show a single ready lab machine\n`^labgrid` - Request a DM of Lab machine formatted in a grid.\n`^persistent` - (Administrator only) Generate a persistent (auto updating) message.\n`^persistentgrid` - (Administrator only) Generate a persistent (auto updating) grid message.\n`^labhybrid` - Get a grid and a list of machines\n`^persistenthybrid` - (Administrator only) Generate a persistent (auto updating) hybrid message."
+        self.helpString = "`^labs` - Request the list of Lab machines via DM\
+`^quicklab` - Show a single ready lab machine\
+`^labgrid` - Request a DM of Lab machine formatted in a grid.\
+`^lablist` - Get a grid and a list of machines\
+`^persistent` - (Administrator only) Generate a persistent (auto updating) message.\
+`^persistentgrid` - (Administrator only) Generate a persistent (auto updating) grid message.\
+`^persistentlist` - (Administrator only) Generate a persistent (auto updating) list message."
         self.configfile = configfile
         self.owner = None
         self.eloop = None
@@ -64,7 +70,7 @@ class BotClient( discord.Client ):
         else:
             return
         if command[0] == "^":
-            if command[1:] == "labs":
+            if command[1:] == "lablist":
                 print( '{} asked for the lab machines'.format(message.author))
                 labsString = self.getListStr() + self.getRLab()
                 await message.author.send(labsString)
@@ -93,7 +99,7 @@ class BotClient( discord.Client ):
                     await message.author.send("Restarting...")
                     print("Restart requested")
                     sys.exit()
-            elif command[1:] == "labhybrid":
+            elif command[1:] == "labs":
                 print( '{} asked for the lab hybrid machines'.format(message.author))
                 labsString = self.getHybridStr()
                 await message.author.send(labsString)
@@ -101,7 +107,7 @@ class BotClient( discord.Client ):
                     await message.channel.send("Hybrid message of online lab machines DMed")
             elif self.loading:
                 pass
-            elif command[1:] == "persistent":
+            elif command[1:] == "persistentlist":
                 print( '{} asked for a persistent message'.format(message.author))
                 if message.author.permissions_in(message.channel).manage_messages:
                     print( '{} was authorised for a persistent message'.format(message.author))
@@ -124,7 +130,7 @@ class BotClient( discord.Client ):
                     await self.savePMsg()
                 else:
                     await message.channel.send("You are not authorised to use this command.")
-            elif command[1:] == "persistenthybrid":
+            elif command[1:] == "persistent":
                 print( '{} asked for a persistent hybrid grid'.format(message.author))
                 if message.author.permissions_in(message.channel).manage_messages:
                     print( '{} was authorised for a persistent hybrid'.format(message.author))
