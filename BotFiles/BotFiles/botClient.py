@@ -23,12 +23,12 @@ class BotClient( discord.Client ):
         self.p_msg_grid = []
         self.p_msg_hybrid = []
         self.loading = True
-        self.helpString = "`^labs` - Request the list of Lab machines via DM\
-`^quicklab` - Show a single ready lab machine\
-`^labgrid` - Request a DM of Lab machine formatted in a grid.\
-`^lablist` - Get a grid and a list of machines\
-`^persistent` - (Administrator only) Generate a persistent (auto updating) message.\
-`^persistentgrid` - (Administrator only) Generate a persistent (auto updating) grid message.\
+        self.helpString = "`^labs` - Request the list of Lab machines via DM\n\
+`^quicklab` - Show a single ready lab machine\n\
+`^labgrid` - Request a DM of Lab machine formatted in a grid.\n\
+`^lablist` - Get a grid and a list of machines\n\
+`^persistent` - (Administrator only) Generate a persistent (auto updating) message.\n\
+`^persistentgrid` - (Administrator only) Generate a persistent (auto updating) grid message.\n\
 `^persistentlist` - (Administrator only) Generate a persistent (auto updating) list message."
         self.configfile = configfile
         self.owner = None
