@@ -136,7 +136,7 @@ def checkLab( host, temp, creds, keyfile ):
             pass
         for line in stdout:
             print(line.strip('\n'))
-            temp.put(str(line)-1)
+            temp.put(int(line.strip('\n'))-1)
         sshclient.close()
     except:
         pass
