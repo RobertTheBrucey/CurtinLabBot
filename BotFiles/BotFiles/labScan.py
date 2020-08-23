@@ -132,10 +132,10 @@ def checkLab( host, temp, creds, keyfile ):
         sshclient.connect(host, username=creds[0], password=creds[1], timeout=1, banner_timeout=1, auth_timeout=1, key_filename=keyfile)
         stdin, stdout, stderr = sshclient.exec_command('who | wc -l',timeout=1)
         for line in stderr:
-            print(line.strip('\n'))
+            #print(line.strip('\n'))
             pass
         for line in stdout:
-            print(line.strip('\n'))
+            #print(line.strip('\n'))
             temp.put(int(line.strip('\n'))-1)
         sshclient.close()
     except:
