@@ -159,7 +159,7 @@ class BotClient( discord.Client ):
         return labsString
 
     def getGridStr(self):
-        labsString = "Lab Machine Users By Room:\n```yaml\n"
+        labsString = "Lab Machine Users By Room:\n```nim\n"
         sp = 2
         self.scanner.lock.acquire()
         for room in [218,219,220,221,232]:
@@ -178,7 +178,7 @@ class BotClient( discord.Client ):
         return labsString + "\n```"
     
     def getHybridStr(self):
-        labsString = "```yaml\nLab Machine Users By Room  -:- Quick Labs\n"
+        labsString = "```nim\nLab Machine Users By Room  -:- Quick Labs\n"
         self.scanner.lock.acquire()
         labs = sorted(self.scanner.labs,key=self.scanner.labs.get)
         ii = 0
