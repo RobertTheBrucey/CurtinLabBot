@@ -1,7 +1,7 @@
 #!/bin/bash
 
-sleep 1
+sleep 10
 cd /CurtinLabBot/BotFiles/BotFiles
 git pull
 python3 CurtinLabBot.py
-sleep 9
+sleep 2
