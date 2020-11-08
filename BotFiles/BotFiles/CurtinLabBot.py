@@ -7,6 +7,7 @@ if __name__ == '__main__':
     import labScan as ls
     import logging
     import datetime
+    import time
 
     logger = logging.getLogger('discord')
     logger.setLevel(logging.INFO)
@@ -51,3 +52,4 @@ ownerid="
     client = bc.BotClient(configfile,scanner)
     client.run(getToken(filename=configfile))
     print("Bot Exitting For No Reason")
+    time.sleep(10)
