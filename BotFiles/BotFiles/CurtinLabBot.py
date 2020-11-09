@@ -43,7 +43,7 @@ ownerid="
         exit()
 
     """ Setup """
-  
+    time.sleep(60)
     #Thread 1 pls
     scanner = ls.LabScan(configfile=configfile)
     scanT = threading.Thread(target=scanner.pollLabs, daemon=True)
