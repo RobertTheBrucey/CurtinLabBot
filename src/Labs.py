@@ -309,7 +309,7 @@ class Labs(commands.Cog):
         return random.choice(self.mins)
 
     def getIP(self, hostname):
-        if self.ips[hostname]:
+        if hostname in self.ips.keys():
             return ips[hostname]
         else:
             return "Unsupported"
