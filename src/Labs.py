@@ -18,6 +18,13 @@ class Labs(commands.Cog):
         self.p_msg_hybrid = []
         self.labs = {}
         self.mins = []
+        self.helpString = "`^labs` - Request the list of Lab machines via DM\n\
+`^quicklab` - Show a single ready lab machine\n\
+`^labgrid` - Request a DM of Lab machine formatted in a grid.\n\
+`^lablist` - Get a grid and a list of machines\n\
+`^persistent` - (Administrator only) Generate a persistent (auto updating) message.\n\
+`^persistentgrid` - (Administrator only) Generate a persistent (auto updating) grid message.\n\
+`^persistentlist` - (Administrator only) Generate a persistent (auto updating) list message."
         self.pull_labs.start()
     
     @commands.Cog.listener()
@@ -47,7 +54,7 @@ class Labs(commands.Cog):
             if command[1:] == "lablist":
                 print( '{} asked for the lab machines'.format(message.author))
                 labsString = self.getListStr() + self.getRLab()
-                await message.author.send(labsString)
+                await message.author.send(self.getListStr())
                 if message.guild and message.channel.permissions_for(message.guild.me).send_messages:
                     await message.channel.send("List of online lab machines DMed\nQuick machine: {}".format(lab))
             elif command[1:] == "labgrid":
