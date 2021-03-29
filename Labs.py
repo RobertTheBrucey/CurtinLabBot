@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands, tasks
 import pickle
 import math
+import aiohttp
 
 listLen = 1000
 
