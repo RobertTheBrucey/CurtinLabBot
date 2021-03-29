@@ -298,10 +298,10 @@ class Labs(commands.Cog):
                     pickle.dump( (self.labs,self.mins), open ("./persistence/labs.p", "wb" ) )
                 await self.bot.get_cog('Labs').updatePMsg()
 
-    #@pull_labs.before_loop
-    #async def before_pull_labs(self):
-    #    print("Waiting for Bot to start before pulling labs.")
-    #    await self.wait_until_ready()
+    @pull_labs.before_loop
+    async def before_pull_labs(self):
+        print("Waiting for Bot to start before pulling labs.")
+        await self.wait_until_ready()
 
     def getRLab(self):
         return random.choice(self.mins)
