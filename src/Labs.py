@@ -291,9 +291,10 @@ class Labs(commands.Cog):
                         self.labs[host] = users
                         changed = True
                     if len(parts) > 4:
-                        if self.ips[host] != parts[4]:
-                            self.ips[host] = parts[4]
-                            changed = True
+                        if parts[4] not in self.ips.keys():
+                            if self.ips[host] != parts[4]:
+                                self.ips[host] = parts[4]
+                                changed = True
                     if (users>-1 and users < mini):
                         mini = users
                         mins = []
