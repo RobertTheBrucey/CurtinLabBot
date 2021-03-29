@@ -13,4 +13,4 @@ async def on_ready():
 
 if __name__ == "__main__":
     #bot.add_cog(Labs(bot))
-    bot.run(getToken())
+    bot.run(getToken("persistence/config.ini"))
