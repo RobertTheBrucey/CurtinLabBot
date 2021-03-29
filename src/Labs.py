@@ -267,6 +267,8 @@ class Labs(commands.Cog):
 
     @tasks.loop(seconds=60)
     async def pull_labs(self):
+        if self.loading:
+            return
         print('Getting lab status')
         async with aiohttp.ClientSession() as session:
             async with session.get('http://35.189.5.47/machineList.txt') as resp:
