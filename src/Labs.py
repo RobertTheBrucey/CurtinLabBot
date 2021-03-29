@@ -283,7 +283,7 @@ class Labs(commands.Cog):
                     host = f"lab{parts[0]}-{parts[1]}0{parts[2]}.cs.curtin.edu.au."
                     users = -1 if parts[3] == 'nil' else int(parts[3])
                     self.labs[host] = users
-                    if len(parts) > 5:
+                    if len(parts) > 4:
                         self.ips[host] = parts[4]
                     if (users>-1 and users < mini):
                         mini = users
