@@ -301,7 +301,7 @@ class Labs(commands.Cog):
     @pull_labs.before_loop
     async def before_pull_labs(self):
         print("Waiting for Bot to start before pulling labs.")
-        await self.wait_until_ready()
+        await self.bot.wait_until_ready()
 
     def getRLab(self):
         return random.choice(self.mins)
