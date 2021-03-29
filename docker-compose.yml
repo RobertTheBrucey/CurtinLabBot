@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  packer:
+    container_name: curtin-labs3
+    image: curtin-labs3
+    volumes:
+      - "./persistence:/CurtinLabBot/persistence"
+    tty: false
+    entrypoint: /start.sh
+    restart: unless-stopped
