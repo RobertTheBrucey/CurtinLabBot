@@ -13,6 +13,6 @@ async def on_ready():
     await bot.change_presence(activity=discord.Game(name="Loading..."))
 
 if __name__ == "__main__":
-    #bot.add_cog(Labs(bot))
+    bot.add_cog(Labs(bot))
     print("Bot starting")
     bot.run(getToken("./persistence/config.ini"))

@@ -3,6 +3,7 @@ from discord.ext import commands, tasks
 import pickle
 import math
 import aiohttp
+import random
 
 listLen = 1000
 
@@ -15,6 +16,9 @@ class Labs(commands.Cog):
         self.p_msg = []
         self.p_msg_grid = []
         self.p_msg_hybrid = []
+        self.labs = {}
+        self.mins = []
+        self.pull_labs.start()
     
     @commands.Cog.listener()
     async def on_ready(self):
@@ -26,9 +30,91 @@ class Labs(commands.Cog):
         except:
             print("Couldn't load persistent messages from file.")
         self.loading = False
-        await self.change_presence(activity=discord.Game(name="^labhelp"))
-        appinfo = await self.application_info()
+        await self.bot.change_presence(activity=discord.Game(name="^labhelp"))
+        appinfo = await self.bot.application_info()
         self.owner = appinfo.owner
+    
+    @commands.Cog.listener()
+    async def on_message( self, message ):
+        #Ignore own messages
+        if message.author == self.bot.user:
+            return
+        if len(message.content) > 0:
+            command = message.content.lower().split()[0]
+        else:
+            return
+        if command[0] == "^":
+            if command[1:] == "lablist":
+                print( '{} asked for the lab machines'.format(message.author))
+                labsString = self.getListStr() + self.getRLab()
+                await message.author.send(labsString)
+                if message.guild and message.channel.permissions_for(message.guild.me).send_messages:
+                    await message.channel.send("List of online lab machines DMed\nQuick machine: {}".format(lab))
+            elif command[1:] == "labgrid":
+                print( '{} asked for the lab machine grid'.format(message.author))
+                await message.author.send(self.getGridStr())
+                if message.guild and message.channel.permissions_for(message.guild.me).send_messages:
+                    await message.channel.send("Grid DMed to you")
+            elif command[1:] == "quicklab":
+                print( '{} asked for a quick lab'.format(message.author))
+                lab = self.getRLab()
+                if message.guild and message.channel.permissions_for(message.guild.me).send_messages:
+                    await message.channel.send("Quick Lab: {}".format(lab))
+                else:
+                    await message.author.send("Quick Lab: {}".format(lab))
+            elif command[1:] == "labhelp":
+                print( '{} asked for the lab help'.format(message.author))
+                if message.guild and message.channel.permissions_for(message.guild.me).send_messages:
+                    await message.channel.send(self.helpString)
+                else:
+                    await message.author.send(self.helpString)
+            elif command[1:] == "restart":
+                if message.author == self.owner:
+                    await message.author.send("Restarting...")
+                    print("Restart requested")
+                    sys.exit()
+            elif command[1:] == "labs":
+                print( '{} asked for the lab hybrid machines'.format(message.author))
+                labsString = self.getHybridStr()
+                await message.author.send(labsString)
+                if message.guild and message.channel.permissions_for(message.guild.me).send_messages:
+                    await message.channel.send("Hybrid message of online lab machines DMed")
+            elif self.loading:
+                pass
+            elif command[1:] == "persistentlist":
+                print( '{} asked for a persistent message'.format(message.author))
+                if message.author.permissions_in(message.channel).manage_messages:
+                    print( '{} was authorised for a persistent message'.format(message.author))
+                    labsString = self.getListStr() + "Quick Lab: " + self.getRLab()
+                    for msg in self.p_msg:
+                        if msg.channel == message.channel:
+                            self.p_msg.remove(msg)
+                    self.p_msg.append(await message.channel.send(labsString))
+                    await self.savePMsg()
+                else:
+                    await message.channel.send("You are not authorised to use this command.")
+            elif command[1:] == "persistentgrid":
+                print( '{} asked for a persistent lab machine grid'.format(message.author))
+                if message.author.permissions_in(message.channel).manage_messages:
+                    print( '{} was authorised for a persistent grid'.format(message.author))
+                    for msg in self.p_msg_grid:
+                        if msg.channel == message.channel:
+                            self.p_msg_grid.remove(msg)
+                    self.p_msg_grid.append(await message.channel.send(self.getGridStr() + "Quick Lab: " + self.getRLab()))
+                    await self.savePMsg()
+                else:
+                    await message.channel.send("You are not authorised to use this command.")
+            elif command[1:] == "persistent":
+                print( '{} asked for a persistent hybrid grid'.format(message.author))
+                if message.author.permissions_in(message.channel).manage_messages:
+                    print( '{} was authorised for a persistent hybrid'.format(message.author))
+                    for msg in self.p_msg_hybrid:
+                        if msg.channel == message.channel:
+                            self.p_msg_hybrid.remove(msg)
+                    self.p_msg_hybrid.append(await message.channel.send(self.getHybridStr()))
+                    await self.savePMsg()
+                else:
+                    await message.channel.send("You are not authorised to use this command.")
 
     async def loadPMsg(self):
         self.pmsg = []
@@ -38,7 +124,7 @@ class Labs(commands.Cog):
         for msgt in msg_ids[0]:
             rmsg = None
             try:
-                guild = self.get_guild(msgt[0])
+                guild = self.bot.get_guild(msgt[0])
                 channel = guild.get_channel(msgt[1])
                 rmsg = await channel.fetch_message(msgt[2])
             except:
@@ -48,7 +134,7 @@ class Labs(commands.Cog):
         for msgt in msg_ids[1]:
             rmsg = None
             try:
-                guild = self.get_guild(msgt[0])
+                guild = self.bot.get_guild(msgt[0])
                 channel = guild.get_channel(msgt[1])
                 rmsg = await channel.fetch_message(msgt[2])
             except:
@@ -58,7 +144,7 @@ class Labs(commands.Cog):
         for msgt in msg_ids[2]:
             rmsg = None
             try:
-                guild = self.get_guild(msgt[0])
+                guild = self.bot.get_guild(msgt[0])
                 channel = guild.get_channel(msgt[1])
                 rmsg = await channel.fetch_message(msgt[2])
             except:
@@ -178,9 +264,12 @@ class Labs(commands.Cog):
             async with session.get('http://35.189.5.47/machineList.txt') as resp:
                 data = await resp.text()
                 data = data.split("\n")[1:]
-                mini = data[0].split(",")[3]
+                mini = int(data[0].split(",")[3])
+                mins = []
                 for row in data:
                     parts = row.split(",")
+                    if len(parts) < 4:
+                        continue
                     host = f"lab{parts[0]}-{parts[1]}0{parts[2]}.cs.curtin.edu.au."
                     users = -1 if parts[3] == 'nil' else int(parts[3])
                     self.labs[host] = users
@@ -197,12 +286,15 @@ class Labs(commands.Cog):
                 if max != -1:
                     print("Saving up machines to file", flush=True)
                     pickle.dump( (self.labs,self.mins), open ("./persistence/labs.p", "wb" ) )
-                await updatePMsg(self.labs)
+                await self.bot.get_cog('Labs').updatePMsg()
 
-    @pull_labs.before_loop
-    async def before_pull_labs(self):
-        print("Waiting for Bot to start before pulling labs.")
-        await self.wait_until_ready()
+    #@pull_labs.before_loop
+    #async def before_pull_labs(self):
+    #    print("Waiting for Bot to start before pulling labs.")
+    #    await self.wait_until_ready()
+
+    def getRLab(self):
+        return random.choice(self.mins)
 
 def pad(inte,places):
     if inte < 1:
@@ -213,3 +305,4 @@ def pad(inte,places):
 
 def getIP(hostname):
     return "Not Currently Supported"
+
