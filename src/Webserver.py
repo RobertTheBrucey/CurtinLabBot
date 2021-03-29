@@ -21,8 +21,13 @@ class Webserver(commands.Cog):
         async def send_lab(request):
             return web.Response(text=self.bot.get_cog('Labs').getRLab())
 
+        @routes.get('/labip')
+        async def send_lab_ip(request):
+            return web.Response(text=self.bot.get_cog('Labs').getRLabIP())
+
         self.webserver_port = os.environ.get('PORT', 8010)
         app.add_routes(routes)
+
 
     @tasks.loop()
     async def web_server(self):
