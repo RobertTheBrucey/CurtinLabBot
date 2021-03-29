@@ -17,6 +17,7 @@ class Labs(commands.Cog):
         self.p_msg_grid = []
         self.p_msg_hybrid = []
         self.labs = {}
+        self.ips = {}
         self.mins = []
         self.helpString = "`^labs` - Request the list of Lab machines via DM\n\
 `^quicklab` - Show a single ready lab machine\n\
@@ -280,6 +281,8 @@ class Labs(commands.Cog):
                     host = f"lab{parts[0]}-{parts[1]}0{parts[2]}.cs.curtin.edu.au."
                     users = -1 if parts[3] == 'nil' else int(parts[3])
                     self.labs[host] = users
+                    if len(parts) > 4:
+                        self.ips[host] = parts[4]
                     if (users>-1 and users < mini):
                         mini = users
                         mins = []
@@ -303,6 +306,12 @@ class Labs(commands.Cog):
     def getRLab(self):
         return random.choice(self.mins)
 
+    def getIP(self, hostname):
+        if self.ips[hostname]:
+            return ips[hostname]
+        else:
+            return "Unsupported"
+
 def pad(inte,places):
     if inte < 1:
         padding = places-1
@@ -310,6 +319,5 @@ def pad(inte,places):
         padding = (places-int(1+math.log10(abs(inte))))
     return " " * padding
 
-def getIP(hostname):
-    return "Not Currently Supported"
+
 
