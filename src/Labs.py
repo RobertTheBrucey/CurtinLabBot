@@ -273,6 +273,7 @@ class Labs(commands.Cog):
         if self.loading:
             return
         print('Getting lab status')
+        changed = False
         async with aiohttp.ClientSession() as session:
             async with session.get('http://35.189.5.47/machineList.txt') as resp:
                 data = await resp.text()
@@ -285,7 +286,9 @@ class Labs(commands.Cog):
                         continue
                     host = f"lab{parts[0]}-{parts[1]}0{parts[2]}.cs.curtin.edu.au."
                     users = -1 if parts[3] == 'nil' else int(parts[3])
-                    self.labs[host] = users
+                    if self.labs[host] != users:
+                        self.labs[host] = users
+                        changed = True
                     if len(parts) > 4:
                         self.ips[host] = parts[4]
                     if (users>-1 and users < mini):
@@ -294,14 +297,17 @@ class Labs(commands.Cog):
                     if (users == mini):
                         mins.append(host)
                 self.mins = mins
-                max = -1
-                for lab in sorted(self.labs,key=self.labs.get):
-                    if self.labs[lab] > max:
-                        max = self.labs[lab]
-                if max != -1:
-                    print("Saving up machines to file", flush=True)
-                    pickle.dump( (self.labs,self.mins), open ("./persistence/labs.p", "wb" ) )
-                await self.bot.get_cog('Labs').updatePMsg()
+                if changed:
+                    max = -1
+                    for lab in sorted(self.labs,key=self.labs.get):
+                        if self.labs[lab] > max:
+                            max = self.labs[lab]
+                    if max != -1:
+                        print("Saving up machines to file", flush=True)
+                        pickle.dump( (self.labs,self.mins), open ("./persistence/labs.p", "wb" ) )
+                    await self.bot.get_cog('Labs').updatePMsg()
+                else:
+                    print("No change since last pull")
 
     @pull_labs.before_loop
     async def before_pull_labs(self):
