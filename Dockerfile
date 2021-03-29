@@ -4,5 +4,5 @@ COPY src/requirements.txt /tmp
 RUN pip3 install -r /tmp/requirements.txt
 COPY src /src
 WORKDIR /src
-RUN chmod +x start.sh
-CMD [ "./start.sh" ]
+RUN chmod +x /src/start.sh
+CMD [ "/src/start.sh" ]
