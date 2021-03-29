@@ -1,4 +1,4 @@
 #!/bin/bash
 
-git pull
+#git pull
 python3 CurtinLabBot.py
