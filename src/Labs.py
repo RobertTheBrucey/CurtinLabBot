@@ -243,14 +243,14 @@ class Labs(commands.Cog):
             if (ii % 2 == 0):
                 labsString += " -:- " + labs[int(ii/2)] + "\n  "
             else:
-                labsString += " -:- IP: " + getIP(labs[int(ii/2)]) + "\n  "
+                labsString += " -:- IP: " + self.getIP(labs[int(ii/2)]) + "\n  "
             ii = ii + 1
             for row in range(1,7):
                 labsString += "  0" + str(row)
             if (ii % 2 == 0):
                 labsString += " -:- " + labs[int(ii/2)] + "\n"
             else:
-                labsString += " -:- IP: " + getIP(labs[int(ii/2)]) + "\n"
+                labsString += " -:- IP: " + self.getIP(labs[int(ii/2)]) + "\n"
             ii = ii + 1
             for column in "abcd":
                 labsString += "-" + str(column)
@@ -261,7 +261,7 @@ class Labs(commands.Cog):
                 if (ii % 2 == 0):
                     labsString += " -:- " + labs[int(ii/2)] + "\n"
                 else:
-                    labsString += " -:- IP: " + getIP(labs[int(ii/2)]) + "\n"
+                    labsString += " -:- IP: " + self.getIP(labs[int(ii/2)]) + "\n"
                 ii = ii + 1
         return labsString + "\n```"
 
