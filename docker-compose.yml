@@ -7,5 +7,5 @@ services:
     volumes:
       - "./persistence:/CurtinLabBot/persistence"
     tty: false
-    entrypoint: /start.sh
+    entrypoint: /src/start.sh
     restart: unless-stopped
