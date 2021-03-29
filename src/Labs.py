@@ -325,7 +325,7 @@ class Labs(commands.Cog):
         return random.choice(self.mins)
 
     def getRLabIP(self):
-        return getIP(random.choice(self.mins))
+        return self.getIP(random.choice(self.mins))
 
     def getIP(self, hostname):
         if hostname in self.ips.keys():
