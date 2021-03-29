@@ -274,9 +274,9 @@ class Labs(commands.Cog):
         while self.loading:
             await asyncio.sleep(5)
         print('Getting lab status')
-        changed = False
         async with aiohttp.ClientSession() as session:
             async with session.get('http://35.189.5.47/machineList.txt') as resp:
+                changed = False
                 data = await resp.text()
                 data = data.split("\n")[1:]
                 mini = int(data[0].split(",")[3])
@@ -320,7 +320,7 @@ class Labs(commands.Cog):
 
     def getIP(self, hostname):
         if hostname in self.ips.keys():
-            return ips[hostname]
+            return self.ips[hostname]
         else:
             return "Unsupported"
 
