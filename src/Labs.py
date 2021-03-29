@@ -270,8 +270,8 @@ class Labs(commands.Cog):
 
     @tasks.loop(seconds=60)
     async def pull_labs(self):
-        if self.loading:
-            return
+        while self.loading:
+            await asyncio.sleep(5)
         print('Getting lab status')
         changed = False
         async with aiohttp.ClientSession() as session:
