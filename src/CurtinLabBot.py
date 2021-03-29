@@ -10,6 +10,7 @@ bot = commands.Bot(command_prefix="^", case_insensitive=True)
 @bot.event
 async def on_ready():
     print(f"Logged in as {bot.user}")
+    await self.change_presence(activity=discord.Game(name="Loading..."))
 
 if __name__ == "__main__":
     #bot.add_cog(Labs(bot))
