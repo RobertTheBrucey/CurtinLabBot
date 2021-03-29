@@ -17,7 +17,7 @@ class Labs(commands.Cog):
     
     @commands.Cog.listener()
     async def on_ready(self):
-        print( 'Logged on as {0}!'.format( self.user ) )
+        #print( 'Logged on as {0}!'.format( self.user ) )
         await self.change_presence(activity=discord.Game(name="Loading..."))
         try:
             await self.loadPMsg()
