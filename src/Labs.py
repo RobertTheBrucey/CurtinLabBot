@@ -180,7 +180,7 @@ class Labs(commands.Cog):
         pickle.dump( msgs, open ("./persistence/pmsgn.p", "wb" ) )
     
     async def updatePMsg(self):
-        labsString = self.getListStr() + "Quick Lab: " + self.getRLab()
+        labsString = f"{self.getListStr()} Quick Lab: {self.getRLab()}, Quick IP: {self.getRLabIP()}"
         #List message section
         for msg in self.p_msg:
             try:
@@ -188,13 +188,13 @@ class Labs(commands.Cog):
             except Exception as err:
                 print("Problem editting persistent message. {}".format(err), flush=True)
         #Grid message section
-        labsString = self.getGridStr() + "Quick Lab: " + self.getRLab()
+        labsString = f"{self.getGridStr()} Quick Lab: {self.getRLab()}, Quick IP: {self.getRLabIP()}"
         for msg in self.p_msg_grid:
             try:
                 await msg.edit(content=labsString, flush=True)
             except:
                 print("Problem editting persistent message.", flush=True)
-        labsString = self.getHybridStr() + "Quick Lab: " + self.getRLab()
+        labsString = f"{self.getHybridStr()} Quick Lab: {self.getRLab()}, Quick IP: {self.getRLabIP()}"
         #Hybrid message section
         for msg in self.p_msg_hybrid:
             try:
