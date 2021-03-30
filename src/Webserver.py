@@ -24,6 +24,7 @@ class Webserver(commands.Cog):
         async def send_lab_all(request):
             csv = "hostname,cpu1min,cpu5min,cpu15min,users,ip\n"
             for lab in self.bot.get_cog('Labs').labs:
+                print(lab)
                 csv += f"{lab.host},{lab.load1min},{lab.load5min},{lab.load15min},{lab.users},{lab.ip}\n"
             return web.Response(text=csv)
 
