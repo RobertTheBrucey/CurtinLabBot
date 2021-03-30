@@ -233,19 +233,19 @@ class Labs(commands.Cog):
         return labsString + f"\n```\nQuick Lab: {self.getRLab()}\nQuick IP: {self.getRLabIP()}"
     
     def getHybridStr(self):
-        labsString = "```nim\nLab Machine Users   -:- Average CPU load in last minute\n"
+        labsString = "```nim\nLab Machine Users    -:- Average CPU load in last minute\n"
         
         sp = 2
         sp2 = 2
         for room in [218,219,220,221,232]:
             #Print Room Number
-            labsString += f"lab{str(room)}:             -:- lab{str(room)}\n   "
+            labsString += f"lab{str(room)}:              -:- lab{str(room)}\n  "
             #Print Column Numbers
             for row in range(1,7):
                 labsString += " 0" + str(row)
-            labsString += " -:-  "
+            labsString += " -:- "
             for row in range(1,7):
-                labsString += "    0" + str(row)
+                labsString += "   0" + str(row)
             labsString += "\n"
             #Print row letter and lab stats
             for column in "abcd":
