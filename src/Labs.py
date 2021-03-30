@@ -307,10 +307,16 @@ class Labs(commands.Cog):
         return labsString + "\n```"
 
     def getRLab(self):
-        return random.choice(self.mins).host
+        if self.mins[0].users == 0:
+            return random.choice(self.mins).host
+        else:
+            return min(self.mins, key=attrgetter('load1min')).host
 
     def getRLabIP(self):
-        return random.choice(self.mins).ip
+        if self.mins[0].users == 0:
+            return random.choice(self.mins).ip
+        else:
+            return min(self.mins, key=attrgetter('load1min')).ip
 
     def getIP(self, hostname):
         if hostname in self.ips.keys():
