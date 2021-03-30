@@ -287,7 +287,7 @@ class Labs(commands.Cog):
                 labsString += " -:- IP: " + labs[int(ii/2)].ip + "\n  "
             ii = ii + 1
             for row in range(1,7):
-                labsString += "  0" + str(row)
+                labsString += "  0" + str(row) + ":"
             if (ii % 2 == 0):
                 labsString += " -:- " + labs[int(ii/2)].host + "\n"
             else:
