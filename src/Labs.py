@@ -206,7 +206,7 @@ class Labs(commands.Cog):
         labsString = ""
         for lab in sorted(self.labs.values(), key=attrgetter('users')):
             if lab.users != -1:
-                labsString += "\n"+lab+" has "+str(lab.users)+" user"
+                labsString += "\n"+lab.host+" has "+str(lab.users)+" user"
                 if lab.users != 1:
                     labsString += "s"
         labsString = "Available lab machines are:```c"+labsString
