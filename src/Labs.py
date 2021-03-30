@@ -263,7 +263,7 @@ class Labs(commands.Cog):
                     users = self.labs[host].load1min if host in self.labs.keys() else -1
                     labsString +=  f" {fpad(users)}"
                 labsString += "\n"
-        return labsString + f"\n```\nQuick Lab: {self.getRLab()}\nQuick IP: {self.getRLabIP()}"
+        return labsString + f"\n```\n`Quick Lab: {self.getRLab()}`\n`Quick IP: {self.getRLabIP()}`"
     
     def getHybridStrOld(self):
         labsString = "```nim\nLab Machine Users By Room  -:- Quick Labs\n"
