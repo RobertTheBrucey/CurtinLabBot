@@ -26,7 +26,10 @@ class Labs(commands.Cog):
 `^persistent` - (Administrator only) Generate a persistent (auto updating) message.\n\
 `^persistentgrid` - (Administrator only) Generate a persistent (auto updating) grid message.\n\
 `^persistentlist` - (Administrator only) Generate a persistent (auto updating) list message."
-        in_labs = pickle.load( open ("./persistence/labsn.p", "rb" ) )
+        try:
+            in_labs = pickle.load( open ("./persistence/labsn.p", "rb" ) )
+        except:
+            pass
         self.labs = in_labs[0]
         self.mins = in_labs[1]
 
