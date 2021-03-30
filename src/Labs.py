@@ -263,6 +263,7 @@ class Labs(commands.Cog):
                     users = 0.0
                     labsString +=  f"  {str((' ',users)[users!=-1.0])}{pad(users,sp2)}"
                 labsString += "\n"
+        print(len(labsString))
         return labsString + "\n```"
     
     def getHybridStrOld(self):
