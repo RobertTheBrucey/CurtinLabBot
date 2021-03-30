@@ -243,7 +243,7 @@ class Labs(commands.Cog):
             #Print Column Numbers
             for row in range(1,7):
                 labsString += " 0" + str(row)
-            labsString += " -:- "
+            labsString += " -:-  "
             for row in range(1,7):
                 labsString += "  0" + str(row)
             labsString += "\n"
