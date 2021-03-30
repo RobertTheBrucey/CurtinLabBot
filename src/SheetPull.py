@@ -41,6 +41,7 @@ class SheetPull(commands.Cog):
         for row in data:
             host = f"{row[0]}.cs.curtin.edu.au."
             users = -1 if row[4] == 'N/A' else int(row[4])
+            print(f"{row} - {len(row)}")
             if self.bot.get_cog('Labs').labs[host] != users:
                 self.bot.get_cog('Labs').labs[host] = users
                 changed = True
