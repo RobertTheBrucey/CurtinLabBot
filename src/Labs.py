@@ -27,9 +27,10 @@ class Labs(commands.Cog):
 `^persistentgrid` - (Administrator only) Generate a persistent (auto updating) grid message.\n\
 `^persistentlist` - (Administrator only) Generate a persistent (auto updating) list message."
         try:
-            in_labs = pickle.load( open ("./persistence/labsn.p", "rb" ) )
-            self.labs = in_labs[0]
-            self.mins = in_labs[1]
+            #in_labs = pickle.load( open ("./persistence/labsn.p", "rb" ) )
+            #self.labs = in_labs[0]
+            #self.mins = in_labs[1]
+            pass
         except:
             pass
         
@@ -253,9 +254,9 @@ class Labs(commands.Cog):
                     host = "lab{}-{}0{}.cs.curtin.edu.au.".format(room,column,row)
                     users = self.labs[host].users if host in self.labs.keys() else -1
                     if users != -1:
-                        labsString +=  f"  {users: <2d}"
+                        labsString +=  f" {users: <2d}"
                     else:
-                        labsString += "    "
+                        labsString += "   "
                 labsString += " -:- -" + str(column)
                 for row in range(1,7):
                     host = "lab{}-{}0{}.cs.curtin.edu.au.".format(room,column,row)
