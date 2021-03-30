@@ -3,6 +3,7 @@ from discord.ext import commands, tasks
 import discord
 import os
 import aiohttp
+from Lab import Lab
 
 app = web.Application()
 routes = web.RouteTableDef()
