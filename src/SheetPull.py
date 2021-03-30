@@ -35,7 +35,6 @@ class SheetPull(commands.Cog):
         result = sheet.values().get(spreadsheetId=SAMPLE_SPREADSHEET_ID,
                                     range=SAMPLE_RANGE_NAME).execute()
         data = result.get('values', [])
-        print(data)
         changed = False
         mini = int(data[1][4])
         mins = []
