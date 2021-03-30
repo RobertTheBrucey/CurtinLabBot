@@ -45,13 +45,14 @@ class SheetPull(commands.Cog):
             if self.bot.get_cog('Labs').labs[host] != users:
                 self.bot.get_cog('Labs').labs[host] = users
                 changed = True
-            try: 
-                if self.bot.get_cog('Labs').ips[host] != row[5]:
+            if len(row) > 5:
+                try: 
+                    if self.bot.get_cog('Labs').ips[host] != row[5]:
+                        self.bot.get_cog('Labs').ips[host] = row[5]
+                        changed = True
+                except:
                     self.bot.get_cog('Labs').ips[host] = row[5]
                     changed = True
-            except:
-                self.bot.get_cog('Labs').ips[host] = row[5]
-                changed = True
             if (users>-1 and users < mini):
                 mini = users
                 mins = []
