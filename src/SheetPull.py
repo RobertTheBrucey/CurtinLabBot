@@ -53,6 +53,15 @@ class SheetPull(commands.Cog):
                 if lab.ip != row[5]:
                     lab.ip = row[5]
                     changed = True
+            if lab.load1min != float(row[1]):
+                lab.load1min = float(row[1])
+                changed = True
+            if lab.load5min != float(row[2]):
+                lab.load5min = float(row[2])
+                changed = True
+            if lab.load15min != float(row[3]):
+                lab.load15min = float(row[3])
+                changed = True
             if (users>-1 and users < mini):
                 mini = users
                 mins = []
