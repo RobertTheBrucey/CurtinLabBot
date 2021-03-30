@@ -271,10 +271,10 @@ class Labs(commands.Cog):
         return labsString + "\n```"
 
     def getRLab(self):
-        return random.choice(self.mins)
+        return random.choice(self.mins).host
 
     def getRLabIP(self):
-        return self.getIP(random.choice(self.mins))
+        return random.choice(self.mins).ip
 
     def getIP(self, hostname):
         if hostname in self.ips.keys():
