@@ -257,7 +257,7 @@ class Labs(commands.Cog):
                     host = "lab{}-{}0{}.cs.curtin.edu.au.".format(room,column,row)
                     users = self.labs[host].load1min if host in self.labs.keys() else -1
                     users = 0
-                    labsString +=  "  " + str((" ",users)[users!=-1]) + pad(users,sp2)
+                    labsString +=  "  " + str((" ",users)[users!=-1.0]) + pad(users,sp2)
                 labsString += "\n"
         return labsString + "\n```"
     
