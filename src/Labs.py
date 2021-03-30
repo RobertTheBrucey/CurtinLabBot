@@ -318,6 +318,12 @@ class Labs(commands.Cog):
         else:
             return min(self.mins, key=attrgetter('load1min')).ip
 
+    def getCSV(self):
+        csv = "hostname,cpu1min,cpu5min,cpu15min,users,ip\n"
+        for lab in self.labs:
+            csv += f"{lab.host},{lab.load1min},{lab.load5min},{lab.load15min},{lab.users},{lab.ip}\n"
+        return csv
+
 def pad(inte,places):
     if inte < 1:
         padding = places-1
