@@ -245,7 +245,7 @@ class Labs(commands.Cog):
                 labsString += " 0" + str(row)
             labsString += " -:-  "
             for row in range(1,7):
-                labsString += "  0" + str(row)
+                labsString += "   0" + str(row)
             labsString += "\n"
             #Print row letter and lab stats
             for column in "abcd":
@@ -327,6 +327,6 @@ def pad(inte,places):
 
 def fpad(flo):
     if flo == -1:
-        return "   "
+        return "    "
     else:
-        return f"{flo:.1f}"
+        return f"{flo:.2f}"
