@@ -252,7 +252,10 @@ class Labs(commands.Cog):
                 for row in range(1,7):
                     host = "lab{}-{}0{}.cs.curtin.edu.au.".format(room,column,row)
                     users = self.labs[host].users if host in self.labs.keys() else -1
-                    labsString +=  f"  {str((' ',users)[users!=-1]): <3d}"
+                    if users != -1:
+                        labsString +=  f"  {users: <2d}"
+                    else:
+                        labsString += "    "
                 labsString += " -:- -" + str(column)
                 for row in range(1,7):
                     host = "lab{}-{}0{}.cs.curtin.edu.au.".format(room,column,row)
