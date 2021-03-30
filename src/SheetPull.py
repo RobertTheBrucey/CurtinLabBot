@@ -39,7 +39,7 @@ class SheetPull(commands.Cog):
         mini = int(data[1][4])
         mins = []
         for row in data:
-            host = f"{row[0]}}.cs.curtin.edu.au."
+            host = f"{row[0]}.cs.curtin.edu.au."
             users = -1 if row[4] == 'N/A' else int(row[4])
             if self.bot.get_cog('Labs').labs[host] != users:
                 self.bot.get_cog('Labs').labs[host] = users
