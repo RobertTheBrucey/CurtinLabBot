@@ -27,7 +27,7 @@ class Labs(commands.Cog):
 `^persistentgrid` - (Administrator only) Generate a persistent (auto updating) grid message.\n\
 `^persistentlist` - (Administrator only) Generate a persistent (auto updating) list message."
         try:
-            #in_labs = pickle.load( open ("./persistence/labsn.p", "rb" ) )
+            in_labs = pickle.load( open ("./persistence/labsn.p", "rb" ) )
             #self.labs = in_labs[0]
             #self.mins = in_labs[1]
             pass
@@ -245,7 +245,7 @@ class Labs(commands.Cog):
                 labsString += " 0" + str(row)
             labsString += " -:- "
             for row in range(1,7):
-                labsString += "   0" + str(row)
+                labsString += "  0" + str(row)
             labsString += "\n"
             #Print row letter and lab stats
             for column in "abcd":
@@ -261,11 +261,8 @@ class Labs(commands.Cog):
                 for row in range(1,7):
                     host = "lab{}-{}0{}.cs.curtin.edu.au.".format(room,column,row)
                     users = self.labs[host].load1min if host in self.labs.keys() else -1
-                    users = 0.0
                     labsString +=  f" {fpad(users)}"
                 labsString += "\n"
-        #print(labsString)
-        print(len(labsString))
         return labsString + f"\n```\nQuick Lab: {self.getRLab()}\nQuick IP: {self.getRLabIP()}"
     
     def getHybridStrOld(self):
