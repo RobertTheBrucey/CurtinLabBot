@@ -255,7 +255,7 @@ class Labs(commands.Cog):
                     if users != -1:
                         labsString +=  f"  {users: <2d}"
                     else:
-                        labsString += "    "
+                        labsString += "  "
                 labsString += " -:- -" + str(column)
                 for row in range(1,7):
                     host = "lab{}-{}0{}.cs.curtin.edu.au.".format(room,column,row)
