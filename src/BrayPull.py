@@ -30,6 +30,7 @@ class BrayPull(commands.Cog):
                         continue
                     host = f"lab{parts[0]}-{parts[1]}0{parts[2]}.cs.curtin.edu.au."
                     lab = self.bot.get_cog('Labs').labs[host] if host in self.bot.get_cog('Labs').labs.keys() else Lab(host)
+                    self.bot.get_cog('Labs').labs[host] = lab
                     users = -1 if parts[3] == 'nil' else int(parts[3])
                     max = max if users <= max else users
                     if lab.users != users:

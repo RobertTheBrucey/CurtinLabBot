@@ -43,6 +43,7 @@ class SheetPull(commands.Cog):
         for row in data:
             host = f"{row[0]}.cs.curtin.edu.au."
             lab = self.bot.get_cog('Labs').labs[host] if host in self.bot.get_cog('Labs').labs.keys() else Lab(host)
+            self.bot.get_cog('Labs').labs[host] = lab
             users = -1 if row[4] == 'N/A' else int(row[4])
             max = max if users <= max else users
             if lab.users != users:

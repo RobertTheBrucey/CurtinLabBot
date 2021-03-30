@@ -180,9 +180,8 @@ class Labs(commands.Cog):
         pickle.dump( msgs, open ("./persistence/pmsgn.p", "wb" ) )
     
     async def updatePMsg(self):
-        while len(self.labs) == 0:
-            await asyncio.sleep(5)
         labsString = self.getListStr() + "Quick Lab: " + self.getRLab()
+        #List message section
         for msg in self.p_msg:
             try:
                 await msg.edit(content=labsString)
@@ -196,6 +195,7 @@ class Labs(commands.Cog):
             except:
                 print("Problem editting persistent message.", flush=True)
         labsString = self.getHybridStr() + "Quick Lab: " + self.getRLab()
+        #Hybrid message section
         for msg in self.p_msg_hybrid:
             try:
                 await msg.edit(content=labsString, flush=True)
