@@ -181,7 +181,7 @@ class Labs(commands.Cog):
     
     async def updatePMsg(self):
         while len(self.labs) == 0:
-            asyncio.sleep(5)
+            await asyncio.sleep(5)
         labsString = self.getListStr() + "Quick Lab: " + self.getRLab()
         for msg in self.p_msg:
             try:
