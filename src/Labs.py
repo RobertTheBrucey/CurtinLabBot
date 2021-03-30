@@ -321,6 +321,7 @@ class Labs(commands.Cog):
     def getCSV(self):
         csv = "hostname,cpu1min,cpu5min,cpu15min,users,ip\n"
         for lab in self.labs:
+            type(lab)
             csv += f"{lab.host},{lab.load1min},{lab.load5min},{lab.load15min},{lab.users},{lab.ip}\n"
         return csv
 
