@@ -181,7 +181,7 @@ class Labs(commands.Cog):
         pickle.dump( msgs, open ("./persistence/pmsgn.p", "wb" ) )
     
     async def updatePMsg(self):
-        labsString = f"{self.getListStr()} Quick Lab: {self.getRLab()}, Quick IP: {self.getRLabIP()}"
+        labsString = f"{self.getListStr()}"
         #List message section
         for msg in self.p_msg:
             try:
@@ -189,13 +189,13 @@ class Labs(commands.Cog):
             except Exception as err:
                 print("Problem editting persistent message. {}".format(err), flush=True)
         #Grid message section
-        labsString = f"{self.getGridStr()} Quick Lab: {self.getRLab()}, Quick IP: {self.getRLabIP()}"
+        labsString = f"{self.getGridStr()}"
         for msg in self.p_msg_grid:
             try:
                 await msg.edit(content=labsString, flush=True)
             except:
                 print("Problem editting persistent message.", flush=True)
-        labsString = f"{self.getHybridStr()} Quick Lab: {self.getRLab()}, Quick IP: {self.getRLabIP()}"
+        labsString = f"{self.getHybridStr()}"
         #Hybrid message section
         for msg in self.p_msg_hybrid:
             try:
@@ -230,20 +230,20 @@ class Labs(commands.Cog):
                     users = self.labs[host].users if host in self.labs.keys() else -1
                     labsString +=  "  " + str((" ",users)[users!=-1]) + pad(users,sp)
                 labsString += "\n"
-        return labsString + "\n```"
+        return labsString + f"\n```\nQuick Lab: {self.getRLab()}\nQuick IP: {self.getRLabIP()}"
     
     def getHybridStr(self):
-        labsString = "```nim\nLab Machine Users  -:- Average CPU load in last minute\n"
+        labsString = "```nim\nLab Machine Users   -:- Average CPU load in last minute\n"
         
         sp = 2
         sp2 = 2
         for room in [218,219,220,221,232]:
             #Print Room Number
-            labsString += f"lab{str(room)}:                    -:- lab{str(room)}\n "
+            labsString += f"lab{str(room)}:             -:- lab{str(room)}\n  "
             #Print Column Numbers
             for row in range(1,7):
                 labsString += " 0" + str(row)
-            labsString += "  -:-  "
+            labsString += " -:-  "
             for row in range(1,7):
                 labsString += "    0" + str(row)
             labsString += "\n"
@@ -266,7 +266,7 @@ class Labs(commands.Cog):
                 labsString += "\n"
         #print(labsString)
         print(len(labsString))
-        return labsString + "\n```"
+        return labsString + f"\n```\nQuick Lab: {self.getRLab()}\nQuick IP: {self.getRLabIP()}"
     
     def getHybridStrOld(self):
         labsString = "```nim\nLab Machine Users By Room  -:- Quick Labs\n"
