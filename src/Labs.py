@@ -322,7 +322,7 @@ class Labs(commands.Cog):
         csv = "hostname,cpu1min,cpu5min,cpu15min,users,ip\n"
         for lab in self.labs:
             type(lab)
-            csv += f"{labs[lab].host},{labs[lab].load1min},{labs[lab].load5min},{labs[lab].load15min},{labs[lab].users},{labs[lab].ip}\n"
+            csv += f"{self.labs[lab].host},{self.labs[lab].load1min},{self.labs[lab].load5min},{self.labs[lab].load15min},{self.labs[lab].users},{self.labs[lab].ip}\n"
         return csv
 
 def pad(inte,places):
