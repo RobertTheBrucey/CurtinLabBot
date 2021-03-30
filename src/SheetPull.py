@@ -63,6 +63,7 @@ class SheetPull(commands.Cog):
                 print("Saving up machines to file", flush=True)
                 pickle.dump( (self.bot.get_cog('Labs').labs,self.bot.get_cog('Labs').mins), open ("./persistence/labsn.p", "wb" ) )
             await self.bot.get_cog('Labs').updatePMsg()
+            print("Persistent Messages Updated")
         else:
             print("No change since last pull")
 
