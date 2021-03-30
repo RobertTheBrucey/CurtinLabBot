@@ -8,6 +8,3 @@ class Lab():
         self.load1min = -1.0
         self.load5min = -1.0
         self.load15min = -1.0
-    
-    def __str__(self):
-        return self.users
