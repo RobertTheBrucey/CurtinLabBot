@@ -263,7 +263,7 @@ class Labs(commands.Cog):
                 labsString += "-" + str(column)
                 for row in range(1,7):
                     host = "lab{}-{}0{}.cs.curtin.edu.au.".format(room,column,row)
-                    users = labs[host].users if host in labs.keys() else -1
+                    users = labs[host].users if host in self.labs.keys() else -1
                     labsString +=  "  " + str((" ",users)[users!=-1]) + pad(users,sp)
                 if (ii % 2 == 0):
                     labsString += " -:- " + labs[int(ii/2)].host + "\n"
