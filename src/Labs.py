@@ -199,8 +199,8 @@ class Labs(commands.Cog):
         for msg in self.p_msg_hybrid:
             try:
                 await msg.edit(content=labsString, flush=True)
-            except:
-                print("Problem editting persistent message.", flush=True)
+            except Exception as e:
+                print(f"Problem editting persistent message. {e}", flush=True)
     
     def getListStr(self):
         labsString = ""
