@@ -232,7 +232,7 @@ class Labs(commands.Cog):
         return labsString + "\n```"
     
     def getHybridStr(self):
-        labsString = "```nim\nLab Machine Users By Room  -:- Average CPU load in last minute\n"
+        labsString = "```nim\nLab Machine Users  -:- Average CPU load in last minute\n"
         
         sp = 2
         sp2 = 2
@@ -241,7 +241,7 @@ class Labs(commands.Cog):
             labsString += f"lab{str(room)}:                    -:- lab{str(room)}\n "
             #Print Column Numbers
             for row in range(1,7):
-                labsString += "  0" + str(row)
+                labsString += " 0" + str(row)
             labsString += "  -:-  "
             for row in range(1,7):
                 labsString += "    0" + str(row)
@@ -255,7 +255,7 @@ class Labs(commands.Cog):
                     if users != -1:
                         labsString +=  f"  {users: <2d}"
                     else:
-                        labsString += "  "
+                        labsString += "    "
                 labsString += " -:- -" + str(column)
                 for row in range(1,7):
                     host = "lab{}-{}0{}.cs.curtin.edu.au.".format(room,column,row)
@@ -263,6 +263,7 @@ class Labs(commands.Cog):
                     users = 0.0
                     labsString +=  f"  {str((' ',users)[users!=-1.0])}{pad(users,sp2)}"
                 labsString += "\n"
+        #print(labsString)
         print(len(labsString))
         return labsString + "\n```"
     
