@@ -244,7 +244,7 @@ class Labs(commands.Cog):
                 labsString += "  0" + str(row)
             labsString += "  -:-  "
             for row in range(1,7):
-                labsString += "  0" + str(row)
+                labsString += "    0" + str(row)
             labsString += "\n"
             #Print row letter and lab stats
             for column in "abcd":
@@ -252,12 +252,12 @@ class Labs(commands.Cog):
                 for row in range(1,7):
                     host = "lab{}-{}0{}.cs.curtin.edu.au.".format(room,column,row)
                     users = self.labs[host].users if host in self.labs.keys() else -1
-                    labsString +=  "  " + str((" ",users)[users!=-1]) + pad(users,sp)
+                    labsString +=  f"  {str((" ",users)[users!=-1]): <3d}"
                 labsString += " -:- -" + str(column)
                 for row in range(1,7):
                     host = "lab{}-{}0{}.cs.curtin.edu.au.".format(room,column,row)
                     users = self.labs[host].load1min if host in self.labs.keys() else -1
-                    labsString +=  "  " + str((" ",users)[users!=-1.0]) + pad(users,sp2)
+                    labsString +=  f"  {str((" ",users)[users!=-1.0])}{pad(users,sp2)}"
                 labsString += "\n"
         return labsString + "\n```"
     
