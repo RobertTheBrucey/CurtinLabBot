@@ -232,6 +232,35 @@ class Labs(commands.Cog):
         return labsString + "\n```"
     
     def getHybridStr(self):
+        labsString = "```nim\nLab Machine Users By Room  -:- Average CPU load in last minute\n"
+        
+        sp = 2
+        sp2 = 4
+        for room in [218,219,220,221,232]:
+            #Print Room Number
+            labsString += f"lab{str(room)}:                    -:- lab{str(room)}\n"
+            #Print Column Numbers
+            for row in range(1,7):
+                labsString += "  0" + str(row)
+            labsString += " -:-    "
+            for row in range(1,7):
+                labsString += "  0" + str(row) + "\n"
+            #Print row letter and lab stats
+            for column in "abcd":
+                labsString += "-" + str(column)
+                for row in range(1,7):
+                    host = "lab{}-{}0{}.cs.curtin.edu.au.".format(room,column,row)
+                    users = self.labs[host].users if host in self.labs.keys() else -1
+                    labsString +=  "  " + str((" ",users)[users!=-1]) + pad(users,sp)
+                labsString += " -:- -" + str(column)
+                for row in range(1,7):
+                    host = "lab{}-{}0{}.cs.curtin.edu.au.".format(room,column,row)
+                    users = self.labs[host].load1min if host in self.labs.keys() else -1
+                    labsString +=  "  " + str((" ",users)[users!=-1]) + pad(users,sp2)
+                labsString += "\n"
+        return labsString + "\n```"
+    
+    def getHybridStrOld(self):
         labsString = "```nim\nLab Machine Users By Room  -:- Quick Labs\n"
         
         labs = sorted(self.labs.values(), key=attrgetter('users'))
