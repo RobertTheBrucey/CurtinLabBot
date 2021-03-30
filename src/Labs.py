@@ -28,8 +28,8 @@ class Labs(commands.Cog):
 `^persistentlist` - (Administrator only) Generate a persistent (auto updating) list message."
         try:
             in_labs = pickle.load( open ("./persistence/labsn.p", "rb" ) )
-            #self.labs = in_labs[0]
-            #self.mins = in_labs[1]
+            self.labs = in_labs[0]
+            self.mins = in_labs[1]
             pass
         except:
             pass
