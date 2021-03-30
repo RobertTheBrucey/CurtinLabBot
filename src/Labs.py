@@ -262,7 +262,7 @@ class Labs(commands.Cog):
                     host = "lab{}-{}0{}.cs.curtin.edu.au.".format(room,column,row)
                     users = self.labs[host].load1min if host in self.labs.keys() else -1
                     users = 0.0
-                    labsString +=  f"  {str((' ',users)[users!=-1.0])}{pad(users,sp2)}"
+                    labsString +=  f" {fpad(users)}"
                 labsString += "\n"
         #print(labsString)
         print(len(labsString))
@@ -328,5 +328,8 @@ def pad(inte,places):
         padding = (places-int(1+math.log10(abs(inte))))
     return " " * padding
 
-
-
+def fpad(flo):
+    if flo == -1:
+        return "   "
+    else:
+        return f"{flo:.1f}"
