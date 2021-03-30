@@ -3,6 +3,7 @@ from discord.ext import commands, tasks
 import aiohttp
 import asyncio
 import pickle
+from Lab import Lab
 
 class BrayPull(commands.Cog):
 
@@ -22,37 +23,32 @@ class BrayPull(commands.Cog):
                 data = data.split("\n")[1:]
                 mini = int(data[0].split(",")[3])
                 mins = []
+                max = -1
                 for row in data:
                     parts = row.split(",")
                     if len(parts) < 4:
                         continue
                     host = f"lab{parts[0]}-{parts[1]}0{parts[2]}.cs.curtin.edu.au."
+                    lab = self.bot.get_cog('Labs').labs[host] if host in self.bot.get_cog('Labs').labs.keys() else Lab(host)
                     users = -1 if parts[3] == 'nil' else int(parts[3])
-                    if self.bot.get_cog('Labs').labs[host] != users:
-                        self.bot.get_cog('Labs').labs[host] = users
+                    max = max if users <= max else users
+                    if lab.users != users:
+                        lab.users = users
                         changed = True
                     if len(parts) > 4:
-                        try: 
-                            if self.bot.get_cog('Labs').ips[host] != parts[4]:
-                                self.bot.get_cog('Labs').ips[host] = parts[4]
-                                changed = True
-                        except:
-                            self.bot.get_cog('Labs').ips[host] = parts[4]
+                        if lab.ip != parts[4]:
+                            lab.ip = parts[4]
                             changed = True
                     if (users>-1 and users < mini):
                         mini = users
                         mins = []
                     if (users == mini):
-                        mins.append(host)
+                        mins.append(lab)
                 self.bot.get_cog('Labs').mins = mins
                 if changed:
-                    max = -1
-                    for lab in sorted(self.bot.get_cog('Labs').labs,key=self.bot.get_cog('Labs').labs.get):
-                        if self.bot.get_cog('Labs').labs[lab] > max:
-                            max = self.bot.get_cog('Labs').labs[lab]
                     if max != -1:
                         print("Saving up machines to file", flush=True)
-                        pickle.dump( (self.bot.get_cog('Labs').labs,self.bot.get_cog('Labs').mins), open ("./persistence/labs.p", "wb" ) )
+                        pickle.dump( (self.bot.get_cog('Labs').labs,self.bot.get_cog('Labs').mins), open ("./persistence/labsn.p", "wb" ) )
                     await self.bot.get_cog('Labs').updatePMsg()
                 else:
                     print("No change since last pull")

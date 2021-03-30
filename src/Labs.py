@@ -4,6 +4,7 @@ import pickle
 import math
 import random
 import asyncio
+from operator import attrgetter
 
 listLen = 1000
 
@@ -17,7 +18,6 @@ class Labs(commands.Cog):
         self.p_msg_grid = []
         self.p_msg_hybrid = []
         self.labs = {}
-        self.ips = {}
         self.mins = []
         self.helpString = "`^labs` - Request the list of Lab machines via DM\n\
 `^quicklab` - Show a single ready lab machine\n\
@@ -26,15 +26,13 @@ class Labs(commands.Cog):
 `^persistent` - (Administrator only) Generate a persistent (auto updating) message.\n\
 `^persistentgrid` - (Administrator only) Generate a persistent (auto updating) grid message.\n\
 `^persistentlist` - (Administrator only) Generate a persistent (auto updating) list message."
-        in_labs = pickle.load( open ("./persistence/labs.p", "rb" ) )
+        in_labs = pickle.load( open ("./persistence/labsn.p", "rb" ) )
         self.labs = in_labs[0]
         self.mins = in_labs[1]
 
     
     @commands.Cog.listener()
     async def on_ready(self):
-        #print( 'Logged on as {0}!'.format( self.user ) )
-        #await self.change_presence(activity=discord.Game(name="Loading..."))
         try:
             await self.loadPMsg()
             print("Persistent messages successfully loaded.")
@@ -200,10 +198,10 @@ class Labs(commands.Cog):
     
     def getListStr(self):
         labsString = ""
-        for lab in sorted(self.labs,key=self.labs.get):
-            if self.labs[lab] != -1:
-                labsString += "\n"+lab+" has "+str(self.labs[lab])+" user"
-                if self.labs[lab] != 1:
+        for lab in sorted(self.labs, key=attrgetter('users')):
+            if lab.users != -1:
+                labsString += "\n"+lab+" has "+str(lab.users)+" user"
+                if lab.users != 1:
                     labsString += "s"
         labsString = "Available lab machines are:```c"+labsString
         labsString = labsString[:labsString[:listLen].rfind('\n')] + "\n```"
@@ -222,7 +220,7 @@ class Labs(commands.Cog):
                 labsString += "-" + str(column)
                 for row in range(1,7):
                     host = "lab{}-{}0{}.cs.curtin.edu.au.".format(room,column,row)
-                    users = self.labs.get(host,-1)
+                    users = self.labs[host].users
                     labsString +=  "  " + str((" ",users)[users!=-1]) + pad(users,sp)
                 labsString += "\n"
         return labsString + "\n```"
@@ -230,7 +228,7 @@ class Labs(commands.Cog):
     def getHybridStr(self):
         labsString = "```nim\nLab Machine Users By Room  -:- Quick Labs\n"
         
-        labs = sorted(self.labs,key=self.labs.get)
+        labs = sorted(self.labs, key=attrgetter('users'))
         ii = 0
         while ii < len(labs):
             if self.labs[labs[ii]] == -1:
@@ -244,27 +242,27 @@ class Labs(commands.Cog):
         for room in [218,219,220,221,232]:
             labsString += "lab" + str(room) + ":                   "
             if (ii % 2 == 0):
-                labsString += " -:- " + labs[int(ii/2)] + "\n  "
+                labsString += " -:- " + labs[int(ii/2)].host + "\n  "
             else:
-                labsString += " -:- IP: " + self.getIP(labs[int(ii/2)]) + "\n  "
+                labsString += " -:- IP: " + labs[int(ii/2)].ip + "\n  "
             ii = ii + 1
             for row in range(1,7):
                 labsString += "  0" + str(row)
             if (ii % 2 == 0):
-                labsString += " -:- " + labs[int(ii/2)] + "\n"
+                labsString += " -:- " + labs[int(ii/2)].host + "\n"
             else:
-                labsString += " -:- IP: " + self.getIP(labs[int(ii/2)]) + "\n"
+                labsString += " -:- IP: " + labs[int(ii/2)].ip + "\n"
             ii = ii + 1
             for column in "abcd":
                 labsString += "-" + str(column)
                 for row in range(1,7):
                     host = "lab{}-{}0{}.cs.curtin.edu.au.".format(room,column,row)
-                    users = self.labs.get(host,-1)
+                    users = labs[host]
                     labsString +=  "  " + str((" ",users)[users!=-1]) + pad(users,sp)
                 if (ii % 2 == 0):
-                    labsString += " -:- " + labs[int(ii/2)] + "\n"
+                    labsString += " -:- " + labs[int(ii/2)].host + "\n"
                 else:
-                    labsString += " -:- IP: " + self.getIP(labs[int(ii/2)]) + "\n"
+                    labsString += " -:- IP: " + labs[int(ii/2)].ip + "\n"
                 ii = ii + 1
         return labsString + "\n```"
 

@@ -7,6 +7,7 @@ from Labs import Labs
 from Webserver import Webserver
 from BrayPull import BrayPull
 from SheetPull import SheetPull
+from Lab import Lab
 
 bot = commands.Bot(command_prefix="^", case_insensitive=True)
 

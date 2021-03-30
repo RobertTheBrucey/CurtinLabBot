@@ -8,6 +8,7 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google.oauth2 import service_account
+from Lab import Lab
 
 # If modifying these scopes, delete the file token.json.
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly']
@@ -38,34 +39,29 @@ class SheetPull(commands.Cog):
         changed = False
         mini = int(data[1][4])
         mins = []
+        max = -1
         for row in data:
             host = f"{row[0]}.cs.curtin.edu.au."
+            lab = self.bot.get_cog('Labs').labs[host] if host in self.bot.get_cog('Labs').labs.keys() else Lab(host)
             users = -1 if row[4] == 'N/A' else int(row[4])
-            if self.bot.get_cog('Labs').labs[host] != users:
-                self.bot.get_cog('Labs').labs[host] = users
+            max = max if users <= max else users
+            if lab.users != users:
+                lab.users = users
                 changed = True
             if len(row) > 5:
-                try: 
-                    if self.bot.get_cog('Labs').ips[host] != row[5]:
-                        self.bot.get_cog('Labs').ips[host] = row[5]
-                        changed = True
-                except:
-                    self.bot.get_cog('Labs').ips[host] = row[5]
+                if lab.ip != row[5]:
+                    lab.ip = row[5]
                     changed = True
             if (users>-1 and users < mini):
                 mini = users
                 mins = []
             if (users == mini):
-                mins.append(host)
+                mins.append(lab)
         self.bot.get_cog('Labs').mins = mins
         if changed:
-            max = -1
-            for lab in sorted(self.bot.get_cog('Labs').labs,key=self.bot.get_cog('Labs').labs.get):
-                if self.bot.get_cog('Labs').labs[lab] > max:
-                    max = self.bot.get_cog('Labs').labs[lab]
             if max != -1:
                 print("Saving up machines to file", flush=True)
-                pickle.dump( (self.bot.get_cog('Labs').labs,self.bot.get_cog('Labs').mins), open ("./persistence/labs.p", "wb" ) )
+                pickle.dump( (self.bot.get_cog('Labs').labs,self.bot.get_cog('Labs').mins), open ("./persistence/labsn.p", "wb" ) )
             await self.bot.get_cog('Labs').updatePMsg()
         else:
             print("No change since last pull")
