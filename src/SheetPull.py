@@ -53,14 +53,14 @@ class SheetPull(commands.Cog):
                 if lab.ip != row[5]:
                     lab.ip = row[5]
                     changed = True
-            if lab.load1min != float(row[1]):
-                lab.load1min = float(row[1])
+            if lab.load1min != load_to_float(row[1]):
+                lab.load1min = load_to_float(row[1])
                 changed = True
-            if lab.load5min != float(row[2]):
-                lab.load5min = float(row[2])
+            if lab.load5min != load_to_float(row[2]):
+                lab.load5min = load_to_float(row[2])
                 changed = True
-            if lab.load15min != float(row[3]):
-                lab.load15min = float(row[3])
+            if lab.load15min != load_to_float(row[3]):
+                lab.load15min = load_to_float(row[3])
                 changed = True
             if (users>-1 and users < mini):
                 mini = users
@@ -81,3 +81,6 @@ class SheetPull(commands.Cog):
     async def before_pull_labs(self):
         print("Waiting for Bot to start before pulling labs.")
         await self.bot.wait_until_ready()
+
+def load_to_float(load):
+    return -1.0 if load == "N/A" else float(load)
