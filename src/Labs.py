@@ -224,7 +224,7 @@ class Labs(commands.Cog):
                 labsString += "-" + str(column)
                 for row in range(1,7):
                     host = "lab{}-{}0{}.cs.curtin.edu.au.".format(room,column,row)
-                    print(labs.keys())
+                    print(self.labs.keys())
                     users = self.labs[host].users
                     labsString +=  "  " + str((" ",users)[users!=-1]) + pad(users,sp)
                 labsString += "\n"
