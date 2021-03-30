@@ -7,11 +7,6 @@ import aiohttp
 app = web.Application()
 routes = web.RouteTableDef()
 
-
-def setup(bot):
-    bot.add_cog(Webserver(bot))
-
-
 class Webserver(commands.Cog):
     def __init__(self, bot):
         self.bot = bot

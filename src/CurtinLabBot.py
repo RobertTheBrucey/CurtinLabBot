@@ -5,6 +5,8 @@ import asyncio
 from config import getToken
 from Labs import Labs
 from Webserver import Webserver
+from BrayPull import BrayPull
+from SheetPull import SheetPull
 
 bot = commands.Bot(command_prefix="^", case_insensitive=True)
 
@@ -16,5 +18,7 @@ async def on_ready():
 if __name__ == "__main__":
     bot.add_cog(Labs(bot))
     bot.add_cog(Webserver(bot))
+    #bot.add_cog(BrayPull(bot))
+    bot.add_cog(SheetPull(bot))
     print("Bot starting")
     bot.run(getToken("./persistence/config.ini"))

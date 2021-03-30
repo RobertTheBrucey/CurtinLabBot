@@ -1,2 +1,3 @@
 discord
 aiohttp<3.7.0
+google-api-python-client

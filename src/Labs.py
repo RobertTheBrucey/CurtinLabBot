@@ -2,7 +2,6 @@ import discord
 from discord.ext import commands, tasks
 import pickle
 import math
-import aiohttp
 import random
 import asyncio
 
@@ -30,7 +29,7 @@ class Labs(commands.Cog):
         in_labs = pickle.load( open ("./persistence/labs.p", "rb" ) )
         self.labs = in_labs[0]
         self.mins = in_labs[1]
-        self.pull_labs.start()
+
     
     @commands.Cog.listener()
     async def on_ready(self):
@@ -268,58 +267,6 @@ class Labs(commands.Cog):
                     labsString += " -:- IP: " + self.getIP(labs[int(ii/2)]) + "\n"
                 ii = ii + 1
         return labsString + "\n```"
-
-    @tasks.loop(seconds=60)
-    async def pull_labs(self):
-        while self.loading:
-            await asyncio.sleep(5)
-        print('Getting lab status')
-        async with aiohttp.ClientSession() as session:
-            async with session.get('http://35.189.5.47/machineList.txt') as resp:
-                changed = False
-                data = await resp.text()
-                data = data.split("\n")[1:]
-                mini = int(data[0].split(",")[3])
-                mins = []
-                for row in data:
-                    parts = row.split(",")
-                    if len(parts) < 4:
-                        continue
-                    host = f"lab{parts[0]}-{parts[1]}0{parts[2]}.cs.curtin.edu.au."
-                    users = -1 if parts[3] == 'nil' else int(parts[3])
-                    if self.labs[host] != users:
-                        self.labs[host] = users
-                        changed = True
-                    if len(parts) > 4:
-                        try: 
-                            if self.ips[host] != parts[4]:
-                                self.ips[host] = parts[4]
-                                changed = True
-                        except:
-                            self.ips[host] = parts[4]
-                            changed = True
-                    if (users>-1 and users < mini):
-                        mini = users
-                        mins = []
-                    if (users == mini):
-                        mins.append(host)
-                self.mins = mins
-                if changed:
-                    max = -1
-                    for lab in sorted(self.labs,key=self.labs.get):
-                        if self.labs[lab] > max:
-                            max = self.labs[lab]
-                    if max != -1:
-                        print("Saving up machines to file", flush=True)
-                        pickle.dump( (self.labs,self.mins), open ("./persistence/labs.p", "wb" ) )
-                    await self.bot.get_cog('Labs').updatePMsg()
-                else:
-                    print("No change since last pull")
-
-    @pull_labs.before_loop
-    async def before_pull_labs(self):
-        print("Waiting for Bot to start before pulling labs.")
-        await self.bot.wait_until_ready()
 
     def getRLab(self):
         return random.choice(self.mins)
