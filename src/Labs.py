@@ -318,12 +318,6 @@ class Labs(commands.Cog):
         else:
             return min(self.mins, key=attrgetter('load1min')).ip
 
-    def getIP(self, hostname):
-        if hostname in self.ips.keys():
-            return self.ips[hostname]
-        else:
-            return "Unsupported"
-
 def pad(inte,places):
     if inte < 1:
         padding = places-1

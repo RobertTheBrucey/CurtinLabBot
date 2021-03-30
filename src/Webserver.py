@@ -20,6 +20,13 @@ class Webserver(commands.Cog):
         async def send_lab_ip(request):
             return web.Response(text=self.bot.get_cog('Labs').getRLabIP())
 
+        @routes.get('/laball')
+        async def send_lab_all(request):
+            csv = "hostname,cpu1min,cpu5min,cpu15min,users,ip\n"
+            for lab in self.bot.get_cog('Labs').labs:
+                csv += f"{lab.host},{lab.load1min},{lab.load5min},{lab.load15min},{lab.users},{lab.ip}\n"
+            return web.Response(text=csv)
+
         self.webserver_port = os.environ.get('PORT', 8010)
         app.add_routes(routes)
 
