@@ -180,6 +180,8 @@ class Labs(commands.Cog):
         pickle.dump( msgs, open ("./persistence/pmsgn.p", "wb" ) )
     
     async def updatePMsg(self):
+        while len(self.labs) == 0:
+            asyncio.sleep(5)
         labsString = self.getListStr() + "Quick Lab: " + self.getRLab()
         for msg in self.p_msg:
             try:
@@ -224,7 +226,6 @@ class Labs(commands.Cog):
                 labsString += "-" + str(column)
                 for row in range(1,7):
                     host = "lab{}-{}0{}.cs.curtin.edu.au.".format(room,column,row)
-                    print(self.labs.keys())
                     users = self.labs[host].users
                     labsString +=  "  " + str((" ",users)[users!=-1]) + pad(users,sp)
                 labsString += "\n"
