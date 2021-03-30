@@ -11,7 +11,7 @@ from google.oauth2 import service_account
 
 # If modifying these scopes, delete the file token.json.
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly']
-SERVICE_ACCOUNT_FILE = 'credentials.json'
+SERVICE_ACCOUNT_FILE = './persistence/credentials.json'
 
 # The ID and range of a sample spreadsheet.
 SAMPLE_SPREADSHEET_ID = '1OP8rMUbdNE1UprSoYGNZxRSEC3gUDFDOcmtcJD5HXR4'
