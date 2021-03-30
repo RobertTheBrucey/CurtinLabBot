@@ -204,7 +204,7 @@ class Labs(commands.Cog):
     
     def getListStr(self):
         labsString = ""
-        for lab in sorted(self.labs, key=attrgetter('users')):
+        for lab in sorted(self.labs.values(), key=attrgetter('users')):
             if lab.users != -1:
                 labsString += "\n"+lab+" has "+str(lab.users)+" user"
                 if lab.users != 1:
@@ -234,7 +234,7 @@ class Labs(commands.Cog):
     def getHybridStr(self):
         labsString = "```nim\nLab Machine Users By Room  -:- Quick Labs\n"
         
-        labs = sorted(self.labs, key=attrgetter('users'))
+        labs = sorted(self.labs.values(), key=attrgetter('users'))
         ii = 0
         while ii < len(labs):
             if self.labs[labs[ii]] == -1:
