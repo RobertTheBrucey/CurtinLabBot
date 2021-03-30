@@ -237,7 +237,7 @@ class Labs(commands.Cog):
         labs = sorted(self.labs.values(), key=attrgetter('users'))
         ii = 0
         while ii < len(labs):
-            if self.labs[labs[ii].users] == -1:
+            if labs[ii].users == -1:
                 labs.remove(labs[ii])
             else:
                 ii = ii + 1
