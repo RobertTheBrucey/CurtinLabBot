@@ -30,15 +30,15 @@ class SheetPull(commands.Cog):
             await asyncio.sleep(5)
         print('Getting lab status')
         creds = service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE)
-        print("Loaded Creds from File")
+        print("Loaded Creds from File", flush=True)
         service = build('sheets', 'v4', credentials=creds)
         # Call the Sheets API
         sheet = service.spreadsheets()
         result = sheet.values().get(spreadsheetId=SAMPLE_SPREADSHEET_ID,
                                     range=SAMPLE_RANGE_NAME).execute()
-        print("Executed data fetch")
+        print("Executed data fetch", flush=True)
         data = result.get('values', [])
-        print("Saved fetched results")
+        print("Saved fetched results", flush=True)
         changed = False
         mini = int(data[1][4])
         mins = []
