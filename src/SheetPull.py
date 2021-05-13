@@ -24,7 +24,7 @@ class SheetPull(commands.Cog):
         self.bot = bot
         self.pull_labs.start()
 
-    @tasks.loop(seconds=60)
+    @tasks.loop(seconds=119)
     async def pull_labs(self):
         while self.bot.get_cog('Labs').loading:
             await asyncio.sleep(5)
