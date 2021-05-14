@@ -79,6 +79,7 @@ class SheetPull(commands.Cog):
             print("Persistent Messages Updated")
         else:
             print("No change since last pull")
+        return
 
     @pull_labs.before_loop
     async def before_pull_labs(self):
