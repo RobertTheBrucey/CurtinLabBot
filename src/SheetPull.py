@@ -3,7 +3,8 @@ from discord.ext import commands, tasks
 import aiohttp
 import asyncio
 import pickle
-from googleapiclient.discovery import build, errors
+from googleapiclient.discovery import build
+from googleapiclient import errors
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
