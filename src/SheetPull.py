@@ -34,8 +34,12 @@ class SheetPull(commands.Cog):
         service = build('sheets', 'v4', credentials=creds)
         # Call the Sheets API
         sheet = service.spreadsheets()
-        result = sheet.values().get(spreadsheetId=SAMPLE_SPREADSHEET_ID,
+        try:
+            result = sheet.values().get(spreadsheetId=SAMPLE_SPREADSHEET_ID,
                                     range=SAMPLE_RANGE_NAME).execute()
+        except googleapiclient.errors.HttpError as e:
+            print(f"Error reading spreadsheet: {e}")
+            return
         print("Executed data fetch", flush=True)
         data = result.get('values', [])
         print("Saved fetched results", flush=True)
