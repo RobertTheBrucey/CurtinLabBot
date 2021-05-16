@@ -3,7 +3,7 @@ from discord.ext import commands, tasks
 import aiohttp
 import asyncio
 import pickle
-from googleapiclient.discovery import build
+from googleapiclient.discovery import build, errors
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
@@ -37,7 +37,7 @@ class SheetPull(commands.Cog):
         try:
             result = sheet.values().get(spreadsheetId=SAMPLE_SPREADSHEET_ID,
                                     range=SAMPLE_RANGE_NAME).execute()
-        except googleapiclient.errors.HttpError as e:
+        except errors.HttpError as e:
             print(f"Error reading spreadsheet: {e}")
             return
         print("Executed data fetch", flush=True)
