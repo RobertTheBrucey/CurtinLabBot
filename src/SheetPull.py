@@ -31,7 +31,7 @@ class SheetPull(commands.Cog):
             await asyncio.sleep(5)
         print('Getting lab status')
         creds = service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE)
-        print("Loaded Creds from File", flush=True)
+        #print("Loaded Creds from File", flush=True)
         service = build('sheets', 'v4', credentials=creds)
         # Call the Sheets API
         sheet = service.spreadsheets()
@@ -41,9 +41,9 @@ class SheetPull(commands.Cog):
         except errors.HttpError as e:
             print(f"Error reading spreadsheet: {e}")
             return
-        print("Executed data fetch", flush=True)
+        #print("Executed data fetch", flush=True)
         data = result.get('values', [])
-        print("Saved fetched results", flush=True)
+        #print("Saved fetched results", flush=True)
         changed = False
         mini = int(data[1][4])
         mins = []
@@ -78,7 +78,7 @@ class SheetPull(commands.Cog):
         self.bot.get_cog('Labs').mins = mins
         if changed:
             if max != -1:
-                print("Saving up machines to file", flush=True)
+                #print("Saving up machines to file", flush=True)
                 pickle.dump( (self.bot.get_cog('Labs').labs,self.bot.get_cog('Labs').mins), open ("./persistence/labsn.p", "wb" ) )
             await self.bot.get_cog('Labs').updatePMsg()
             print("Persistent Messages Updated")
